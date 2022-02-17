@@ -1,0 +1,48 @@
+<main class="login-body">
+  <!-- Login Admin -->
+  <form class="form-default" [formGroup]="authForm" (ngSubmit)="onSubmit()">
+
+    <div class="login-form">
+      <h2>Registration Here</h2>
+      <div class="alert alert-danger mt-2" role="alert" *ngIf="error">
+        {{error}}
+      </div>
+      <div class="form-input">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" placeholder="Username" formControlName="username">
+        <span
+          *ngIf="authForm.controls.username.invalid &&
+                 authForm.controls.username.dirty &&
+                 authForm.controls.username.value"
+          class="error">Email is too short</span>
+      </div>
+      <div class="form-input">
+        <label for="fullname">Full name</label>
+        <input type="text" name="fullname" id="fullname" placeholder="Full name" formControlName="fullname">
+      </div>
+      <div class="form-input">
+        <label for="email">Email Address</label>
+        <input type="email" name="email" id="email" placeholder="Email Address" formControlName="email">
+        <span
+          *ngIf="authForm.controls.email.invalid &&
+                 authForm.controls.email.dirty &&
+                 authForm.controls.email.value"
+          class="error">Email is invalid</span>
+      </div>
+      <div class="form-input">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" placeholder="Password"  formControlName="password">
+        <span
+          *ngIf="authForm.controls.password.invalid &&
+                 authForm.controls.password.dirty &&
+                 authForm.controls.password.value"
+          class="error">Password is too short</span>
+      </div>
+      <div class="form-input pt-30">
+        <input type="submit" name="submit" value="Registration" [disabled]="authForm.invalid">
+      </div>
+      <a href="/login" class="registration">Login</a>
+      <a style="margin-top: 15px;" href="#" class="registration">Home</a>
+    </div>
+  </form>
+</main>

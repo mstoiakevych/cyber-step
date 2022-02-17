@@ -1,0 +1,124 @@
+<div class="order">
+  <div class="row d-flex justify-content-center">
+    <div class="container">
+      <div class="modal-body">
+        <div class="container">
+          <div class="paypal" [hidden]="this.paidFor" #paypal></div>
+        </div>
+        <i class="fa fa-close" (click)="this.onClose()"></i>
+        <ng-template [ngIf]="!this.showPayPal">
+          <div class="container">
+            <div class="row justify-content-center">
+              <h1 class="details pay">Details</h1>
+            </div>
+          </div>
+          <div class="hr"></div>
+          <div class="bgg">
+            <div class="bg" style="background-image: url({{this.headerURL}});">
+              <div class="container">
+                <div class="row">
+                  <div class="col c">
+                    <div class="row info">
+                      <img src="{{this.currentRankURL}}" alt="" width="120px">
+                      <div class="col-3">
+                        <div class="row rank">
+                          <p>Current Rank</p>
+                        </div>
+                        <div class="row rank">
+                          <div class="lvl">{{this.currentValue}}</div>
+                        </div>
+                      </div>
+                      <img src="{{this.desiredRankURL}}" alt="" width="120px">
+                      <div class="col-3">
+                        <div class="row rank">
+                          <p>Desired Rank</p>
+                        </div>
+                        <div class="row rank">
+                          <div class="lvl">{{this.desiredValue}}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="hr"></div>
+          <form novalidate [formGroup]="orderForm">
+            <div class="container">
+              <div class="row"><h1 class="pay-d">Payment Details</h1></div>
+              <div class="row payment">
+                <div class="col">
+                  <div class="row rank">
+                    <label for="nickname" class="form-label">
+                      <span *ngIf="!this.orderForm.controls.nickName.touched ||
+                       this.orderForm.controls.nickName.status!=='INVALID'">Nickname *</span>
+                      <span *ngIf="this.orderForm.controls.nickName.status==='INVALID'
+                            &&  this.orderForm.controls.nickName.touched"
+                            class="invalid">Nickname *</span>
+                    </label>
+                  </div>
+                  <div class="row rank">
+                    <input formControlName="nickName" id="nickname" class="input" type="text" autocomplete="off"
+                           placeholder="Nickname...">
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="row rank">
+                    <label for="comments">
+                      <span *ngIf="!this.orderForm.controls.comments.touched ||
+                       this.orderForm.controls.comments.status!=='INVALID'">Comments</span>
+                      <span *ngIf="this.orderForm.controls.comments.status==='INVALID'
+                            &&  this.orderForm.controls.comments.touched"
+                            class="invalid">Comments</span>
+                    </label>
+                  </div>
+                  <div class="row rank">
+                    <input formControlName="comments" id="comments" class="input" type="text" autocomplete="off"
+                           placeholder="Comments...">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="row booster">
+                    <label for="slct" class="form-label">
+                      <span data-animation="fadeInLeft" data-delay=".3s">Select specific booster</span>
+                    </label>
+                  </div>
+                  <div class="row booster-b">
+                    <div class="select">
+                      <select name="slct" id="slct" (change)="onChange($event)">
+                        <option value="" selected disabled hidden>Choose booster</option>
+                        <option value="Alpha">Alpha</option>
+                        <option value="Chako">Chako</option>
+                        <option value="Patrick">Patrick</option>
+                        <option value="Scricy">Scricy</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col booster-ord">
+                  <div class="row">
+                    <div class="col">
+                      <div class="price">Total: €{{totalPrice}}</div>
+                    </div>
+                    <div class="col">
+                      <div class="slider-btns">
+                        <button data-animation="fadeInLeft" data-delay="1s" class="btn radius-btn"
+                                [disabled]="orderForm.invalid"
+                                (click)="this.orderNow()">Pay
+                          Now
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

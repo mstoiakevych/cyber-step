@@ -1,0 +1,307 @@
+<main>
+  <!-- Slider Area Start-->
+  <div class="slider-area slider-bg mb-100">
+    <div class="slider-active">
+      <!-- Single Slider -->
+      <div class="single-slider d-flex align-items-center slider-height">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-lg-6 col-md-9 ">
+              <div class="hero__caption">
+                <span data-animation="fadeInLeft" data-delay=".3s">Best boosting service provider</span>
+                <h1 data-animation="fadeInLeft" data-delay=".6s">Man UP boosting platform</h1>
+                <p data-animation="fadeInLeft" data-delay=".8s">Fast and quality boosting in every popular game. Arriving fast and in time.</p>
+                <!-- Slider btn -->
+                <div class="slider-btns">
+                  <!-- Hero-btn -->
+                  <a data-animation="fadeInLeft" data-delay="1s" href="#" class="btn radius-btn">get started</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="hero__img d-none d-lg-block f-right">
+                <img src="assets/img/hero/logo.gif" alt="" data-animation="fadeInRight" data-delay="1s" height="500">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Slider Shape -->
+    <div class="slider-shape d-none d-lg-block">
+      <img class="slider-shape1" src="assets/img/hero/top-left-shape.png" alt="">
+    </div>
+  </div>
+  <!-- Slider Area End -->
+
+  <div class="carousel container-fluid" *ngIf="isGamesLoaded">
+    <owl-carousel-o [options]="customOptions">
+      <ng-container *ngFor="let game of games">
+        <ng-template carouselSlide>
+          <div class="carousel-game-item" [style]="'background-image: url(' + game.sliderImageUrl + ')'" routerLink="game/{{game.nameUrl}}">
+            <div class="game-name">
+              <p>{{game.title}}</p>
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+    </owl-carousel-o>
+  </div>
+
+  <!-- Domain-search start -->
+  <div class="domain-search-area section-bg1 pt-100">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-4 col-lg-5">
+          <h2>Search game</h2>
+        </div>
+        <div class="col-xl-8 col-lg-7">
+          <!--Hero form -->
+          <form action="#" class="search-box">
+            <div class="input-form">
+              <input [(ngModel)]="search" name="find" type="text" placeholder="Find game">
+              <!-- icon search -->
+              <div class="search-form">
+                <button (click)="findGame()"><i class="ti-search"></i></button>
+              </div>
+              <!-- icon search -->
+              <div class="world-form">
+                <i class="fas fa-globe"></i>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Domain-search End -->
+  <!--? Team -->
+  <section class="team-area section-padding40 section-bg1">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-12">
+          <div class="section-tittle text-center mb-105">
+            <h2>Most amazing features</h2>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="single-cat">
+            <div class="cat-icon">
+              <img src="assets/img/icon/shield.png" alt="">
+            </div>
+            <div class="cat-cap">
+              <h5><a href="#">VPN protection</a></h5>
+              <p>ManUp's boosters use VPN before connecting to user's account.The mesaure provides extra safety measures.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="single-cat">
+            <div class="cat-icon">
+              <img src="assets/img/icon/chronometer.png" alt="">
+            </div>
+            <div class="cat-cap">
+              <h5><a href="#">Order Tracking & Scheduling</a></h5>
+              <p>Our platform provides order tracking and scheduling for all users.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="single-cat">
+            <div class="cat-icon">
+              <img src="assets/img/icon/medical-insurance.png" alt="">
+            </div>
+            <div class="cat-cap">
+              <h5><a href="#">Fast-Efficient and Flexible soultion</a></h5>
+              <p>ManUp's platform brings you the lowest price possible regardless of your game choice/</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 align-items-center">
+          <div class="single-cat">
+            <div class="cat-icon">
+              <img src="assets/img/icon/monitor.png" alt="">
+            </div>
+            <div class="cat-cap">
+              <h5><a href="#">Safety & Privacy</a></h5>
+              <p>Other than VPN we work only with the best boosters</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Services End -->
+  <!--? Pricing Card Start -->
+  <section class="pricing-card-area fix">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-8">
+          <div class="section-tittle text-center mb-90">
+            <h2>Choose plan which fit for you</h2>
+            <p>Choose our time limiter subscriptions</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-10">
+          <div class="single-card text-center mb-30">
+            <div class="card-top">
+              <img src="assets/img/hero/dollar-symbol.png" alt="">
+              <h4>Weekly subscription</h4>
+              <p>Starting at</p>
+            </div>
+            <div class="card-mid">
+              <h4>$15</h4>
+            </div>
+            <div class="card-bottom">
+              <ul>
+                <li>15 Hours of boosting</li>
+              </ul>
+              <a href="#" class="borders-btn">Get Started</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-10">
+          <div class="single-card text-center mb-30">
+            <div class="card-top">
+              <img src="assets/img/hero/dollar-symbol.png" alt="">
+              <h4>Monthly subscription</h4>
+            </div>
+            <div class="card-mid">
+              <h4>$100</h4>
+            </div>
+            <div class="card-bottom">
+              <ul>
+                <li>75 Hours of boosting</li>
+                <li>Streaming option</li>
+                <li>Guidence option</li>
+              </ul>
+              <a href="#" class="borders-btn">Get Started</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-10">
+          <div class="single-card text-center mb-30">
+            <div class="card-top">
+              <img src="assets/img/hero/dollar-symbol.png" alt="">
+              <h4>Year subscription</h4>
+            </div>
+            <div class="card-mid">
+              <h4>$1000</h4>
+            </div>
+            <div class="card-bottom">
+              <ul>
+                <li>1000 Hours of boosting</li>
+                <li>Streaming option</li>
+                <li>Guidence option</li>
+                <li>24/7 Support</li>
+                <li>And more?</li>
+              </ul>
+              <a href="#" class="borders-btn">Get Started</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Pricing Card End -->
+
+  <!--? About-2 Area Start -->
+  <div class="about-area1 pb-bottom">
+    <div class="container">
+      <div class="row align-items-center justify-content-between">
+        <div class="col-xl-7 col-lg-7 col-md-12">
+          <div class="about-caption about-caption3 mb-50">
+            <!-- Section Tittle -->
+            <div class="section-tittle section-tittle2 mb-30">
+              <h2>Dedicated support</h2>
+            </div>
+            <p class="mb-40">IF you have any problems with our service such as:</p>
+            <ul class="mb-30">
+              <li>
+                <img src="assets/img/hero/question.png" alt="">
+                <p>Fraud</p>
+              </li>
+              <li>
+                <img src="assets/img/hero/question.png" alt="">
+                <p>Blackmail</p>
+              </li>
+            </ul>
+            <a href="#" class="btn"><i class="fas fa-phone-alt"></i>(10) 892-293 2678</a>
+          </div>
+        </div>
+        <div class="col-xl-5 col-lg-5 col-md-8 col-sm-10">
+          <!-- about-img -->
+          <div class="about-img ">
+            <img src="assets/img/gallery/about2.png" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- About-2 Area End -->
+  <!-- ask questions -->
+  <section class="ask-questions section-bg1 section-padding30 fix">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-9 col-md-10 ">
+          <!-- Section Tittle -->
+          <div class="section-tittle text-center mb-90">
+            <h2>Frequently ask questions</h2>
+            <p>Or the questions that we have been asked frequently</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 col-md-6">
+          <div class="single-question d-flex mb-50">
+            <span> Q.</span>
+            <div class="pera">
+              <h2>Why choose us?</h2>
+              <p>Because we had to change all dummy text to this!</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+          <div class="single-question d-flex mb-50">
+            <span> Q.</span>
+            <div class="pera">
+              <h2>Do you protect our information</h2>
+              <p>Ofcourse we protect your information from cops that will defend you from many people(whom we send where you live)</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+          <div class="single-question d-flex mb-50">
+            <span> Q.</span>
+            <div class="pera">
+              <h2>How can I withdraw all my money from this website?</h2>
+              <p>Thats simple.Go to setting -> payment information -> you can not.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+          <div class="single-question d-flex mb-50">
+            <span> Q.</span>
+            <div class="pera">
+              <h2>How do I cancel my subscription?</h2>
+              <p>I dunno, never had one tbh.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 ">
+          <div class="more-btn text-center mt-20">
+            <a href="#" class="btn">Go to Support</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End ask questions -->
+
+</main>

@@ -1,0 +1,205 @@
+<div class="container">
+  <div class="row">
+    <app-order-page *ngIf="this.showOrder" [@fadeInOut] [game]=this.game
+                    [currentRankURL]=this.currentRankURL [desiredRankURL]=this.desiredRankURL
+                    [currentValue]=this.currentValue [desiredValue]=this.desiredValue
+                    [totalPrice]=this.totalPrice
+                    [offers]=this.offers
+                    (onChanged)="this.close($event)"
+    ></app-order-page>
+    <div class="col-md-6">
+      <div class="rank">
+        <div class="row">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#8654ff" width="24" height="24"
+               viewBox="0 0 26 26">
+            <polygon class="play-btn__svg" points="9.33 6.69 9.33 19.39 19.3 13.04 9.33 6.69"/>
+            <path class="play-btn__svg"
+                  d="M26,13A13,13,0,1,1,13,0,13,13,0,0,1,26,13ZM13,2.18A10.89,10.89,0,1,0,23.84,13.06,10.89,10.89,0,0,0,13,2.18Z"/>
+          </svg>
+          <h2 class="t-Rank">Current Rank *</h2>
+        </div>
+        <div class="row">
+          <div class="col-3">
+            <img src="{{currentRankURL}}" alt="" width="100%">
+          </div>
+          <div class="col">
+            <div class="container">
+              <label class="num">Select your Current Rank</label>
+              <ng-template [ngIf]="game.ranks[0].levels.length < 1" [ngIfElse]="levels1">
+                <div class="select">
+                  <select [ngModel]="selectedCurrentRank" #select1 (change)="choseRank($event, select1.value,'c')"
+                          name="slct">
+                    <option class="select" *ngFor="let rank of game.ranks;"
+                            value="{{rank.rank}}">{{rank.rank}}</option>
+                  </select>
+                </div>
+              </ng-template>
+              <ng-template #levels1>
+                <div class="row">
+                  <div class="select selectr">
+                    <select [ngModel]="selectedCurrentRank" #select1 (change)="choseRank($event, select1.value,'c')"
+                            name="slct">
+                      <option class="select" *ngFor="let rank of game.ranks;"
+                              value="{{rank.rank}}">{{rank.rank}}</option>
+                    </select>
+                  </div>
+                  <ng-template [ngIf]="isLvl1">
+                    <div class="select selecti">
+                      <select [ngModel]="selectedCurrentRankLVL" #select1lvl
+                              (change)="choseRankLVL($event, select1lvl.value,'c')"
+                              name="slct">
+                        <option class="select" *ngFor="let level of game.ranks[0].levels;"
+                                value="{{level.level}}">{{level.level}}</option>
+                      </select>
+                    </div>
+                  </ng-template>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
+        <div class="row drank">
+          <svg viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#8654ff"
+               width="24" height="24">
+            <circle class="stroked" fill="none" stroke="#8654ff" cx="8" cy="8" r="6"/>
+            <path class="stroked" fill="none" stroke="#8654ff" d="M 8 0 L 8 6.5"/>
+            <path class="stroked" fill="none" stroke="#8654ff" d="M 0 8 L 6.5 8"/>
+            <path class="stroked" fill="none" stroke="#8654ff" d="M 8 9.5 L 8 16"/>
+            <path class="stroked" fill="none" stroke="#8654ff" d="M 9.5 8 L 16 8"/>
+          </svg>
+          <h2 class="t-Rank">Desired Rank *</h2>
+        </div>
+
+
+        <div class="row">
+          <div class="col-3">
+            <img src="{{desiredRankURL}}" alt="" width="100%">
+          </div>
+          <div class="col">
+            <div class="container">
+              <label class="num">Select your Desired Rank</label>
+              <ng-template [ngIf]="game.ranks[0].levels.length < 1" [ngIfElse]="levels2">
+                <div class="select">
+                  <select [ngModel]="selectedDesiredRank" #select2 name="slct"
+                          (change)="choseRank($event, select2.value,'d')">
+                    <option *ngFor="let rank of game.ranks;"
+                            value="{{rank.rank}}">{{rank.rank}}</option>
+                  </select>
+                </div>
+              </ng-template>
+              <ng-template #levels2>
+                <div class="row">
+                  <div class="select selectr">
+                    <select [ngModel]="selectedDesiredRank" #select2 (change)="choseRank($event, select2.value,'d')"
+                            name="slct">
+                      <option class="select" *ngFor="let rank of game.ranks;index as i;"
+                              value="{{rank.rank}}">{{rank.rank}}</option>
+                    </select>
+                  </div>
+                  <ng-template [ngIf]="isLvl2">
+                    <div class="select selecti">
+                      <select [ngModel]="selectedDesiredRankLVL" #select2lvl
+                              (change)="choseRankLVL($event, select2lvl.value,'d')"
+                              name="slct">
+                        <option class="select" *ngFor="let level of game.ranks[0].levels;index as i;"
+                                value="{{level.level}}">{{level.level}}</option>
+                      </select>
+                    </div>
+                  </ng-template>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="hero__caption">
+            <span data-animation="fadeInLeft" data-delay=".3s">Select server</span>
+          </div>
+        </div>
+        <div class="select">
+          <select name="slct" id="slct">
+            <option value="1">Americas</option>
+            <option value="2">Europe</option>
+            <option value="3">Asia</option>
+            <option value="4">Oceania</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-md-6">
+      <div class="container order"
+           style=" background: url('assets/img/games/shield-cash.gif') top right no-repeat #2d0a31">
+        <div class="row y-order">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#8654ff"
+               viewBox="0 0 24 24">
+            <path
+              d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7h-16.813l2.938 7h11.898zm4.969-10l-3.432 12h-12.597l.839 2h13.239l3.474-12h1.929l.743-2h-4.195z"/>
+          </svg>
+          <h2 class="t-order">Your Order</h2>
+        </div>
+        <div class="s-order">
+          <div *ngFor="let offer of game.offers; index as i;">
+            <div class="row settings">
+              <input class="custom-checkbox" type="checkbox" id={{i+100}} name="Specific heroes"
+                     (click)="addPercentPrice($event, offer.pctCost)">
+              <label class="settings" for={{i+100}}>{{offer.title}}</label>
+              <span>{{offer.pctCost != 0 ? '+' + offer.pctCost + '% cost' : 'FREE'}}</span>
+            </div>
+          </div>
+          <div class="checked">
+            <div class="row settings settings-h pt">
+              <svg class="check" xmlns="http://www.w3.org/2000/svg" fill="#9F78FF" width="16"
+                   height="16"
+                   viewBox="0 0 24 24">
+                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/>
+              </svg>
+              <p class="list-item">Guaranteed Safety</p>
+            </div>
+            <div class="row settings settings-h">
+              <svg class="check" xmlns="http://www.w3.org/2000/svg" fill="#9F78FF" width="16"
+                   height="16"
+                   viewBox="0 0 24 24">
+                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/>
+              </svg>
+              <p class="list-item">Chat with Booster</p>
+            </div>
+            <div class="row settings settings-h">
+              <svg class="check" xmlns="http://www.w3.org/2000/svg" fill="#9F78FF" width="16"
+                   height="16"
+                   viewBox="0 0 24 24">
+                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/>
+              </svg>
+              <p class="list-item">Order Tracking & Scheduling</p>
+            </div>
+            <div class="row settings settings-h">
+              <svg class="check" xmlns="http://www.w3.org/2000/svg" fill="#9F78FF" width="16"
+                   height="16"
+                   viewBox="0 0 24 24">
+                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/>
+              </svg>
+              <p class="list-item">24/7 Live Support</p>
+            </div>
+            <div class="row settings settings-h">
+              <div class="col">
+                <div class="price">Total: €{{totalPrice}}</div>
+              </div>
+              <div class="col">
+                <div class="slider-btns">
+                  <a data-animation="fadeInLeft" data-delay="1s" class="btn radius-btn" (click)="this.order()">BOOST
+                    NOW</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row settings">
+            <h4 class="secured">Secured and trusted checkout with:</h4>
+            <img class="secured-img" src="assets/img/games/pay-icons.png" alt="" width="100%">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

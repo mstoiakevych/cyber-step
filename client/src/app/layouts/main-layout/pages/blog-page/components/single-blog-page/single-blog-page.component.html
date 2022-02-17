@@ -1,0 +1,12 @@
+<main class="mt-150">
+    <div *ngIf="blog" class="container">
+        <h1 class="h1 mb-50 display-1 d-block text-white text-center single-blog-main-heading">{{blog.title}}</h1>
+        <div class="single-blog-container">
+            <div class="single-blog-main-img-container mb-50">
+                <img [src]="blog.imgUrl" width="100%" height="100px" class="rounded img-thumbnail single-blog-main-img"
+                    alt={{blog.title}}>
+            </div>
+            <p class="lh-base text-white single-blog-text" [innerHTML]="blog.text"></p>
+        </div>
+    </div>
+</main>
