@@ -1,0 +1,34 @@
+<main>
+  <div class="slider-area slider-bg mb-100">
+    <div class="slider-active">
+      <div class="single-slider d-flex align-items-center slider-height">
+        <ng-template [ngIf]="this.isGameLoaded">
+          <div class="container-fluid">
+            <div class="row bg-img" style="background-image: url({{this.game.imageUrl}})">
+              <div class="container">
+                <app-particles></app-particles>
+                <div class="hero__caption">
+                  <div>
+                    <h1 data-animation="fadeInLeft" data-delay=".6s"> {{this.game.title}} Boosting </h1>
+                    <p class="title-boosting" data-animation="fadeInLeft" data-delay=".8s"> Get {{this.game.title}} Rank
+                      Boosting with
+                      great features and more. </p>
+                  </div>
+                  <ng-template [ngIf]="game.digital" [ngIfElse]="notdigital">
+                    <app-digit-game-page [game]=this.game></app-digit-game-page>
+                  </ng-template>
+                  <ng-template #notdigital>
+                    <app-not-digit-game-page [game]=this.game></app-not-digit-game-page>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    <div class="slider-shape d-none d-lg-block">
+      <img class="slider-shape1" src="assets/img/hero/top-left-shape.png" alt="">
+    </div>
+  </div>
+</main>

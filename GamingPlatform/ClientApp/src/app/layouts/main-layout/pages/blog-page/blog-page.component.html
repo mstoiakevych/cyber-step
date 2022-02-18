@@ -1,0 +1,26 @@
+<main class="mt-150">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 my-5" *ngFor="let blog of blogs">
+                <div class="card" routerLink="/blog/{{blog._id}}">
+                    <img class="card-img-top" style="height: 180px; width: 100%" [src]="blog.imgUrl"
+                        alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{blog.title}}</h5>
+<!--                        <p class="card-text" [innerHTML]="blog.text!">-->
+<!--                        </p>-->
+                        <div class="card-info">
+                            <a class="btn read-more">Read more <img
+                                    src="https://www.flaticon.com/svg/static/icons/svg/545/545783.svg"
+                                    style="margin-left: 5px;" width="25px" height="25px" alt=""></a>
+                            <p class="time-posted card-text"><small class="time-posted-text text-muted">
+                              {{blog.posted | date:'medium'}}
+                            </small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

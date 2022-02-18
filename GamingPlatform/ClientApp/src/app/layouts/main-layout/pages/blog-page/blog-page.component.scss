@@ -1,0 +1,42 @@
+.card{
+    background: transparent;
+    border: none;
+    color: white;
+    transition: transform 0.7s ease 0s, opacity 0.7s ease 0s;
+
+    .card-title{
+        font-size: 22px;
+        color: white;
+
+    }
+
+    .read-more{
+        width: 50%;
+        padding: 10px 20px !important;
+        color: white;
+    }
+    .time-posted{
+        width: 40%;
+    }
+    .time-posted-text{
+        font-size: 11px;
+        color: rgb(170, 170, 170) !important;
+    }
+    
+    .card-text{
+        color: white;
+    }
+    .card-info{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }    
+    
+}
+
+.card:hover{
+    transform: translateY(-8px);
+    opacity: 0.7;
+}
+
+

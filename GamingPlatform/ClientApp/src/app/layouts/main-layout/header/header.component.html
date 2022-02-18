@@ -1,0 +1,53 @@
+<header>
+  <!-- Header Start -->
+  <div class="header-area header-transparent">
+    <div class="main-header ">
+      <div class="header-bottom  header-sticky">
+        <div class="container-fluid">
+          <div class="row align-items-center">
+            <!-- Logo -->
+            <div class="col-xl-2 col-lg-2">
+              <div class="logo">
+                <a routerLink="/"><img src="assets/img/logo/logo.png" alt=""></a>
+              </div>
+            </div>
+            <div class="col-xl-10 col-lg-10">
+              <div class="menu-wrapper d-flex align-items-center justify-content-end">
+                <!-- Main-menu -->
+                <div class="main-menu d-none d-lg-block">
+                  <nav>
+                    <ul id="navigation">
+                      <li><a href="index.html">Home</a></li>
+                      <li><a routerLink="/profile">Profile</a></li>
+                      <li><a href="#">Help</a></li>
+                      <li><a routerLink="/blog">Blog</a>
+                        <ul class="submenu">
+                          <li><a routerLink="/blog">Blog</a></li>
+                          <li><a href="#">Blog Details</a></li>
+                          <li><a href="#">Element</a></li>
+                        </ul>
+                      </li>
+                      <li><a href="#">Contact</a></li>
+                      <!-- Button -->
+                      <ng-template [ngIf]="!authService.isAuthenticated()">
+                      <li class="button-header margin-left"><a routerLink="/signup" class="btn">Sign Up</a></li>
+                      <li class="button-header"><a routerLink="/login" class="btn3">Sign In</a></li>
+                      </ng-template>
+                      <ng-template [ngIf]="authService.isAuthenticated()">
+                        <li class="button-header margin-left" (click)="logOut()"><a class="btn">Log out</a></li>
+                      </ng-template>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div class="col-12">
+              <div class="mobile_menu d-block d-lg-none"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

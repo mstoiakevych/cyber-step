@@ -1,0 +1,65 @@
+<main>
+
+    <form class="section-top-border" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <div class="row mt-100 justify-content-center">
+          <div class="col-lg-3 col-md-3 mt-sm-30 ml-30">
+            <div class="single-element-widget" *ngIf="user">
+              <h3 class="info-title text-center mb-20">Profile picture</h3>
+              <div class="text-center">
+                <img src="{{user.imageUrl}}" alt="" class="img-fluid profile-pic">
+              </div>
+              <h1 class="text-light text-center mt-20 mb-20">{{user.username}}</h1>
+              <!--              <input type="file" id="wizard-picture" class="text-light mt-20">-->
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-5">
+            <h3 class="mb-30 info-title">Your info</h3>
+
+              <div class="row form-element">
+                <span class="label-text">Full name</span>
+              </div>
+              <div class="row form-element mb-10">
+                <input class="input" type="text" autocomplete="off" placeholder="Full name..." formControlName="fullname">
+              </div>
+
+              <div class="row form-element">
+                <span class="label-text">Username</span>
+              </div>
+              <div class="row form-element mb-10">
+                <input class="input" type="text" autocomplete="off" placeholder="Username..." formControlName="username">
+              </div>
+
+              <div class="row form-element">
+                <span class="label-text">Email</span>
+              </div>
+              <div class="row form-element mb-10">
+                <input class="input" type="text" autocomplete="off" placeholder="Email..." formControlName="email">
+              </div>
+
+              <div class="row form-element">
+                <span class="label-text">Age</span>
+              </div>
+              <div class="row form-element mb-10">
+                <input class="input" type="number" autocomplete="off" placeholder="Age..." min="0" max="100" formControlName="age">
+              </div>
+
+              <div class="row form-element">
+                <span class="label-text">Phone</span>
+              </div>
+              <div class="row form-element mb-10">
+                <input class="input" type="text" autocomplete="off" placeholder="Phone..." formControlName="phone">
+              </div>
+
+              <div class="row form-element">
+                <span class="label-text">Address</span>
+              </div>
+              <div class="row form-element mb-10">
+                <input class="input" type="text" autocomplete="off" placeholder="Address..." formControlName="address">
+              </div>
+              <div class="more-btn text-center mt-20">
+                <a class="btn" (click)="onSubmit()">Save Changes</a>
+              </div>
+          </div>
+        </div>
+    </form>
+</main>
