@@ -6,5 +6,5 @@ public class CounterStrikeGo : IGameOptions
     public List<Rank> Ranks { get; set; }
     public List<Offer> Offers { get; set; }
 
-    public const string ConfigName = "CSGO";
+    public const string ConfigName = "Counter Strike: Global Offencive";
 }
