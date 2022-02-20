@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Shared.Boosting;
 using Shared.Boosting.Entities;
 
 namespace GamingPlatform.Controllers;
@@ -16,11 +17,13 @@ public class WeatherForecastController : ControllerBase
 
     private readonly ILogger<WeatherForecastController> _logger;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger, IOptions<ApexLegends> options, IOptions<Dota2> dotaOptions)
+    public WeatherForecastController(ILogger<WeatherForecastController> logger, IOptions<ApexLegendsGameOptions> options, IOptions<Dota2GameOptions> dotaOptions, GameOptionsProvider _gameOptionsProvider)
     {
         _logger = logger;
-        Console.WriteLine(JsonSerializer.Serialize(options.Value));
-        Console.WriteLine(JsonSerializer.Serialize(dotaOptions.Value));
+        // Console.WriteLine(JsonSerializer.Serialize(options.Value));
+        // Console.WriteLine(JsonSerializer.Serialize(dotaOptions.Value));
+        var lolOptions = _gameOptionsProvider.GetGameOptions<LeagueOfLegendsGameOptions>();
+        Console.WriteLine(JsonSerializer.Serialize(lolOptions));
     }
 
     [HttpGet]

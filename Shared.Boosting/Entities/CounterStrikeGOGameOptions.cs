@@ -1,11 +1,10 @@
 ﻿namespace Shared.Boosting.Entities;
 
-public class Dota2 : IGameOptions
+public class CounterStrikeGoGameOptions : IGameOptions
 {
     public string Title { get; set; }
-    public int MinRating { get; set; }
-    public int MaxRating { get; set; }
     public List<Rank> Ranks { get; set; }
     public List<Offer> Offers { get; set; }
-    public const string ConfigName = "Dota 2";
+
+    public const string ConfigName = "Counter Strike: Global Offencive";
 }

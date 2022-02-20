@@ -1,6 +1,6 @@
 ﻿namespace Shared.Boosting.Entities;
 
-public class Overwatch : IGameOptions
+public class OverwatchGameOptions : IGameOptions
 {
     public string Title { get; set; }
     public List<Rank> Ranks { get; set; }

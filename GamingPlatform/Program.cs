@@ -1,5 +1,6 @@
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Shared.Boosting;
 using Shared.Boosting.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,15 +19,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Configuration.AddJsonFile("boostingsettings.json", false);
-builder.Services.AddOptions<ApexLegends>().Bind(builder.Configuration.GetSection(ApexLegends.ConfigName));
-builder.Services.AddOptions<Dota2>().Bind(builder.Configuration.GetSection(Dota2.ConfigName));
-builder.Services.AddOptions<CounterStrikeGo>().Bind(builder.Configuration.GetSection(CounterStrikeGo.ConfigName));
-builder.Services.AddOptions<Hearthstone>().Bind(builder.Configuration.GetSection(Hearthstone.ConfigName));
-builder.Services.AddOptions<LeagueOfLegends>().Bind(builder.Configuration.GetSection(LeagueOfLegends.ConfigName));
-builder.Services.AddOptions<Overwatch>().Bind(builder.Configuration.GetSection(Overwatch.ConfigName));
-builder.Services.AddOptions<Pubg>().Bind(builder.Configuration.GetSection(Pubg.ConfigName));
-builder.Services.AddOptions<RocketLeague>().Bind(builder.Configuration.GetSection(RocketLeague.ConfigName));
-builder.Services.AddOptions<Valorant>().Bind(builder.Configuration.GetSection(Valorant.ConfigName));
+builder.Services.AddOptions<ApexLegendsGameOptions>().Bind(builder.Configuration.GetSection(ApexLegendsGameOptions.ConfigName));
+builder.Services.AddOptions<Dota2GameOptions>().Bind(builder.Configuration.GetSection(Dota2GameOptions.ConfigName));
+builder.Services.AddOptions<CounterStrikeGoGameOptions>().Bind(builder.Configuration.GetSection(CounterStrikeGoGameOptions.ConfigName));
+builder.Services.AddOptions<HearthstoneGameOptions>().Bind(builder.Configuration.GetSection(HearthstoneGameOptions.ConfigName));
+builder.Services.AddOptions<LeagueOfLegendsGameOptions>().Bind(builder.Configuration.GetSection(LeagueOfLegendsGameOptions.ConfigName));
+builder.Services.AddOptions<OverwatchGameOptions>().Bind(builder.Configuration.GetSection(OverwatchGameOptions.ConfigName));
+builder.Services.AddOptions<PubgGameOptions>().Bind(builder.Configuration.GetSection(PubgGameOptions.ConfigName));
+builder.Services.AddOptions<RocketLeagueGameOptions>().Bind(builder.Configuration.GetSection(RocketLeagueGameOptions.ConfigName));
+builder.Services.AddOptions<ValorantGameOptions>().Bind(builder.Configuration.GetSection(ValorantGameOptions.ConfigName));
+
+builder.Services.AddSingleton<GameOptionsProvider>();
 
 var app = builder.Build();
 
