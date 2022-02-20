@@ -1,9 +1,9 @@
 ﻿namespace Shared.Boosting.Entities;
 
-public class Valorant : IGame
+public class Valorant : IGameOptions
 {
     public string Title { get; set; }
     public List<Rank> Ranks { get; set; }
     public List<Offer> Offers { get; set; }
-    public string ConfigName => "valorant";
+    public const string ConfigName = "Valorant";
 }

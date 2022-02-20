@@ -1,9 +1,9 @@
 ﻿namespace Shared.Boosting.Entities;
 
-public class RocketLeague : IGame
+public class RocketLeague : IGameOptions
 {
     public string Title { get; set; }
     public List<Rank> Ranks { get; set; }
     public List<Offer> Offers { get; set; }
-    public string ConfigName => "rocket-league";
+    public const string ConfigName = "Rocket League";
 }

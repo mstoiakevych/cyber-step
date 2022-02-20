@@ -1,0 +1,190 @@
+﻿{
+  "Apex Legends": {
+    "title": "Apex Legends",
+    "offers": [
+      {
+        "title": "Specific legends",
+        "percentage": 20
+      },
+      {
+        "title": "Priority order (2x speed)",
+        "percentage": 20
+      },
+      {
+        "title": "Play with booster",
+        "percentage": 50
+      },
+      {
+        "title": "Live stream",
+        "percentage": 15
+      }
+    ],
+    "ranks": [
+      {
+        "title": "Bronze",
+        "tier": 4,
+        "imageUrl": "ranks/apex/bronze/bronzeiv.png"
+      },
+      {
+        "title": "Bronze",
+        "tier": 3,
+        "imageUrl": "ranks/apex/bronze/bronzeiii.png"
+      },
+      {
+        "title": "Bronze",
+        "tier": 2,
+        "imageUrl": "ranks/apex/bronze/bronzeii.png"
+      },
+      {
+        "title": "Bronze",
+        "tier": 1,
+        "imageUrl": "ranks/apex/bronze/bronzei.png"
+      },
+      {
+        "title": "Silver",
+        "tier": 4,
+        "imageUrl": "ranks/apex/silver/silveriv.png"
+      },
+      {
+        "title": "Silver",
+        "tier": 3,
+        "imageUrl": "ranks/apex/silver/silveriii.png"
+      },
+      {
+        "title": "Silver",
+        "tier": 2,
+        "imageUrl": "ranks/apex/silver/silverii.png"
+      },
+      {
+        "title": "Silver",
+        "tier": 1,
+        "imageUrl": "ranks/apex/silver/silveri.png"
+      },
+      {
+        "title": "Gold",
+        "tier": 4,
+        "imageUrl": "ranks/apex/gold/goldiv.png"
+      },
+      {
+        "title": "Gold",
+        "tier": 3,
+        "imageUrl": "ranks/apex/gold/goldiii.png"
+      },
+      {
+        "title": "Gold",
+        "tier": 2,
+        "imageUrl": "ranks/apex/gold/goldii.png"
+      },
+      {
+        "title": "Gold",
+        "tier": 1,
+        "imageUrl": "ranks/apex/gold/goldi.png"
+      },
+      {
+        "title": "Platinum",
+        "tier": 4,
+        "imageUrl": "ranks/apex/platinum/platinumiv.png"
+      },
+      {
+        "title": "Platinum",
+        "tier": 3,
+        "imageUrl": "ranks/apex/platinum/platinumiii.png"
+      },
+      {
+        "title": "Platinum",
+        "tier": 2,
+        "imageUrl": "ranks/apex/platinum/platinumii.png"
+      },
+      {
+        "title": "Platinum",
+        "tier": 1,
+        "imageUrl": "ranks/apex/platinum/platinumi.png"
+      },
+      {
+        "title": "Diamond",
+        "tier": 4,
+        "imageUrl": "ranks/apex/diamond/diamondiv.png"
+      },
+      {
+        "title": "Diamond",
+        "tier": 3,
+        "imageUrl": "ranks/apex/diamond/diamondiii.png"
+      },
+      {
+        "title": "Diamond",
+        "tier": 2,
+        "imageUrl": "ranks/apex/diamond/diamondii.png"
+      },
+      {
+        "title": "Diamond",
+        "tier": 1,
+        "imageUrl": "ranks/apex/diamond/diamondi.png"
+      },
+      {
+        "title": "Master+",
+        "imageUrl": "ranks/apex/master/master+i.png"
+      }
+    ]
+  },
+  "Dota 2": {
+    "title": "Dota 2",
+    "minRating": 0,
+    "maxRating": 6500,
+    "offers": [
+      {
+        "title": "Specific heroes",
+        "pctCost": 20
+      },
+      {
+        "title": "Priority order (2x speed)",
+        "pctCost": 20
+      },
+      {
+        "title": "Live stream",
+        "pctCost": 15
+      }
+    ],
+    "ranks": [
+      {
+        "title": "Herald",
+        "imageUrl": "ranks/dota2/herald.png",
+        "startsAt": 0
+      },
+      {
+        "title": "Guardian",
+        "imageUrl": "ranks/dota2/guardian.png",
+        "startsAt": 77
+      },
+      {
+        "title": "Crusader",
+        "imageUrl": "ranks/dota2/crusader.png",
+        "startsAt": 154
+      },
+      {
+        "title": "Archon",
+        "imageUrl": "ranks/dota2/archon.png",
+        "startsAt": 2310
+      },
+      {
+        "title": "Legend",
+        "imageUrl": "ranks/dota2/legend.png",
+        "startsAt": 3080
+      },
+      {
+        "title": "Ancient",
+        "imageUrl": "ranks/dota2/ancient.png",
+        "startsAt": 3850
+      },
+      {
+        "title": "Divine",
+        "imageUrl": "ranks/dota2/divine.png",
+        "startsAt": 4620
+      },
+      {
+        "title": "Immortal",
+        "imageUrl": "ranks/dota2/immortal.png",
+        "startsAt": 5420
+      }
+    ]
+  }
+}

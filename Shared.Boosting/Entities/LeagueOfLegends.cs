@@ -1,9 +1,9 @@
 ﻿namespace Shared.Boosting.Entities;
 
-public class LeagueOfLegends : IGame
+public class LeagueOfLegends : IGameOptions
 {
     public string Title { get; set; }
     public List<Rank> Ranks { get; set; }
     public List<Offer> Offers { get; set; }
-    public string ConfigName => "lol";
+    public const string ConfigName = "LOL";
 }
