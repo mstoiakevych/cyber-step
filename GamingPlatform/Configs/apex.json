@@ -1,0 +1,127 @@
+{
+  "title": "Apex Legends",
+  "offers": [
+    {
+      "title": "Specific legends",
+      "percentage": 20
+    },
+    {
+      "title": "Priority order (2x speed)",
+      "percentage": 20
+    },
+    {
+      "title": "Play with booster",
+      "percentage": 50
+    },
+    {
+      "title": "Live stream",
+      "percentage": 15
+    }
+  ],
+  "ranks": [
+    {
+      "title": "Bronze",
+      "tier": 4,
+      "imageUrl": "ranks/apex/bronze/bronzeiv.png"
+    },
+    {
+      "title": "Bronze",
+      "tier": 3,
+      "imageUrl": "ranks/apex/bronze/bronzeiii.png"
+    },
+    {
+      "title": "Bronze",
+      "tier": 2,
+      "imageUrl": "ranks/apex/bronze/bronzeii.png"
+    },
+    {
+      "title": "Bronze",
+      "tier": 1,
+      "imageUrl": "ranks/apex/bronze/bronzei.png"
+    },
+    {
+      "title": "Silver",
+      "tier": 4,
+      "imageUrl": "ranks/apex/silver/silveriv.png"
+    },
+    {
+      "title": "Silver",
+      "tier": 3,
+      "imageUrl": "ranks/apex/silver/silveriii.png"
+    },
+    {
+      "title": "Silver",
+      "tier": 2,
+      "imageUrl": "ranks/apex/silver/silverii.png"
+    },
+    {
+      "title": "Silver",
+      "tier": 1,
+      "imageUrl": "ranks/apex/silver/silveri.png"
+    },
+    {
+      "title": "Gold",
+      "tier": 4,
+      "imageUrl": "ranks/apex/gold/goldiv.png"
+    },
+    {
+      "title": "Gold",
+      "tier": 3,
+      "imageUrl": "ranks/apex/gold/goldiii.png"
+    },
+    {
+      "title": "Gold",
+      "tier": 2,
+      "imageUrl": "ranks/apex/gold/goldii.png"
+    },
+    {
+      "title": "Gold",
+      "tier": 1,
+      "imageUrl": "ranks/apex/gold/goldi.png"
+    },
+    {
+      "title": "Platinum",
+      "tier": 4,
+      "imageUrl": "ranks/apex/platinum/platinumiv.png"
+    },
+    {
+      "title": "Platinum",
+      "tier": 3,
+      "imageUrl": "ranks/apex/platinum/platinumiii.png"
+    },
+    {
+      "title": "Platinum",
+      "tier": 2,
+      "imageUrl": "ranks/apex/platinum/platinumii.png"
+    },
+    {
+      "title": "Platinum",
+      "tier": 1,
+      "imageUrl": "ranks/apex/platinum/platinumi.png"
+    },
+    {
+      "title": "Diamond",
+      "tier": 4,
+      "imageUrl": "ranks/apex/diamond/diamondiv.png"
+    },
+    {
+      "title": "Diamond",
+      "tier": 3,
+      "imageUrl": "ranks/apex/diamond/diamondiii.png"
+    },
+    {
+      "title": "Diamond",
+      "tier": 2,
+      "imageUrl": "ranks/apex/diamond/diamondii.png"
+    },
+    {
+      "title": "Diamond",
+      "tier": 1,
+      "imageUrl": "ranks/apex/diamond/diamondi.png"
+    },
+    {
+      "title": "Master+",
+      "imageUrl": "ranks/apex/master/master+i.png"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "title": "Dota 2",
+  "minRating": 0,
+  "maxRating": 6500,
+  "offers": [
+    {
+      "title": "Specific heroes",
+      "pctCost": 20
+    },
+    {
+      "title": "Priority order (2x speed)",
+      "pctCost": 20
+    },
+    {
+      "title": "Live stream",
+      "pctCost": 15
+    }
+  ],
+  "ranks": [
+    {
+      "title": "Herald",
+      "imageUrl": "ranks/dota2/herald.png",
+      "startsAt": 0
+    },
+    {
+      "title": "Guardian",
+      "imageUrl": "ranks/dota2/guardian.png",
+      "startsAt": 77
+    },
+    {
+      "title": "Crusader",
+      "imageUrl": "ranks/dota2/crusader.png",
+      "startsAt": 154
+    },
+    {
+      "title": "Archon",
+      "imageUrl": "ranks/dota2/archon.png",
+      "startsAt": 2310
+    },
+    {
+      "title": "Legend",
+      "imageUrl": "ranks/dota2/legend.png",
+      "startsAt": 3080
+    },
+    {
+      "title": "Ancient",
+      "imageUrl": "ranks/dota2/ancient.png",
+      "startsAt": 3850
+    },
+    {
+      "title": "Divine",
+      "imageUrl": "ranks/dota2/divine.png",
+      "startsAt": 4620
+    },
+    {
+      "title": "Immortal",
+      "imageUrl": "ranks/dota2/immortal.png",
+      "startsAt": 5420
+    }
+  ]
+}

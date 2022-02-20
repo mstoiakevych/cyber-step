@@ -1,0 +1,91 @@
+{
+  "title": "CS:GO",
+  "offers": [
+    {
+      "title": "Priority order (2x speed)",
+      "percentage": 20
+    },
+    {
+      "title": "+1 Win after Boost",
+      "percentage": 5
+    },
+    {
+      "title": "Live stream",
+      "percentage": 15
+    }
+  ],
+  "ranks": [
+    {
+      "title": "Silver 1",
+      "imageUrl": "assets/img/ranks/csgo/silver-1.png",
+    },
+    {
+      "title": "Silver 2",
+      "imageUrl": "assets/img/ranks/csgo/silver-2.png",
+    },
+    {
+      "title": "Silver 3",
+      "imageUrl": "assets/img/ranks/csgo/silver-3.png",
+    },
+    {
+      "title": "Silver 4",
+      "imageUrl": "assets/img/ranks/csgo/silver-4.png",
+    },
+    {
+      "title": "Silver Elite",
+      "imageUrl": "assets/img/ranks/csgo/silver-elite.png",
+    },
+    {
+      "title": "Silver Elite Master",
+      "imageUrl": "assets/img/ranks/csgo/silver-elite-master.png",
+    },
+    {
+      "title": "Gold Nova 1",
+      "imageUrl": "assets/img/ranks/csgo/gold-nova-1.png",
+    },
+    {
+      "title": "Gold Nova 2",
+      "imageUrl": "assets/img/ranks/csgo/gold-nova-2.png",
+    },
+    {
+      "title": "Gold Nova 3",
+      "imageUrl": "assets/img/ranks/csgo/gold-nova-3.png",
+    },
+    {
+      "title": "Gold Nova Master",
+      "imageUrl": "assets/img/ranks/csgo/gold-nova-master.png",
+    },
+    {
+      "title": "Gold Guardian 1",
+      "imageUrl": "assets/img/ranks/csgo/master-guardian-1.png",
+    },
+    {
+      "title": "Gold Guardian 2",
+      "imageUrl": "assets/img/ranks/csgo/master-guardian-2.png",
+    },
+    {
+      "title": "Gold Guardian Elite",
+      "imageUrl": "assets/img/ranks/csgo/master-guardian-elite.png",
+    },
+    {
+      "title": "Distinguished Master Guardian",
+      "imageUrl": "assets/img/ranks/csgo/distinguished-master-guardian.png",
+    },
+    {
+      "title": "Legendary Eagle",
+      "imageUrl": "assets/img/ranks/csgo/legendary-eagle.png",
+    },
+    {
+      "title": "Legendary Eagle Master",
+      "imageUrl": "assets/img/ranks/csgo/legendary-eagle-master.png",
+    },
+    {
+      "title": "Supreme Master First Class",
+      "imageUrl": "assets/img/ranks/csgo/supreme-master-first-class.png",
+    },
+    {
+      "title": "The Global Elite",
+      "imageUrl": "assets/img/ranks/csgo/the-global-elite.png",
+    }
+  ]
+}
