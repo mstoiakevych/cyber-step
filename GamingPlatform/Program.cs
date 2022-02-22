@@ -1,4 +1,5 @@
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Shared.Boosting;
 using Shared.Boosting.Entities;
@@ -14,6 +15,17 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseInMemoryDatabase("InMemory");
     // options.UseNpgsql(configuration.GetConnectionString("GamingPlatform"));
 });
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    })
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/login";
+        options.LogoutPath = "/signout";
+    })
+    .AddSteam();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -47,6 +59,8 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
