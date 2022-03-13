@@ -1,4 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.Security.Claims;
+using System.Text.Json;
+using Domain.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Shared.Boosting;
@@ -20,15 +23,16 @@ public class WeatherForecastController : ControllerBase
     public WeatherForecastController(ILogger<WeatherForecastController> logger, IOptions<ApexLegendsGameOptions> options, IOptions<Dota2GameOptions> dotaOptions, GameOptionsProvider _gameOptionsProvider)
     {
         _logger = logger;
-        // Console.WriteLine(JsonSerializer.Serialize(options.Value));
-        // Console.WriteLine(JsonSerializer.Serialize(dotaOptions.Value));
-        var lolOptions = _gameOptionsProvider.GetGameOptions<LeagueOfLegendsGameOptions>();
-        Console.WriteLine(JsonSerializer.Serialize(lolOptions));
     }
 
     [HttpGet]
-    public IEnumerable<WeatherForecast> Get()
+    public async Task<WeatherForecast[]> Get()
     {
+        foreach (var userClaim in User.Claims)
+        {
+            Console.WriteLine($"Weather forecast:    {userClaim.Type} - {userClaim.Value}");
+        }
+        
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),

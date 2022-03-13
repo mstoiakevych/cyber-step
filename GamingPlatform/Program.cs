@@ -1,5 +1,11 @@
+using AspNet.Security.OpenId.Steam;
+using Domain.Identity;
+using Infrastructure.Abstractions;
 using Infrastructure.Data;
+using Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Shared.Boosting;
 using Shared.Boosting.Entities;
@@ -12,18 +18,31 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    options.UseInMemoryDatabase("InMemory");
-    // options.UseNpgsql(configuration.GetConnectionString("GamingPlatform"));
+    // options.UseInMemoryDatabase("InMemory");
+    options.UseNpgsql(builder.Configuration.GetConnectionString("GamingPlatform"));
 });
+
+builder.Services.AddIdentity<SteamUser, IdentityRole>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<DataContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = SteamAuthenticationDefaults.AuthenticationScheme;
     })
     .AddCookie(options =>
     {
         options.LoginPath = "/login";
         options.LogoutPath = "/signout";
+
+        options.Events.OnSigningOut = context =>
+        {
+            Console.WriteLine("Cookie");
+            
+            return Task.CompletedTask;
+        };
     })
     .AddSteam();
 
@@ -42,6 +61,10 @@ builder.Services.AddOptions<RocketLeagueGameOptions>().Bind(builder.Configuratio
 builder.Services.AddOptions<ValorantGameOptions>().Bind(builder.Configuration.GetSection(ValorantGameOptions.ConfigName));
 
 builder.Services.AddSingleton<GameOptionsProvider>();
+
+builder.Services.AddTransient<IClaimsTransformation, SteamUserClaimsTransformation>();
+
+builder.Services.AddHttpClient<ISteamApiService, SteamApiService>();
 
 var app = builder.Build();
 
