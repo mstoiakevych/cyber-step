@@ -1,5 +1,6 @@
 using AspNet.Security.OpenId.Steam;
 using Domain.Identity;
+using GamingPlatform.Hubs;
 using Infrastructure.Abstractions;
 using Infrastructure.Data;
 using Infrastructure.Services;
@@ -15,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
@@ -68,6 +70,8 @@ builder.Services.AddHttpClient<ISteamApiService, SteamApiService>();
 
 var app = builder.Build();
 
+app.UseRouting();
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -86,7 +90,13 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
-app.MapFallbackToFile("index.html");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapFallbackToFile("index.html");
+    endpoints.MapHub<MatchManagementHub>("/hub/match-management");
+});
+// app.MapControllers();
+// app.MapFallbackToFile("index.html");
 
 app.Run();
