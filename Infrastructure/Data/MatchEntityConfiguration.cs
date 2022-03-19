@@ -22,5 +22,10 @@ public class MatchEntityConfiguration : IEntityTypeConfiguration<Match>
                     .HasForeignKey(mp => mp.MatchId),
                 x => { x.HasKey(mp => new {mp.MatchId, mp.PlayerId}); }
             );
+
+        builder
+            .HasOne(x => x.Bot)
+            .WithOne(x => x.Match)
+            .HasForeignKey<Match>(x => x.BotId);
     }
 }

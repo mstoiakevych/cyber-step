@@ -6,6 +6,7 @@ namespace Domain.Tournaments;
 public class Player : IBaseEntity
 {
     public long Id { get; set; }
+    public string UserId { get; set; }
     public SteamUser User { get; set; }
     public Team Team { get; set; }
     public ICollection<Match> Matches { get; set; }
