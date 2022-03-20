@@ -22,6 +22,19 @@ namespace Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Common.BotClient", b =>
+                {
+                    b.Property<string>("ConnectionId")
+                        .HasColumnType("text");
+
+                    b.Property<long>("MatchId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ConnectionId");
+
+                    b.ToTable("BotClient");
+                });
+
             modelBuilder.Entity("Domain.Common.HubClient", b =>
                 {
                     b.Property<string>("ConnectionId")
@@ -30,15 +43,17 @@ namespace Infrastructure.Migrations
                     b.Property<long>("MatchId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("PlayerId")
+                    b.Property<long>("PlayerId")
                         .HasColumnType("bigint");
 
                     b.HasKey("ConnectionId");
 
+                    b.HasIndex("MatchId");
+
                     b.HasIndex("PlayerId")
                         .IsUnique();
 
-                    b.ToTable("HubClient");
+                    b.ToTable("HubClients");
                 });
 
             modelBuilder.Entity("Domain.Identity.SteamUser", b =>
@@ -129,7 +144,6 @@ namespace Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("BotId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("GameMode")
@@ -196,7 +210,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Player");
+                    b.ToTable("Players");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -333,20 +347,29 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Common.HubClient", b =>
                 {
+                    b.HasOne("Domain.Tournaments.Match", "Match")
+                        .WithMany()
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Tournaments.Player", "Player")
                         .WithOne()
-                        .HasForeignKey("Domain.Common.HubClient", "PlayerId");
+                        .HasForeignKey("Domain.Common.HubClient", "PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Match");
 
                     b.Navigation("Player");
                 });
 
             modelBuilder.Entity("Domain.Tournaments.Match", b =>
                 {
-                    b.HasOne("Domain.Common.HubClient", "Bot")
+                    b.HasOne("Domain.Common.BotClient", "Bot")
                         .WithOne("Match")
                         .HasForeignKey("Domain.Tournaments.Match", "BotId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Bot");
                 });
@@ -432,7 +455,7 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Common.HubClient", b =>
+            modelBuilder.Entity("Domain.Common.BotClient", b =>
                 {
                     b.Navigation("Match");
                 });

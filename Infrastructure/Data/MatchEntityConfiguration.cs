@@ -26,6 +26,7 @@ public class MatchEntityConfiguration : IEntityTypeConfiguration<Match>
         builder
             .HasOne(x => x.Bot)
             .WithOne(x => x.Match)
-            .HasForeignKey<Match>(x => x.BotId);
+            .HasForeignKey<Match>(x => x.BotId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

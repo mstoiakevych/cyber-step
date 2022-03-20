@@ -55,6 +55,18 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BotClient",
+                columns: table => new
+                {
+                    ConnectionId = table.Column<string>(type: "text", nullable: false),
+                    MatchId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BotClient", x => x.ConnectionId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -161,7 +173,7 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Player",
+                name: "Players",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -171,31 +183,13 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Player", x => x.Id);
+                    table.PrimaryKey("PK_Players", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Player_AspNetUsers_UserId",
+                        name: "FK_Players_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "HubClient",
-                columns: table => new
-                {
-                    ConnectionId = table.Column<string>(type: "text", nullable: false),
-                    PlayerId = table.Column<long>(type: "bigint", nullable: true),
-                    MatchId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_HubClient", x => x.ConnectionId);
-                    table.ForeignKey(
-                        name: "FK_HubClient_Player_PlayerId",
-                        column: x => x.PlayerId,
-                        principalTable: "Player",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -210,16 +204,41 @@ namespace Infrastructure.Migrations
                     Server = table.Column<int>(type: "integer", nullable: false),
                     LobbyName = table.Column<string>(type: "text", nullable: false),
                     LobbyPassword = table.Column<string>(type: "text", nullable: false),
-                    BotId = table.Column<string>(type: "text", nullable: false)
+                    BotId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Matches", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Matches_HubClient_BotId",
+                        name: "FK_Matches_BotClient_BotId",
                         column: x => x.BotId,
-                        principalTable: "HubClient",
+                        principalTable: "BotClient",
                         principalColumn: "ConnectionId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HubClients",
+                columns: table => new
+                {
+                    ConnectionId = table.Column<string>(type: "text", nullable: false),
+                    PlayerId = table.Column<long>(type: "bigint", nullable: false),
+                    MatchId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HubClients", x => x.ConnectionId);
+                    table.ForeignKey(
+                        name: "FK_HubClients_Matches_MatchId",
+                        column: x => x.MatchId,
+                        principalTable: "Matches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HubClients_Players_PlayerId",
+                        column: x => x.PlayerId,
+                        principalTable: "Players",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -240,9 +259,9 @@ namespace Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MatchPlayer_Player_PlayerId",
+                        name: "FK_MatchPlayer_Players_PlayerId",
                         column: x => x.PlayerId,
-                        principalTable: "Player",
+                        principalTable: "Players",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -285,8 +304,13 @@ namespace Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_HubClient_PlayerId",
-                table: "HubClient",
+                name: "IX_HubClients_MatchId",
+                table: "HubClients",
+                column: "MatchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HubClients_PlayerId",
+                table: "HubClients",
                 column: "PlayerId",
                 unique: true);
 
@@ -302,8 +326,8 @@ namespace Infrastructure.Migrations
                 column: "PlayerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Player_UserId",
-                table: "Player",
+                name: "IX_Players_UserId",
+                table: "Players",
                 column: "UserId",
                 unique: true);
         }
@@ -326,6 +350,9 @@ namespace Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "HubClients");
+
+            migrationBuilder.DropTable(
                 name: "MatchPlayer");
 
             migrationBuilder.DropTable(
@@ -335,10 +362,10 @@ namespace Infrastructure.Migrations
                 name: "Matches");
 
             migrationBuilder.DropTable(
-                name: "HubClient");
+                name: "Players");
 
             migrationBuilder.DropTable(
-                name: "Player");
+                name: "BotClient");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

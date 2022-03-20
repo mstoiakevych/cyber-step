@@ -22,7 +22,6 @@ public class Repository<T> : IRepository<T> where T : class
         includeProperties.ToList().ForEach(include => query.Include(include));
 
         return query.AsEnumerable();
-
     }
 
     public T? GetByKey<TKey>(TKey key) =>  Entities.Find(key);
