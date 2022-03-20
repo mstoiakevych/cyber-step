@@ -1,4 +1,5 @@
-﻿using Domain.Identity;
+﻿using Domain.Common;
+using Domain.Identity;
 using Domain.Tournaments;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -20,4 +21,6 @@ public class DataContext : IdentityDbContext<SteamUser>
     }
 
     public DbSet<Match> Matches { get; set; }
+    public DbSet<Player> Players { get; set; }
+    public DbSet<HubClient> HubClients { get; set; }
 }
