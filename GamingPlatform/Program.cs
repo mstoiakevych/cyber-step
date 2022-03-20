@@ -1,5 +1,7 @@
 using AspNet.Security.OpenId.Steam;
+using Domain.Abstractions;
 using Domain.Identity;
+using GamingPlatform;
 using GamingPlatform.Hubs;
 using Infrastructure;
 using Infrastructure.Abstractions;
@@ -21,6 +23,8 @@ builder.Services.AddDbContext<DataContext>(options =>
     // options.UseInMemoryDatabase("InMemory");
     options.UseNpgsql(builder.Configuration.GetConnectionString("GamingPlatform"));
 });
+builder.Services.AddOptions<BotOptions>().Bind(builder.Configuration.GetSection("BotOptions"));
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 #region Configure Authentication
 

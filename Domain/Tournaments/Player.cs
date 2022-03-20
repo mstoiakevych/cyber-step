@@ -3,7 +3,7 @@ using Domain.Identity;
 
 namespace Domain.Tournaments;
 
-public class Player : IBaseEntity
+public class Player : IEntity
 {
     public long Id { get; set; }
     public string UserId { get; set; }

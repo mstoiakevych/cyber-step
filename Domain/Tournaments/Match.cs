@@ -3,7 +3,7 @@ using Domain.Common;
 
 namespace Domain.Tournaments;
 
-public class Match : IBaseEntity
+public class Match : IEntity
 {
     public long Id { get; set; }
     public string Name { get; set; }
@@ -12,7 +12,7 @@ public class Match : IBaseEntity
     public DotaServer Server { get; set; }
     public string LobbyName { get; set; }
     public string LobbyPassword { get; set; }
-    public string BotId { get; set; }
-    public HubClient Bot { get; set; }
+    public string? BotId { get; set; }
+    public BotClient? Bot { get; set; }
     public ICollection<Player> Players { get; set; }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Domain.Abstractions;
 
-public interface IBaseEntity
+public interface IEntity
 {
     public long Id { get; set; }
 }
