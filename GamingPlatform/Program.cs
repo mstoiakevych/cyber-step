@@ -24,7 +24,6 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("GamingPlatform"));
 });
 builder.Services.AddOptions<BotOptions>().Bind(builder.Configuration.GetSection("BotOptions"));
-builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 #region Configure Authentication
 

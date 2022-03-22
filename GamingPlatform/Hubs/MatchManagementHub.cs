@@ -15,13 +15,11 @@ public class MatchManagementHub : Hub
     }
 
     private static readonly Random Random = new();
-    private readonly IUnitOfWork _unitOfWork;
     private readonly BotOptions _botOptions;
 
-    public MatchManagementHub(IOptions<BotOptions> botOptions, IUnitOfWork unitOfWork)
+    public MatchManagementHub(IOptions<BotOptions> botOptions)
     {
         _botOptions = botOptions.Value;
-        _unitOfWork = unitOfWork;
     }
 
     public async Task CreateGame(string gameName)
