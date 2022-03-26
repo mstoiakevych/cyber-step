@@ -13,11 +13,5 @@ public class BotClientEntityConfiguration: IEntityTypeConfiguration<BotClient>
         builder
             .Property(x => x.ConnectionId)
             .ValueGeneratedNever();
-        
-        builder
-            .HasOne(x => x.Match)
-            .WithOne(x=>x.Bot)
-            .HasForeignKey<BotClient>(x=>x.MatchId)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

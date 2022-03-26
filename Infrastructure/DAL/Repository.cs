@@ -35,20 +35,66 @@ public class Repository<T> : IRepository<T> where T : class
 
     public T? Single(Expression<Func<T, bool>> predicate) => Entities.SingleOrDefault(predicate);
     public async Task<T?> SingleAsync(Expression<Func<T, bool>> predicate) => await Entities.SingleOrDefaultAsync(predicate);
-    public T Insert(T entity) => Entities.Add(entity).Entity;
-    public async Task<T> InsertAsync(T entity) => (await Entities.AddAsync(entity)).Entity;
 
-    public void InsertRange(IEnumerable<T> items) => Entities.AddRange(items);
+    public T Insert(T entity)
+    {
+        var inserted = Entities.Add(entity).Entity;
 
-    public async Task InsertRangeAsync(IEnumerable<T> items) => await Entities.AddRangeAsync(items);
+        Save();
 
-    public void Update(T entity) => Entities.Update(entity);
+        return inserted;
+    }
 
-    public void UpdateRange(IEnumerable<T> items) => Entities.UpdateRange(items);
+    public async Task<T> InsertAsync(T entity)
+    {
+        var inserted = (await Entities.AddAsync(entity)).Entity;
 
-    public void Delete(T entity) => Entities.Remove(entity);
+        await SaveAsync();
 
-    public void DeleteRange(IEnumerable<T> items) => Entities.RemoveRange(items);
+        return inserted;
+    }
+
+    public void InsertRange(IEnumerable<T> items)
+    {
+        Entities.AddRange(items);
+
+        Save();
+    }
+
+    public async Task InsertRangeAsync(IEnumerable<T> items)
+    {
+        await Entities.AddRangeAsync(items);
+
+        await SaveAsync();
+    }
+
+    public void Update(T entity)
+    {
+        Entities.Update(entity);
+
+        Save();
+    }
+
+    public void UpdateRange(IEnumerable<T> items)
+    {
+        Entities.UpdateRange(items);
+
+        Save();
+    }
+
+    public void Delete(T entity)
+    {
+        Entities.Remove(entity);
+
+        Save();
+    }
+
+    public void DeleteRange(IEnumerable<T> items)
+    {
+        Entities.RemoveRange(items);
+
+        Save();
+    }
 
     public T Attach(T entity) => Entities.Attach(entity).Entity;
 

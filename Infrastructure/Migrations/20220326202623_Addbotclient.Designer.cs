@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220326202623_Addbotclient")]
+    partial class Addbotclient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,7 +34,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("ConnectionId");
 
-                    b.ToTable("BotClients", (string)null);
+                    b.ToTable("BotClients");
                 });
 
             modelBuilder.Entity("Domain.Common.HubClient", b =>
@@ -53,7 +55,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("PlayerId")
                         .IsUnique();
 
-                    b.ToTable("HubClients", (string)null);
+                    b.ToTable("HubClients");
                 });
 
             modelBuilder.Entity("Domain.Identity.SteamUser", b =>
@@ -172,7 +174,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("BotId")
                         .IsUnique();
 
-                    b.ToTable("Matches", (string)null);
+                    b.ToTable("Matches");
                 });
 
             modelBuilder.Entity("Domain.Tournaments.MatchPlayer", b =>
@@ -187,7 +189,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PlayerId");
 
-                    b.ToTable("MatchPlayers", (string)null);
+                    b.ToTable("MatchPlayers");
                 });
 
             modelBuilder.Entity("Domain.Tournaments.Player", b =>
@@ -210,7 +212,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Players", (string)null);
+                    b.ToTable("Players");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

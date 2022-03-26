@@ -13,5 +13,6 @@ public static class DependencyInjection
         serviceCollection.AddTransient<IRepository<Match>, Repository<Match>>();
         serviceCollection.AddTransient<IRepository<Player>, Repository<Player>>();
         serviceCollection.AddTransient<IRepository<HubClient>, Repository<HubClient>>();
+        serviceCollection.AddTransient<IRepository<BotClient>, Repository<BotClient>>();
     }
 }
