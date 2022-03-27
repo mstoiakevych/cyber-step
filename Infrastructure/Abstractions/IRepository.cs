@@ -4,6 +4,7 @@ namespace Infrastructure.Abstractions;
 
 public interface IRepository<T> where T : class
 {
+    IQueryable<T> Query { get; }
     IEnumerable<T> All { get; }
     IEnumerable<T> AllIncluding(params Expression<Func<T, object>>[] predicates);
     T? GetByKey<TKey>(TKey key);

@@ -4,11 +4,12 @@ namespace Domain.Common;
 
 public class BotClient
 {
-    public string ConnectionId { get; }
+    public string ConnectionId { get; init; }
+    public long MatchId { get; init; }
 
-    public long MatchId { get; }
-    public Match? Match { get; set; }
-    
+    public BotClient()
+    {
+    }
 
     public BotClient(string connectionId, long matchId)
     {

@@ -1,9 +1,8 @@
-﻿using Domain.Abstractions;
-using Domain.Common;
+﻿using Domain.Tournaments;
 
-namespace Domain.Tournaments;
+namespace Infrastructure.DTO.Match;
 
-public class Match : IEntity
+public class MatchDto
 {
     public long Id { get; set; }
     public string Name { get; set; }
@@ -12,7 +11,5 @@ public class Match : IEntity
     public string Server { get; set; }
     public string LobbyName { get; set; }
     public string LobbyPassword { get; set; }
-    public string? BotId { get; set; }
-    public BotClient? Bot { get; set; }
     public ICollection<Player> Players { get; set; }
 }
