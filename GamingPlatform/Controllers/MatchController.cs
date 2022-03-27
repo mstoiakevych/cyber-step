@@ -2,7 +2,6 @@
 using Domain.Tournaments;
 using Infrastructure.Abstractions;
 using Infrastructure.DTO.Match;
-using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamingPlatform.Controllers;
@@ -38,13 +37,35 @@ public class MatchController : ControllerBase
         return Ok(query);
     }
 
+    [HttpPost("create-join")]
+    public async Task<ActionResult<JoinMatchDto>> CreateAndJoin(CreateMatchDto createMatchDto)
+    {
+        var match = new Match
+        {
+            Name = createMatchDto.Name,
+            Server = createMatchDto.Server,
+            GameMode = createMatchDto.GameMode,
+            GameState = GameState.Lobby
+        };
+
+        match = await _matchRepository.InsertAsync(match);
+
+        var player = await _playerService.JoinMatch(match.Id, User);
+        if (player == null) return BadRequest();
+        
+        return new JoinMatchDto
+        {
+            MatchId = match.Id,
+            PlayerId = player.Id
+        };
+    }
+
     [HttpPost("join/{id:long}")]
-    public async Task<ActionResult<JoinMatchDto>> JoinMatch(long id)
+    public async Task<ActionResult<JoinMatchDto>> Join(long id)
     {
         var player = await _playerService.JoinMatch(id, User);
 
-        if (player == null)
-            return BadRequest();
+        if (player == null) return BadRequest();
 
         return new JoinMatchDto
         {
