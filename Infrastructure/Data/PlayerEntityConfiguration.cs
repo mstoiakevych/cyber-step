@@ -10,7 +10,7 @@ public class PlayerEntityConfiguration : IEntityTypeConfiguration<Player>
     {
         builder
             .HasOne(x => x.User)
-            .WithOne()
-            .HasForeignKey<Player>(x => x.UserId);
+            .WithMany()
+            .HasForeignKey(x => x.UserId);
     }
 }

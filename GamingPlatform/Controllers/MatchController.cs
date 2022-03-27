@@ -1,6 +1,8 @@
-﻿using Domain.Tournaments;
+﻿using Domain.Abstractions;
+using Domain.Tournaments;
 using Infrastructure.Abstractions;
 using Infrastructure.DTO.Match;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamingPlatform.Controllers;
@@ -10,10 +12,12 @@ namespace GamingPlatform.Controllers;
 public class MatchController : ControllerBase
 {
     private readonly IRepository<Match> _matchRepository;
+    private readonly IPlayerService _playerService;
 
-    public MatchController(IRepository<Match> matchRepository)
+    public MatchController(IRepository<Match> matchRepository, IPlayerService playerService)
     {
         _matchRepository = matchRepository;
+        _playerService = playerService;
     }
 
     [HttpGet]
@@ -32,5 +36,20 @@ public class MatchController : ControllerBase
         }
 
         return Ok(query);
+    }
+
+    [HttpPost("join/{id:long}")]
+    public async Task<ActionResult<JoinMatchDto>> JoinMatch(long id)
+    {
+        var player = await _playerService.JoinMatch(id, User);
+
+        if (player == null)
+            return BadRequest();
+
+        return new JoinMatchDto
+        {
+            MatchId = id,
+            PlayerId = player.Id
+        };
     }
 }

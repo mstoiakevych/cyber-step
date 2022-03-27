@@ -1,7 +1,9 @@
-﻿using Domain.Common;
+﻿using Domain.Abstractions;
+using Domain.Common;
 using Domain.Tournaments;
 using Infrastructure.Abstractions;
 using Infrastructure.DAL;
+using Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure;
@@ -14,5 +16,7 @@ public static class DependencyInjection
         serviceCollection.AddTransient<IRepository<Player>, Repository<Player>>();
         serviceCollection.AddTransient<IRepository<HubClient>, Repository<HubClient>>();
         serviceCollection.AddTransient<IRepository<BotClient>, Repository<BotClient>>();
+        
+        serviceCollection.AddTransient<IPlayerService, PlayerService>();
     }
 }
