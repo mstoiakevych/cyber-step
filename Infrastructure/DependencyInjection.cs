@@ -18,5 +18,7 @@ public static class DependencyInjection
         serviceCollection.AddTransient<IRepository<BotClient>, Repository<BotClient>>();
         
         serviceCollection.AddTransient<IPlayerService, PlayerService>();
+        serviceCollection.AddTransient<IMatchService, MatchService>();
+        serviceCollection.AddTransient<IClientService, ClientService>();
     }
 }

@@ -1,5 +1,4 @@
-﻿using Domain.Abstractions;
-using Domain.Tournaments;
+﻿using Domain.Tournaments;
 using Infrastructure.Abstractions;
 using Infrastructure.DTO.Match;
 using Microsoft.AspNetCore.Mvc;
@@ -10,31 +9,21 @@ namespace GamingPlatform.Controllers;
 [Route("api/[controller]")]
 public class MatchController : ControllerBase
 {
-    private readonly IRepository<Match> _matchRepository;
+    private readonly IMatchService _matchService;
     private readonly IPlayerService _playerService;
 
-    public MatchController(IRepository<Match> matchRepository, IPlayerService playerService)
+    public MatchController(IPlayerService playerService, IMatchService matchService)
     {
-        _matchRepository = matchRepository;
         _playerService = playerService;
+        _matchService = matchService;
     }
 
     [HttpGet]
-    public ActionResult<Match[]> Search([FromQuery] MatchSearchArgs args)
+    public async Task<ActionResult<Match[]>> Search([FromQuery] MatchSearchArgs args)
     {
-        var query = _matchRepository.Query.Where(x => x.GameState == GameState.Lobby);
-        
-        if (args.GameMode != null)
-        {
-            query = query.Where(x => x.GameMode == args.GameMode);
-        }
+        var matches = await _matchService.Search(args);
 
-        if (args.Server != null)
-        {
-            query = query.Where(x => x.Server == args.Server);
-        }
-
-        return Ok(query);
+        return Ok(matches);
     }
 
     [HttpPost("create-join")]
@@ -48,7 +37,7 @@ public class MatchController : ControllerBase
             GameState = GameState.Lobby
         };
 
-        match = await _matchRepository.InsertAsync(match);
+        match = await _matchService.CreateMatch(match);
 
         var player = await _playerService.JoinMatch(match.Id, User);
         if (player == null) return BadRequest();
@@ -72,5 +61,16 @@ public class MatchController : ControllerBase
             MatchId = id,
             PlayerId = player.Id
         };
+    }
+
+    [HttpPost("end/{id:long}")]
+    public async Task<ActionResult> End(long id)
+    {
+        var success = await _matchService.EndMatch(id);
+
+        if (!success)
+            return BadRequest();
+        
+        return Ok();
     }
 }

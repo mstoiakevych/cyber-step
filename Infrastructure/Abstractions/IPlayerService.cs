@@ -2,7 +2,7 @@
 using Domain.Common;
 using Domain.Tournaments;
 
-namespace Domain.Abstractions;
+namespace Infrastructure.Abstractions;
 
 public interface IPlayerService
 {
