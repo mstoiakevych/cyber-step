@@ -16,4 +16,6 @@ public class Match : IEntity
     public string? BotId { get; set; }
     public BotClient? Bot { get; set; }
     public ICollection<Player>? Players { get; set; }
+
+    public Team? TeamWinner { get; set; }
 }
