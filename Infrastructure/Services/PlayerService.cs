@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Domain.Common;
+using Domain.Exceptions;
 using Domain.Identity;
 using Domain.Tournaments;
 using Infrastructure.Abstractions;
@@ -55,15 +56,15 @@ public class PlayerService : IPlayerService
     public async Task<HubClient> ConnectPlayer(long matchId, long playerId, ClaimsPrincipal claimsPrincipal, string connectionId)
     {
         var match = await _matchRepository.GetByKeyAsync(matchId);
-        if (match == null) return null; // todo throw connection close exception (invalid match id)
+        if (match == null) throw new CSConnectionClosedException("Can't establish a connection with this match");
         
         var user = await _userManager.GetUserAsync(claimsPrincipal);
-        if (user == null) return null; // todo todo throw connection close exception (not authenticated)
+        if (user == null) throw new CSNotAuthenticatedException("You must be authenticated in order to join this match");
 
         var player = await _playerRepository.GetByKeyAsync(playerId);
-        if (player == null) return null; // todo throw connection close exception (player must join the game first)
+        if (player == null) throw new CSConnectionClosedException("Can't establish a connection with this match");
 
-        if (user.Id != player.UserId) return null; // todo throw connection close exception (invalid player id)
+        if (user.Id != player.UserId) throw new CSConnectionClosedException("Can't establish a connection with this match");
         
         var hubClient = new HubClient(connectionId, player.Id, match.Id);
 
@@ -75,10 +76,8 @@ public class PlayerService : IPlayerService
     {
         var match = await _matchRepository.GetByKeyAsync(matchId);
 
-        if (match == null) return null; // todo throw connection close exception (invalid match id)
+        if (match == null) throw new CSConnectionClosedException("Can't establish a bot connection with this match");
 
-        // todo maybe check for existing bot in the match???
-        
         var botClient = new BotClient
         {
             ConnectionId = connectionId,

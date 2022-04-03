@@ -1,8 +1,8 @@
 using AspNet.Security.OpenId.Steam;
-using Domain.Abstractions;
 using Domain.Identity;
 using GamingPlatform;
 using GamingPlatform.Hubs;
+using GamingPlatform.Middleware;
 using Infrastructure;
 using Infrastructure.Abstractions;
 using Infrastructure.Data;
@@ -55,6 +55,8 @@ builder.Services.AddHttpClient<ISteamApiService, SteamApiService>();
 
 builder.Services.AddInfrastructure();
 
+builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+
 var app = builder.Build();
 
 app.UseRouting();
@@ -70,6 +72,9 @@ else
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// app.UseCyberStepExceptionHandler();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
