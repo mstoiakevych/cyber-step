@@ -8,20 +8,12 @@ public class MatchEntityConfiguration : IEntityTypeConfiguration<Match>
 {
     public void Configure(EntityTypeBuilder<Match> builder)
     {
+        builder.Property(x => x.GameState).HasDefaultValue(GameState.Lobby);
+        
         builder
             .HasMany(x => x.Players)
-            .WithMany(x => x.Matches)
-            .UsingEntity<MatchPlayer>(
-                x => x
-                    .HasOne(mp => mp.Player)
-                    .WithMany()
-                    .HasForeignKey(mp => mp.PlayerId),
-                x => x
-                    .HasOne(mp => mp.Match)
-                    .WithMany()
-                    .HasForeignKey(mp => mp.MatchId),
-                x => { x.HasKey(mp => new {mp.MatchId, mp.PlayerId}); }
-            );
+            .WithOne(x => x.Match)
+            .HasForeignKey(x => x.MatchId);
 
         builder
             .HasOne(x => x.Bot)

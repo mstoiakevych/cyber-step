@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220327121409_Changeservertype")]
-    partial class Changeservertype
+    [Migration("20220403173252_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,6 +31,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<long>("MatchId")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.HasKey("ConnectionId");
 
@@ -148,18 +151,21 @@ namespace Infrastructure.Migrations
                     b.Property<string>("BotId")
                         .HasColumnType("text");
 
-                    b.Property<int>("GameMode")
+                    b.Property<int?>("GameMode")
                         .HasColumnType("integer");
 
                     b.Property<int>("GameState")
-                        .HasColumnType("integer");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
 
                     b.Property<string>("LobbyName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("LobbyPassword")
-                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("MatchMode")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -167,7 +173,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Server")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -178,21 +183,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Matches");
                 });
 
-            modelBuilder.Entity("Domain.Tournaments.MatchPlayer", b =>
-                {
-                    b.Property<long>("MatchId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("PlayerId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("MatchId", "PlayerId");
-
-                    b.HasIndex("PlayerId");
-
-                    b.ToTable("MatchPlayers");
-                });
-
             modelBuilder.Entity("Domain.Tournaments.Player", b =>
                 {
                     b.Property<long>("Id")
@@ -201,7 +191,10 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<int>("Team")
+                    b.Property<long>("MatchId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("Team")
                         .HasColumnType("integer");
 
                     b.Property<string>("UserId")
@@ -210,8 +203,9 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("MatchId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Players");
                 });
@@ -377,32 +371,21 @@ namespace Infrastructure.Migrations
                     b.Navigation("Bot");
                 });
 
-            modelBuilder.Entity("Domain.Tournaments.MatchPlayer", b =>
+            modelBuilder.Entity("Domain.Tournaments.Player", b =>
                 {
                     b.HasOne("Domain.Tournaments.Match", "Match")
-                        .WithMany()
+                        .WithMany("Players")
                         .HasForeignKey("MatchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Tournaments.Player", "Player")
+                    b.HasOne("Domain.Identity.SteamUser", "User")
                         .WithMany()
-                        .HasForeignKey("PlayerId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Match");
-
-                    b.Navigation("Player");
-                });
-
-            modelBuilder.Entity("Domain.Tournaments.Player", b =>
-                {
-                    b.HasOne("Domain.Identity.SteamUser", "User")
-                        .WithOne()
-                        .HasForeignKey("Domain.Tournaments.Player", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -456,6 +439,11 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Tournaments.Match", b =>
+                {
+                    b.Navigation("Players");
                 });
 #pragma warning restore 612, 618
         }

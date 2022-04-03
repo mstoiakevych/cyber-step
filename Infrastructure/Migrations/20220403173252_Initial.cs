@@ -55,15 +55,16 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BotClient",
+                name: "BotClients",
                 columns: table => new
                 {
                     ConnectionId = table.Column<string>(type: "text", nullable: false),
-                    MatchId = table.Column<long>(type: "bigint", nullable: false)
+                    MatchId = table.Column<long>(type: "bigint", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BotClient", x => x.ConnectionId);
+                    table.PrimaryKey("PK_BotClients", x => x.ConnectionId);
                 });
 
             migrationBuilder.CreateTable(
@@ -173,13 +174,40 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Matches",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    GameMode = table.Column<int>(type: "integer", nullable: true),
+                    GameState = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
+                    MatchMode = table.Column<string>(type: "text", nullable: true),
+                    Server = table.Column<string>(type: "text", nullable: true),
+                    LobbyName = table.Column<string>(type: "text", nullable: true),
+                    LobbyPassword = table.Column<string>(type: "text", nullable: true),
+                    BotId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Matches", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Matches_BotClients_BotId",
+                        column: x => x.BotId,
+                        principalTable: "BotClients",
+                        principalColumn: "ConnectionId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Players",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<string>(type: "text", nullable: false),
-                    Team = table.Column<int>(type: "integer", nullable: false)
+                    Team = table.Column<int>(type: "integer", nullable: true),
+                    MatchId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -190,30 +218,11 @@ namespace Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Matches",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    GameMode = table.Column<int>(type: "integer", nullable: false),
-                    GameState = table.Column<int>(type: "integer", nullable: false),
-                    Server = table.Column<int>(type: "integer", nullable: false),
-                    LobbyName = table.Column<string>(type: "text", nullable: false),
-                    LobbyPassword = table.Column<string>(type: "text", nullable: false),
-                    BotId = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Matches", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Matches_BotClient_BotId",
-                        column: x => x.BotId,
-                        principalTable: "BotClient",
-                        principalColumn: "ConnectionId",
+                        name: "FK_Players_Matches_MatchId",
+                        column: x => x.MatchId,
+                        principalTable: "Matches",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -236,30 +245,6 @@ namespace Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_HubClients_Players_PlayerId",
-                        column: x => x.PlayerId,
-                        principalTable: "Players",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MatchPlayer",
-                columns: table => new
-                {
-                    MatchId = table.Column<long>(type: "bigint", nullable: false),
-                    PlayerId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MatchPlayer", x => new { x.MatchId, x.PlayerId });
-                    table.ForeignKey(
-                        name: "FK_MatchPlayer_Matches_MatchId",
-                        column: x => x.MatchId,
-                        principalTable: "Matches",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MatchPlayer_Players_PlayerId",
                         column: x => x.PlayerId,
                         principalTable: "Players",
                         principalColumn: "Id",
@@ -321,15 +306,14 @@ namespace Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_MatchPlayer_PlayerId",
-                table: "MatchPlayer",
-                column: "PlayerId");
+                name: "IX_Players_MatchId",
+                table: "Players",
+                column: "MatchId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Players_UserId",
                 table: "Players",
-                column: "UserId",
-                unique: true);
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -353,22 +337,19 @@ namespace Infrastructure.Migrations
                 name: "HubClients");
 
             migrationBuilder.DropTable(
-                name: "MatchPlayer");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "Matches");
 
             migrationBuilder.DropTable(
                 name: "Players");
 
             migrationBuilder.DropTable(
-                name: "BotClient");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Matches");
+
+            migrationBuilder.DropTable(
+                name: "BotClients");
         }
     }
 }

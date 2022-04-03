@@ -6,6 +6,5 @@ public class CreateMatchDto
 {
     public string Name { get; set; }
     public GameMode GameMode { get; set; }
-    public GameState GameState { get; set; }
     public string Server { get; set; }
 }

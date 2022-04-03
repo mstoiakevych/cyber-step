@@ -21,7 +21,6 @@ public class DataContext : IdentityDbContext<SteamUser>
 
     public DbSet<Match> Matches { get; set; }
     public DbSet<Player> Players { get; set; }
-    public DbSet<MatchPlayer> MatchPlayers { get; set; }
     public DbSet<HubClient> HubClients { get; set; }
     public DbSet<BotClient> BotClients { get; set; }
 }

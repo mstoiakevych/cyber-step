@@ -5,6 +5,7 @@ using Domain.Identity;
 using Domain.Tournaments;
 using Infrastructure.Abstractions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services;
 
@@ -32,7 +33,7 @@ public class PlayerService : IPlayerService
 
     public async Task<Player?> JoinMatch(long matchId, ClaimsPrincipal claimsPrincipal)
     {
-        var match = await _matchRepository.GetByKeyAsync(matchId);
+        var match = _matchRepository.Query.Include(x => x.Players).FirstOrDefault(x => x.Id == matchId);
 
         if (match == null)
             return null;
@@ -42,10 +43,14 @@ public class PlayerService : IPlayerService
         if (user == null)
             return null;
 
+        var existingPlayer = match.Players?.FirstOrDefault(x => x.UserId == user.Id);
+        if (existingPlayer != null)
+            return existingPlayer;
+
         var player = new Player
         {
             UserId = user.Id,
-            Matches = new List<Match> {match}
+            MatchId = matchId
         };
 
         player = await _playerRepository.InsertAsync(player);
