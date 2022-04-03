@@ -7,8 +7,9 @@ public class Player : IEntity
 {
     public long Id { get; set; }
     public string UserId { get; set; }
-    public SteamUser User { get; set; }
+    public SteamUser? User { get; set; }
     public Team? Team { get; set; }
-    public ICollection<Match> Matches { get; set; }
+    public long MatchId { get; set; }
+    public Match? Match { get; set; }
     // todo add props
 }

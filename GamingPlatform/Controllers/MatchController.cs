@@ -33,8 +33,7 @@ public class MatchController : ControllerBase
         {
             Name = createMatchDto.Name,
             Server = createMatchDto.Server,
-            GameMode = createMatchDto.GameMode,
-            GameState = GameState.Lobby
+            GameMode = createMatchDto.GameMode
         };
 
         match = await _matchService.CreateMatch(match);

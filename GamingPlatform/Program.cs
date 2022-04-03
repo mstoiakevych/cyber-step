@@ -73,7 +73,6 @@ else
     app.UseSwaggerUI();
 }
 
-// app.UseCyberStepExceptionHandler();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
