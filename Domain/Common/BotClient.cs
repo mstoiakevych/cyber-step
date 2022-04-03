@@ -6,6 +6,8 @@ public class BotClient
 {
     public string ConnectionId { get; init; }
     public long MatchId { get; init; }
+    
+    public BotState Status { get; set; }
 
     public BotClient()
     {
