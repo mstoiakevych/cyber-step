@@ -23,6 +23,8 @@ import {ParticlesComponent} from './particles/particles.component';
 import {OrderPageComponent} from './pages/game-page/components/order-page/order-page.component';
 import {SingleBlogPageComponent} from './pages/blog-page/components/single-blog-page/single-blog-page.component';
 import { AlertComponent } from './alert/alert.component';
+import {NgxSmartModalModule} from "ngx-smart-modal";
+import {NgSelectModule} from "@ng-select/ng-select";
 
 
 @NgModule({
@@ -56,7 +58,9 @@ import { AlertComponent } from './alert/alert.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    NgSelectModule,
     BrowserModule,
+    NgxSmartModalModule.forChild()
   ]
 })
 export class MainLayoutModule {

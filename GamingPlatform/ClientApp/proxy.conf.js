@@ -1,7 +1,7 @@
 const { env } = require('process');
 
-const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
-  env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'http://localhost:10676';
+const target = env.ASPNETCORE_HTTPS_PORT ? `https://127.0.0.1:${env.ASPNETCORE_HTTPS_PORT}` :
+  env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'http://127.0.0.1:10676';
 
 const PROXY_CONFIG = [
   {
@@ -9,7 +9,8 @@ const PROXY_CONFIG = [
       "/weatherforecast",
       "/signin",
       "/signout",
-      "/link-identity"
+      "/link-identity",
+      "/api/match/create-join"
    ],
     target: target,
     secure: false,

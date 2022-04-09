@@ -8,6 +8,7 @@ export const environment = {
   authAPI: 'http://localhost:3000/api/auth/',
   blogAPI: 'http://localhost:3000/api/blogs/',
   orderAPI: 'http://localhost:3000/api/orders/',
+  matchUrl: 'http://test.com',
   jwtToken: 'jwt-token'
 };
 
