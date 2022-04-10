@@ -103,6 +103,8 @@ def start_game(hub_connection, args):
     c = CustomLobbyPage()
     c.start_game()
     hub_connection.send("SetBotStatus", [Status.InGame])
+    hub_connection.send("ShowModalWithMessage", ["Waiting for the game result"])
+
     st = time.time()
 
     g = GamePage()
