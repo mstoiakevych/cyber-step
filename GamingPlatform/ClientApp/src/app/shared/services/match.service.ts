@@ -2,16 +2,23 @@
 import {HttpClient} from "@angular/common/http";
 import {CreatedMatch, Match} from "../interfaces/match";
 import {Observable} from "rxjs";
+import {IApiService} from "../interfaces/iapi.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class MatchService {
+export class MatchService implements IApiService {
 
   constructor(private http: HttpClient) {
   }
 
-  createMatch(match: Match): Observable<CreatedMatch> {
-    return this.http.post<CreatedMatch>('/api/match/create-join', match)
+  baseUrl = '/api/match'
+
+  createAndJoinMatch(match: Match): Observable<CreatedMatch> {
+    return this.http.post<CreatedMatch>(`${this.baseUrl}/create-join`, match)
+  }
+
+  joinMatch(matchId: number) : Observable<CreatedMatch> {
+    return this.http.post<CreatedMatch>(`${this.baseUrl}/join/${matchId}`, null);
   }
 }

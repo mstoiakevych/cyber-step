@@ -25,6 +25,7 @@ import {SingleBlogPageComponent} from './pages/blog-page/components/single-blog-
 import { AlertComponent } from './alert/alert.component';
 import {NgxSmartModalModule} from "ngx-smart-modal";
 import {NgSelectModule} from "@ng-select/ng-select";
+import {CreateGameModalComponent} from "../../shared/components/create-game-modal/create-game-modal.component";
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import {NgSelectModule} from "@ng-select/ng-select";
     ParticlesComponent,
     OrderPageComponent,
     SingleBlogPageComponent,
-    AlertComponent
+    AlertComponent,
+    CreateGameModalComponent
   ],
   exports: [
     MainLayoutComponent

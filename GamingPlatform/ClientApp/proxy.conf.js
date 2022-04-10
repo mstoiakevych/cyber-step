@@ -10,7 +10,7 @@ const PROXY_CONFIG = [
       "/signin",
       "/signout",
       "/link-identity",
-      "/api/match/create-join"
+      "/api",
    ],
     target: target,
     secure: false,

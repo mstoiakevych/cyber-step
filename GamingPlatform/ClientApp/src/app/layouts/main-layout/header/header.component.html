@@ -1,50 +1,5 @@
 <header>
-  <ngx-smart-modal identifier="CreateGameModal" style="background-color: black">
-    <form class="form-default" [formGroup]="gameCreationForm" (ngSubmit)="onSubmit()">
-      <div class="login-form">
-        <h2>Create Game</h2>
-        <div class="alert alert-danger mt-2" role="alert" *ngIf="error">
-          {{error}}
-        </div>
-        <div class="form-input">
-          <label for="Name">Game name:</label>
-          <input type="text" name="Name" id="Name" placeholder="Game name" formControlName="Name">
-          <span
-            *ngIf="gameCreationForm.controls.Name.invalid &&
-                 gameCreationForm.controls.Name.dirty &&
-                 gameCreationForm.controls.Name.value"
-            class="error">Game name is required</span>
-        </div>
-        <div class="form-input">
-          <label for="GameMode">Game mode</label>
-          <ng-select id="GameMode"
-                     [items]="gameModes"
-                     bindLabel="representation"
-                     bindValue="gameMode"
-                     formControlName="GameMode"
-                     [clearable]="false"
-                     [searchable]="false"
-          >
-          </ng-select>
-        </div>
-        <div class="form-input">
-          <label for="Server">Server</label>
-          <ng-select id="Server"
-                     [items]="servers"
-                     bindLabel="representation"
-                     bindValue="server"
-                     formControlName="Server"
-                     [clearable]="false"
-                     [searchable]="false"
-          >
-          </ng-select>
-        </div>
-        <div class="form-input pt-30">
-          <input type="submit" name="submit" value="Create game" [disabled]="gameCreationForm.invalid">
-        </div>
-      </div>
-    </form>
-  </ngx-smart-modal>
+  <app-create-game-modal [modalId]="createGameModalId"></app-create-game-modal>
   <!-- Header Start -->
   <div class="header-area header-transparent">
     <div class="main-header ">
@@ -66,7 +21,7 @@
                       <li><a href="index.html">Home</a></li>
                       <li><a routerLink="/profile">Profile</a></li>
                       <li><a href="#">Help</a></li>
-                      <li><a (click)="ngxSmartModalService.getModal('CreateGameModal').open()">New Game</a></li>
+                      <li><a (click)="ngxSmartModalService.getModal(createGameModalId).open()">New Game</a></li>
                       <li><a href="#">Contact</a></li>
                       <!-- Button -->
                       <ng-template [ngIf]="!authService.isAuthenticated()">

@@ -8,7 +8,20 @@ using Microsoft.Extensions.Options;
 
 namespace GamingPlatform.Hubs;
 
-public class MatchManagementHub : Hub
+public interface IMatchClientHub
+{
+    Task Error(string message);
+    Task ShowErrorMessage(string message);
+    Task UpGame(long gameId);
+    Task InviteInLobby(IEnumerable<string> players, long matchId);
+    Task ShowModalWithMessage(string message);
+    Task EditCustomMatch(string args, long matchId);
+    Task ShowModalWithTimer(string message);
+    Task StartGame(string? arg);
+    Task ShowMatchResult(Team winner);
+}
+
+public class MatchManagementHub : Hub<IMatchClientHub>
 {
     private readonly BotOptions _botOptions;
     private readonly IRepository<Match> _matchRepository;
@@ -36,7 +49,7 @@ public class MatchManagementHub : Hub
 
         if (match == null)
         {
-            await Clients.Client(Context.ConnectionId).SendAsync("Error", "This bot does not belong to any match");
+            await Clients.Client(Context.ConnectionId).Error("This bot does not belong to any match");
             return;
         }
         
@@ -44,7 +57,7 @@ public class MatchManagementHub : Hub
         _matchRepository.Update(match);
         
         var players = match.Players.Select(x => x.UserId);
-        await Clients.Clients(players).SendAsync("ShowErrorMessage", message);
+        await Clients.Clients(players).ShowErrorMessage(message);
     }
     
     public async Task CreateGame(long matchId, long playerId)
@@ -53,14 +66,14 @@ public class MatchManagementHub : Hub
         var response = await client.GetAsync($"{_botOptions.ServerUrl}/create");
         if (!response.IsSuccessStatusCode)
         {
-            await Clients.Client(Context.ConnectionId).SendAsync("Error", "Server error");
+            await Clients.Client(Context.ConnectionId).Error("Server error");
             return;
         }
 
         var botConnectionId = response.Content.ReadAsStringAsync().Result;
         await _playerService.ConnectBot(matchId, botConnectionId);
         await _playerService.ConnectPlayer(matchId, playerId, Context.User, Context.ConnectionId);
-        await Clients.Client(botConnectionId).SendAsync("UpGame", matchId);
+        await Clients.Client(botConnectionId).UpGame(matchId);
     }
 
     public async Task SetBotStatus(BotState botStatus)
@@ -70,7 +83,7 @@ public class MatchManagementHub : Hub
 
         if (match == null)
         {
-            await Clients.Client(Context.ConnectionId).SendAsync("Error", "This bot does not belong to any match");
+            await Clients.Client(Context.ConnectionId).Error("This bot does not belong to any match");
             return;
         }
 
@@ -87,21 +100,21 @@ public class MatchManagementHub : Hub
 
         if (match == null)
         {
-            await Clients.Client(Context.ConnectionId).SendAsync("Error", $"Can not find match by this id: {matchId}");
+            await Clients.Client(Context.ConnectionId).Error($"Can not find match by this id: {matchId}");
             return;
         }
 
         if (match.Bot.Status != BotState.Online)
         {
-            await Clients.Client(Context.ConnectionId).SendAsync("Error", "Your bot is not online");
+            await Clients.Client(Context.ConnectionId).Error( "Your bot is not online");
             return;
         }
 
         if (match.Players?.Count > 0)
         {
             var players = match.Players.Select(x => x.UserId);
-            await Clients.Client(match.BotId).SendAsync("InviteInLobby", players, matchId);
-            await Clients.Clients(players).SendAsync("ShowModalWithMessage", "Waiting when all players accept invite");
+            await Clients.Client(match.BotId).InviteInLobby(players, matchId);
+            await Clients.Clients(players).ShowModalWithMessage("Waiting when all players accept invite");
         }
     }
 
@@ -114,13 +127,13 @@ public class MatchManagementHub : Hub
 
         if (match == null)
         {
-            await Clients.Client(Context.ConnectionId).SendAsync("Error", $"Can not find match by this id: {matchId}");
+            await Clients.Client(Context.ConnectionId).Error($"Can not find match by this id: {matchId}");
             return;
         }
 
         if (match.Bot.Status != BotState.InLobby)
         {
-            await Clients.Client(Context.ConnectionId).SendAsync("Error", "Your bot is not in lobby");
+            await Clients.Client(Context.ConnectionId).Error("Your bot is not in lobby");
             return;
         }
 
@@ -134,9 +147,8 @@ public class MatchManagementHub : Hub
                 visibility = "lv_public"
             });
 
-        await Clients.Client(match.BotId).SendAsync("EditCustomMatch", args, matchId);
-        await Clients.Clients(match.Players.Select(x => x.UserId))
-            .SendAsync("ShowModalWithMessage", "Waiting when the bot will configure the game");
+        await Clients.Client(match.BotId).EditCustomMatch(args, matchId);
+        await Clients.Clients(match.Players.Select(x => x.UserId)).ShowModalWithMessage("Waiting when the bot will configure the game");
     }
 
     public async Task Time2Prepare(long matchId, int minutes)
@@ -148,18 +160,18 @@ public class MatchManagementHub : Hub
 
         if (match == null)
         {
-            await Clients.Client(Context.ConnectionId).SendAsync("Error", $"Can not find match by this id: {matchId}");
+            await Clients.Client(Context.ConnectionId).Error($"Can not find match by this id: {matchId}");
             return;
         }
 
         if (match.Bot.Status != BotState.InLobby)
         {
-            await Clients.Client(Context.ConnectionId).SendAsync("Error", "Your bot is not in lobby");
+            await Clients.Client(Context.ConnectionId).Error("Your bot is not in lobby");
             return;
         }
         
         await Clients.Clients(match.Players.Select(x => x.UserId))
-            .SendAsync("ShowModalWithTimer", $"You have time to prepare. The game will start automatically in {minutes}m.");
+            .ShowModalWithTimer($"You have time to prepare. The game will start automatically in {minutes}m.");
     }
 
     public async Task StartGame(long matchId)
@@ -170,17 +182,17 @@ public class MatchManagementHub : Hub
 
         if (match == null)
         {
-            await Clients.Client(Context.ConnectionId).SendAsync("Error", $"Can not find match by this id: {matchId}");
+            await Clients.Client(Context.ConnectionId).Error($"Can not find match by this id: {matchId}");
             return;
         }
 
         if (match.Bot.Status != BotState.ReadyToStart)
         {
-            await Clients.Client(Context.ConnectionId).SendAsync("Error", "Your bot is not ready");
+            await Clients.Client(Context.ConnectionId).Error("Your bot is not ready");
             return;
         }
 
-        await Clients.Client(match.BotId).SendAsync("StartGame", null);
+        await Clients.Client(match.BotId).StartGame(null);
     }
 
     public async Task SetMatchResult(Team winner)
@@ -192,13 +204,13 @@ public class MatchManagementHub : Hub
 
         if (match == null)
         {
-            await Clients.Client(Context.ConnectionId).SendAsync("Error", "This bot does not belong to any match");
+            await Clients.Client(Context.ConnectionId).Error("This bot does not belong to any match");
             return;
         }
 
         if (match.Bot.Status != BotState.InGame)
         {
-            await Clients.Client(Context.ConnectionId).SendAsync("Error", "Your bot is not ready");
+            await Clients.Client(Context.ConnectionId).Error("Your bot is not ready");
             return;
         }
 
@@ -206,6 +218,6 @@ public class MatchManagementHub : Hub
         await _matchRepository.SaveAsync();
 
         var players = match.Players.Select(x => x.UserId);
-        await Clients.Clients(players).SendAsync("ShowMatchResult", winner);
+        await Clients.Clients(players).ShowMatchResult(winner);
     }
 }
