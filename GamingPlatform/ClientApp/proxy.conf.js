@@ -6,6 +6,7 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://127.0.0.1:${env.ASPNETCORE_H
 const PROXY_CONFIG = [
   {
     context: [
+      "/hub/match-management",
       "/weatherforecast",
       "/signin",
       "/signout",
@@ -14,6 +15,7 @@ const PROXY_CONFIG = [
    ],
     target: target,
     secure: false,
+    ws: true,
     headers: {
       Connection: 'Keep-Alive'
     }

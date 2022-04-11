@@ -9,7 +9,10 @@ export const environment = {
   blogAPI: 'http://localhost:3000/api/blogs/',
   orderAPI: 'http://localhost:3000/api/orders/',
   matchUrl: 'http://test.com',
-  jwtToken: 'jwt-token'
+  jwtToken: 'jwt-token',
+
+
+  matchHub: 'https://localhost:7044/hub/match-management'
 };
 
 /*

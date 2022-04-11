@@ -3,7 +3,6 @@ import {OwlOptions} from 'ngx-owl-carousel-o';
 import {GameService} from '../../../../shared/services/game.service';
 import {Game} from '../../../../shared/interfaces/game';
 import {Router} from '@angular/router';
-import {OrderService} from '../../../../shared/services/order.service';
 
 @Component({
   selector: 'app-home-page',
@@ -41,14 +40,10 @@ export class HomePageComponent implements OnInit {
   }
 
   games: Game[] = [];
-  isGamesLoaded = false;
+  isGamesLoaded = true;
   search = '';
 
   ngOnInit(): void {
-    this.gameService.getGames().subscribe(games => {
-      this.games = games;
-      this.isGamesLoaded = true;
-    }, error => console.error(error));
   }
 
   findGame(): void {

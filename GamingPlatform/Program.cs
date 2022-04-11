@@ -16,7 +16,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
-builder.Services.AddSignalR();
+builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
+    build =>
+    {
+        build.AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowAnyOrigin();
+    }));
+builder.Services.AddSignalR(options =>
+{
+    options.MaximumReceiveMessageSize = 102400000;
+});
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
@@ -75,6 +85,7 @@ else
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
+app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

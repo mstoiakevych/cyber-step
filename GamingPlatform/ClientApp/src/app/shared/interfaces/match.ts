@@ -9,6 +9,11 @@ export interface CreatedMatch {
   PlayerId: number
 }
 
+export enum Team { // todo move to player
+  Radiant,
+  Dire
+}
+
 export enum GameMode {
   OneVsOne,
   TwoVsTwo,
