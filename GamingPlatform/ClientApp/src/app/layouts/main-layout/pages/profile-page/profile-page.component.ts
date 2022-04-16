@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {User} from '../../../../shared/interfaces/user';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {AlertService} from '../../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -11,7 +10,7 @@ import {AlertService} from '../../../../shared/services/alert.service';
 })
 export class ProfilePageComponent implements OnInit {
 
-  constructor(private authService: AuthService, private alert: AlertService) {
+  constructor(private authService: AuthService) {
   }
 
   user!: User;

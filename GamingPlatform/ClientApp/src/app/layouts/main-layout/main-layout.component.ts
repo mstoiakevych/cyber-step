@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {NotificationService} from "../../shared/services/notification.service";
 
 @Component({
   selector: 'app-main-layout',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainLayoutComponent implements OnInit {
 
-  constructor() { }
+  constructor(public notificationService: NotificationService) { }
 
   ngOnInit(): void {
   }

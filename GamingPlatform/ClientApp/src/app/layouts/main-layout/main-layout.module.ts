@@ -14,7 +14,9 @@ import {CarouselModule} from 'ngx-owl-carousel-o';
 import {HttpClientModule} from '@angular/common/http';
 import {GamePageComponent} from './pages/game-page/game-page.component';
 import {DigitGamePageComponent} from './pages/game-page/components/digit-game-page/digit-game-page.component';
-import {NotDigitGamePageComponent} from './pages/game-page/components/not-digit-game-page/not-digit-game-page.component';
+import {
+  NotDigitGamePageComponent
+} from './pages/game-page/components/not-digit-game-page/not-digit-game-page.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {ProfilePageComponent} from './pages/profile-page/profile-page.component';
@@ -22,7 +24,6 @@ import {AuthGuard} from '../../shared/guards/auth.guard';
 import {ParticlesComponent} from './particles/particles.component';
 import {OrderPageComponent} from './pages/game-page/components/order-page/order-page.component';
 import {SingleBlogPageComponent} from './pages/blog-page/components/single-blog-page/single-blog-page.component';
-import { AlertComponent } from './alert/alert.component';
 import {NgxSmartModalModule} from "ngx-smart-modal";
 import {NgSelectModule} from "@ng-select/ng-select";
 import {CreateGameModalComponent} from "../../shared/components/create-game-modal/create-game-modal.component";
@@ -47,7 +48,6 @@ import {CreateGameModalComponent} from "../../shared/components/create-game-moda
     ParticlesComponent,
     OrderPageComponent,
     SingleBlogPageComponent,
-    AlertComponent,
     CreateGameModalComponent
   ],
   exports: [

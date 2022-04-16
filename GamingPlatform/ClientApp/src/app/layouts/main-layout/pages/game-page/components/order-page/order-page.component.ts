@@ -3,7 +3,6 @@ import {Game} from '../../../../../../shared/interfaces/game';
 import {OrderService} from '../../../../../../shared/services/order.service';
 import {Order} from '../../../../../../shared/interfaces/order';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {AlertService} from '../../../../../../shared/services/alert.service';
 import {Router} from '@angular/router';
 
 declare var paypal: any;
@@ -18,7 +17,7 @@ export class OrderPageComponent implements OnInit {
 
   headerURL!: string;
 
-  constructor(private orderService: OrderService, private alert: AlertService, private router: Router) {
+  constructor(private orderService: OrderService, private router: Router) {
   }
 
   @Input() game!: Game;
@@ -93,7 +92,6 @@ export class OrderPageComponent implements OnInit {
         offers: this.offers
       };
     } else {
-      this.alert.danger('Game data is wrong!');
       throw new Error('Game data is wrong!');
     }
 
@@ -124,7 +122,6 @@ export class OrderPageComponent implements OnInit {
 
             this.onClose();
             this.paidFor = true;
-            await this.alert.success('Purchase completed!');
             await this.router.navigate(['']);
           },
           onError: (err: any) => {
@@ -133,7 +130,6 @@ export class OrderPageComponent implements OnInit {
         })
         .render(this.paypalElement.nativeElement);
     }, error => {
-      this.alert.danger('Something went wrong!');
       this.onClose();
     });
   }

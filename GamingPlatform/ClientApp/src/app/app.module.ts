@@ -11,12 +11,14 @@ import {MainLayoutModule} from "./layouts/main-layout/main-layout.module";
 import {AuthLayoutModule} from "./layouts/auth-layout/auth-layout.module";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {CookieService} from "ngx-cookie-service";
+import {NotificationComponent} from "./shared/components/notification/notification.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     NotFoundLayoutComponent,
-    BlogPageComponent
+    BlogPageComponent,
+    NotificationComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
