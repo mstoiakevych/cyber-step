@@ -8,5 +8,6 @@ export const environment = {
   jwtToken: 'jwt-token',
 
 
+  baseUrl: '',
   matchHub: '/hub/match-management'
 };

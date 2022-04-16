@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormControl, Validators} from '@angular/forms';
-import {AuthService} from 'src/app/shared/services/auth.service';
-import {Router} from '@angular/router';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-login-page',
@@ -17,7 +15,7 @@ export class LoginPageComponent implements OnInit {
 
   error = '';
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor() {
   }
 
   ngOnInit(): void {
@@ -25,17 +23,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.authService.login(this.loginForm.value).subscribe(res => {
-      if (res.success) {
-        this.loginForm.reset();
-        this.router.navigate(['/']);
-      }
-    }, error => {
-      this.error = error.error.result;
-      setTimeout(() => {
-        this.error = '';
-      }, 5000);
-    });
+
   }
 
 

@@ -1,4 +1,5 @@
 <main>
+  <app-create-game-modal [modalId]="createGameModalId"></app-create-game-modal>
   <!-- Slider Area Start-->
   <div class="slider-area slider-bg mb-100">
     <div class="slider-active">
@@ -8,13 +9,13 @@
           <div class="row align-items-center">
             <div class="col-lg-6 col-md-9 ">
               <div class="hero__caption">
-                <span data-animation="fadeInLeft" data-delay=".3s">Best boosting service provider</span>
-                <h1 data-animation="fadeInLeft" data-delay=".6s">Man UP boosting platform</h1>
+                <span data-animation="fadeInLeft" data-delay=".3s">Best tournament provider</span>
+                <h1 data-animation="fadeInLeft" data-delay=".6s">Cyber STEP tournament platform</h1>
                 <p data-animation="fadeInLeft" data-delay=".8s">Fast and quality boosting in every popular game. Arriving fast and in time.</p>
                 <!-- Slider btn -->
                 <div class="slider-btns">
                   <!-- Hero-btn -->
-                  <a data-animation="fadeInLeft" data-delay="1s" href="#" class="btn radius-btn">get started</a>
+                  <a data-animation="fadeInLeft" data-delay="1s" href="#" class="btn radius-btn" (click)="ngxSmartModalService.getModal(createGameModalId).open()">New Game</a>
                 </div>
               </div>
             </div>
@@ -45,10 +46,10 @@
           <!--Hero form -->
           <form action="#" class="search-box">
             <div class="input-form">
-              <input [(ngModel)]="search" name="find" type="text" placeholder="Find game">
+              <input name="find" type="text" placeholder="Find game">
               <!-- icon search -->
               <div class="search-form">
-                <button (click)="findGame()"><i class="ti-search"></i></button>
+                <button><i class="ti-search"></i></button>
               </div>
               <!-- icon search -->
               <div class="world-form">

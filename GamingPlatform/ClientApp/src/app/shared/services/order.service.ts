@@ -31,7 +31,7 @@ export class OrderService {
   }
 
   createOrder(order: Order): Observable<any> {
-    const headers = {Authorization: `Bearer ${this.authService.token}`};
+    const headers = {Authorization: `Bearer`};
 
     return this.http.post(this.url + 'create', order, {headers});
   }

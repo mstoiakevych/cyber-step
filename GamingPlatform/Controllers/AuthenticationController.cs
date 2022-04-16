@@ -30,13 +30,16 @@ public class AuthenticationController : Controller
     [HttpGet("/signout")]
     public async Task<IActionResult> SignOutUser()
     {
+        Response.Cookies.Delete("UserId");
+        Response.Cookies.Delete("Username");
+        Response.Cookies.Delete("Avatar");
         await _signInManager.SignOutAsync();
 
         return Redirect("/");    
     }
 
     [HttpGet("/link-identity")]
-    public async Task<IActionResult> AuthenticateWithSteam()
+    public async Task<ActionResult> AuthenticateWithSteam()
     {
         var result = await HttpContext.AuthenticateAsync(SteamAuthenticationDefaults.AuthenticationScheme);
 
@@ -66,6 +69,10 @@ public class AuthenticationController : Controller
         }
 
         await _signInManager.SignInAsync(user, new AuthenticationProperties(), SteamAuthenticationDefaults.AuthenticationScheme);
+        
+        HttpContext.Response.Cookies.Append("UserId", user.Id);
+        HttpContext.Response.Cookies.Append("Username", user.UserName);
+        HttpContext.Response.Cookies.Append("Avatar", user.Avatar);
         
         return Redirect("/");
     }

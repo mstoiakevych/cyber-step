@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {OwlOptions} from 'ngx-owl-carousel-o';
-import {GameService} from '../../../../shared/services/game.service';
-import {Game} from '../../../../shared/interfaces/game';
-import {Router} from '@angular/router';
+import {NgxSmartModalService} from "ngx-smart-modal";
+import {MatchManagementHub} from "../../../../shared/hubs/match-management.hub";
+import {MatchService} from "../../../../shared/services/match.service";
 
 @Component({
   selector: 'app-home-page',
@@ -11,44 +10,18 @@ import {Router} from '@angular/router';
 })
 export class HomePageComponent implements OnInit {
 
-  customOptions: OwlOptions = {
-    loop: true,
-    mouseDrag: true,
-    touchDrag: true,
-    pullDrag: true,
-    dots: true,
-    navSpeed: 700,
-    navText: ['', ''],
-    responsive: {
-      0: {
-        items: 1
-      },
-      400: {
-        items: 2
-      },
-      740: {
-        items: 3
-      },
-      940: {
-        items: 5
-      }
-    },
-    nav: false
-  };
+  createGameModalId = 'CreateGameId';
 
-  constructor(private gameService: GameService, private router: Router) {
-  }
-
-  games: Game[] = [];
-  isGamesLoaded = true;
-  search = '';
+  constructor(public ngxSmartModalService: NgxSmartModalService,
+              public hub: MatchManagementHub,
+              public matchService: MatchService) {}
 
   ngOnInit(): void {
+    this.hub.onError(m => console.log(m))
+
+    this.hub.establishConnection()
   }
 
-  findGame(): void {
-    if (this.search) {
-        this.router.navigate(['/game/' + this.search]);
-      }
+  onCreateGame() {
   }
 }

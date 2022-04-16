@@ -26,16 +26,6 @@ export class SignupPageComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.authService.register(this.authForm.value)
-      .subscribe(data => {
-        this.authForm.reset();
-        this.router.navigate(['/login']);
-      }, error => {
-        this.error = error.error.result;
-        setTimeout(() => {
-          this.error = '';
-        }, 5000);
-      });
   }
 
 }

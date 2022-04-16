@@ -12,6 +12,7 @@ export const environment = {
   jwtToken: 'jwt-token',
 
 
+  baseUrl: 'https://localhost:7044',
   matchHub: 'https://localhost:7044/hub/match-management'
 };
 

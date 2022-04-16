@@ -10,6 +10,7 @@ import {AppRoutingModule} from "./app-routing.module";
 import {MainLayoutModule} from "./layouts/main-layout/main-layout.module";
 import {AuthLayoutModule} from "./layouts/auth-layout/auth-layout.module";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {CookieService} from "ngx-cookie-service";
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     AuthLayoutModule,
     BrowserAnimationsModule,
   ],
-  providers: [BlogPageComponent],
+  providers: [BlogPageComponent, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

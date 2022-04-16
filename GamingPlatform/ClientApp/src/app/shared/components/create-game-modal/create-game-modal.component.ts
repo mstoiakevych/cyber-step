@@ -1,8 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {gameModeRepresentations, serverRepresentations} from "../../interfaces/match";
-import {MatchService} from "../../services/match.service";
 import {ModalComponent} from "../../interfaces/modal-component";
+import {MatchService} from "../../services/match.service";
+import {MatchManagementHub} from "../../hubs/match-management.hub";
 
 @Component({
   selector: 'app-create-game-modal',
@@ -23,7 +24,7 @@ export class CreateGameModalComponent implements OnInit, ModalComponent {
   gameModes = gameModeRepresentations
   servers = serverRepresentations
 
-  constructor(private matchService: MatchService) {
+  constructor(private matchService: MatchService, public hub: MatchManagementHub) {
   }
 
   ngOnInit(): void {
@@ -31,7 +32,7 @@ export class CreateGameModalComponent implements OnInit, ModalComponent {
 
   onSubmit() {
     this.matchService.createAndJoinMatch(this.gameCreationForm.value).subscribe(createdMatch => {
-      console.log(createdMatch)
+      this.hub.createGame(createdMatch.matchId, createdMatch.playerId)
     })
   }
 }

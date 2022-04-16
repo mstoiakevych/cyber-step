@@ -5,8 +5,8 @@
 }
 
 export interface CreatedMatch {
-  Id: number,
-  PlayerId: number
+  matchId: number,
+  playerId: number
 }
 
 export enum Team { // todo move to player

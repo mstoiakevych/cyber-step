@@ -40,6 +40,7 @@ const routes: Routes = [
       },
       {
         path: 'examples',
+        canActivate: [AuthGuard],
         component: ExamplesComponent
       },
       {

@@ -26,20 +26,8 @@ export class ProfilePageComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.authService.getCurrentUser().subscribe(user => {
-      this.user = user;
-      this.userForm.controls.fullname.setValue(user.fullname);
-      this.userForm.controls.username.setValue(user.username);
-      this.userForm.controls.email.setValue(user.email);
-      this.userForm.controls.age.setValue(user.age);
-      this.userForm.controls.phone.setValue(user.phone);
-      this.userForm.controls.address.setValue(user.address);
-    });
   }
 
   onSubmit(): void {
-    this.authService.updateUser({_id: this.user._id, ...this.userForm.value}).subscribe(_ => {
-      this.alert.success('Data has been updated!');
-    }, error => this.alert.danger('Something went wrong!'));
   }
 }
