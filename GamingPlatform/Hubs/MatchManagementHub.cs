@@ -52,14 +52,14 @@ public class MatchManagementHub : Hub<IMatchClientHub>
             await Clients.Client(Context.ConnectionId).Error("This bot does not belong to any match");
             return;
         }
-        
+
         match.Bot.Status = BotState.Error;
         _matchRepository.Update(match);
-        
+
         var players = match.Players.Select(x => x.UserId);
         await Clients.Clients(players).ShowErrorMessage(message);
     }
-    
+
     public async Task CreateGame(long matchId, long playerId)
     {
         var client = new HttpClient();
@@ -106,7 +106,7 @@ public class MatchManagementHub : Hub<IMatchClientHub>
 
         if (match.Bot.Status != BotState.Online)
         {
-            await Clients.Client(Context.ConnectionId).Error( "Your bot is not online");
+            await Clients.Client(Context.ConnectionId).Error("Your bot is not online");
             return;
         }
 
@@ -148,7 +148,8 @@ public class MatchManagementHub : Hub<IMatchClientHub>
             });
 
         await Clients.Client(match.BotId).EditCustomMatch(args, matchId);
-        await Clients.Clients(match.Players.Select(x => x.UserId)).ShowModalWithMessage("Waiting when the bot will configure the game");
+        await Clients.Clients(match.Players.Select(x => x.UserId))
+            .ShowModalWithMessage("Waiting when the bot will configure the game");
     }
 
     public async Task Time2Prepare(long matchId, int minutes)
@@ -169,7 +170,7 @@ public class MatchManagementHub : Hub<IMatchClientHub>
             await Clients.Client(Context.ConnectionId).Error("Your bot is not in lobby");
             return;
         }
-        
+
         await Clients.Clients(match.Players.Select(x => x.UserId))
             .ShowModalWithTimer($"You have time to prepare. The game will start automatically in {minutes}m.");
     }
@@ -219,5 +220,21 @@ public class MatchManagementHub : Hub<IMatchClientHub>
 
         var players = match.Players.Select(x => x.UserId);
         await Clients.Clients(players).ShowMatchResult(winner);
+    }
+
+    public async Task ShowModalWithMessage(string message)
+    {
+        var match = await _matchRepository.Query
+            .Include(x => x.Players)
+            .FirstOrDefaultAsync(x => x.BotId == Context.ConnectionId);
+
+        if (match == null)
+        {
+            await Clients.Client(Context.ConnectionId).Error("This bot does not belong to any match");
+            return;
+        }
+
+        var players = match.Players.Select(x => x.UserId);
+        await Clients.Clients(players).ShowModalWithMessage(message);
     }
 }
