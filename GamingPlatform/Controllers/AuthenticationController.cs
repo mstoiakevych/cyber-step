@@ -65,7 +65,7 @@ public class AuthenticationController : Controller
                 OnlineState = Enum.GetValues<OnlineState>()[playerSummary.Personastate]
             };
 
-            await _userManager.CreateAsync(user);
+            var identityResult = await _userManager.CreateAsync(user);
         }
 
         await _signInManager.SignInAsync(user, new AuthenticationProperties(), SteamAuthenticationDefaults.AuthenticationScheme);

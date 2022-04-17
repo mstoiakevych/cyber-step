@@ -32,6 +32,20 @@
     <div class="slider-shape d-none d-lg-block">
       <img class="slider-shape1" src="assets/img/hero/top-left-shape.png" alt="">
     </div>
+
+    <div class="container matches" style="width: 100%">
+      <div class="card" *ngFor="let match of matches">
+        <div class="card-header">
+          {{match.name}}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Server: {{getNormalizedServerName(match)}}</h5>
+          <p class="card-text">Players: {{match.joinedPlayers}}/{{match.totalPlayers}}</p>
+          <a class="btn btn-primary" (click)="onJoin(match)">Join</a>
+        </div>
+      </div>
+    </div>
+
   </div>
   <!-- Slider Area End -->
 

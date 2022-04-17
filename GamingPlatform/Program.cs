@@ -30,8 +30,8 @@ builder.Services.AddSignalR(options =>
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    options.UseInMemoryDatabase("InMemory");
-    // options.UseNpgsql(builder.Configuration.GetConnectionString("GamingPlatform"));
+    // options.UseInMemoryDatabase("InMemory");
+    options.UseNpgsql(builder.Configuration.GetConnectionString("GamingPlatform"));
 });
 builder.Services.AddOptions<BotOptions>().Bind(builder.Configuration.GetSection("BotOptions"));
 

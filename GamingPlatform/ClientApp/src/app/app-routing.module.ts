@@ -14,6 +14,7 @@ import { ProfilePageComponent } from './layouts/main-layout/pages/profile-page/p
 import { BlogPageComponent } from './layouts/main-layout/pages/blog-page/blog-page.component';
 import { SingleBlogPageComponent } from './layouts/main-layout/pages/blog-page/components/single-blog-page/single-blog-page.component';
 import { AuthGuard } from './shared/guards/auth.guard';
+import {MatchPageComponent} from "./layouts/main-layout/pages/match-page/match-page.component";
 
 
 const routes: Routes = [
@@ -59,6 +60,10 @@ const routes: Routes = [
       {
         path: 'blog/:id',
         component: SingleBlogPageComponent
+      },
+      {
+        path: 'match/:id',
+        component: MatchPageComponent
       }
     ]
   },

@@ -5,7 +5,7 @@ namespace Infrastructure.Abstractions;
 
 public interface IMatchService
 {
-    Task<List<Match>> Search(MatchSearchArgs args);
+    Task<List<MatchDto>> Search(MatchSearchArgs args);
     Task<Match> CreateMatch(Match match);
     Task<bool> EndMatch(long id);
 }

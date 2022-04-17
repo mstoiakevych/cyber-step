@@ -1,8 +1,8 @@
 ﻿import * as signalR from "@microsoft/signalr";
 import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
 import {environment} from "../../../environments/environment";
-import {Team} from "../interfaces/match";
 import {Injectable} from "@angular/core";
+import {Player, Team} from "../interfaces/player";
 
 type StringAction = (message: string) => void
 
@@ -55,6 +55,10 @@ export class MatchManagementHub {
     MatchManagementHub.connection.on('ShowMatchResult', cb)
   }
 
+  public onMatchJoin(cb: (players: Player[]) => void) {
+    MatchManagementHub.connection.on('onMatchJoin', cb)
+  }
+
   public createGame(matchId: number, playerId: number) {
     MatchManagementHub.connection.send('CreateGame', matchId, playerId)
   }
@@ -73,5 +77,9 @@ export class MatchManagementHub {
 
   public startGame(matchId: number) {
     MatchManagementHub.connection.send('StartGame', matchId)
+  }
+
+  public joinGame(matchId: number, playerId: number) {
+    MatchManagementHub.connection.send('Join', matchId, playerId)
   }
 }

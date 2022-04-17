@@ -12,6 +12,7 @@ const PROXY_CONFIG = [
       "/signout",
       "/link-identity",
       "/api",
+      "/api/match"
    ],
     target: target,
     secure: false,

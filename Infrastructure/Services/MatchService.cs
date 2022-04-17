@@ -24,9 +24,9 @@ public class MatchService : IMatchService
         return match;
     }
 
-    public async Task<List<Match>> Search(MatchSearchArgs args)
+    public async Task<List<MatchDto>> Search(MatchSearchArgs args)
     {
-        var query = _matchRepository.Query.Where(x => x.GameState == GameState.Lobby);
+        var query = _matchRepository.Query.Include(x => x.Players).Where(x => x.GameState == GameState.Lobby);
         
         if (args.GameMode != null)
         {
@@ -38,7 +38,7 @@ public class MatchService : IMatchService
             query = query.Where(x => x.Server == args.Server);
         }
 
-        return await query.ToListAsync();
+        return await query.Select(x => new MatchDto {Id = x.Id, Name = x.Name, Server = x.Server, GameMode = x.GameMode ?? GameMode.OneVsOne, GameState = x.GameState, LobbyName = x.LobbyName, LobbyPassword = x.LobbyPassword, Players = x.Players}).ToListAsync();
     }
 
     public async Task<bool> EndMatch(long id)

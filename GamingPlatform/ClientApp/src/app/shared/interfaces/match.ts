@@ -1,4 +1,16 @@
 ﻿export interface Match {
+  id: number;
+  name: string;
+  gameMode: GameMode;
+  gameState: GameState;
+  server: DotaServerType;
+  lobbyName: string;
+  lobbyPassword: string;
+  totalPlayers: number;
+  joinedPlayers: number;
+}
+
+export interface CreateMatch {
   Name: string;
   GameMode: GameMode;
   Server: DotaServerType;
@@ -7,11 +19,6 @@
 export interface CreatedMatch {
   matchId: number,
   playerId: number
-}
-
-export enum Team { // todo move to player
-  Radiant,
-  Dire
 }
 
 export enum GameMode {
@@ -40,6 +47,31 @@ export const gameModeRepresentations: GameModeRepresentation[] = [
   }
 ]
 
+export enum GameState {
+  Lobby,
+  Active,
+  Ended
+}
+
+export interface GameStateRepresentation {
+  gameState: GameState,
+  representation: string
+}
+
+export const gameStateRepresentations: GameStateRepresentation[] = [
+  {
+    gameState: GameState.Lobby,
+    representation: 'Lobby'
+  },
+  {
+    gameState: GameState.Active,
+    representation: 'Active'
+  },
+  {
+    gameState: GameState.Ended,
+    representation: 'Ended'
+  }
+]
 
 export type DotaServerType =
   "sl_us_west"

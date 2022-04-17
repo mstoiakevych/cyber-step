@@ -1,6 +1,7 @@
 ﻿using Domain.Common;
 using Domain.Tournaments;
 using Infrastructure.Abstractions;
+using Infrastructure.DTO.Match;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -18,19 +19,22 @@ public interface IMatchClientHub
     Task ShowModalWithTimer(string message);
     Task StartGame(string? arg);
     Task ShowMatchResult(Team winner);
+    Task OnMatchJoin(IEnumerable<PlayerInMatch> players);
 }
 
 public partial class MatchManagementHub : Hub<IMatchClientHub>
 {
     private readonly BotOptions _botOptions;
     private readonly IRepository<Match> _matchRepository;
+    private readonly IRepository<Player> _playerRepository;
     private readonly IPlayerService _playerService;
 
     public MatchManagementHub(IOptions<BotOptions> botOptions, IRepository<Match> matchRepository,
-        IPlayerService playerService)
+        IPlayerService playerService, IRepository<Player> playerRepository)
     {
         _matchRepository = matchRepository;
         _playerService = playerService;
+        _playerRepository = playerRepository;
         _botOptions = botOptions.Value;
     }
 
@@ -64,7 +68,7 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
 
         if (match == null)
         {
-            await Clients.Client(Context.ConnectionId).Error($"Can not find match by this id: {matchId}");
+            await Clients.Client(Context.ConnectionId).Error("Can not find this match");
             return;
         }
 
@@ -80,5 +84,42 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
             await Clients.Client(match.BotId).InviteInLobby(players, matchId);
             await Clients.Clients(players).ShowModalWithMessage("Waiting when all players accept invite");
         }
+    }
+
+    public async Task Join(long matchId, long playerId)
+    {
+        var match = await _matchRepository.Query.Include(x => x.Players).FirstOrDefaultAsync(x => x.Id == matchId);
+
+        if (match == null)
+        {
+            await Clients.Client(Context.ConnectionId).Error("You can't join this match");
+            return;
+        }
+
+        var player = await _playerRepository.GetByKeyAsync(playerId);
+
+        if (player == null)
+        {
+            await Clients.Client(Context.ConnectionId).Error("You can't join this match");
+            return;   
+        }
+
+        if (match.Players.Any(x => x.Id == playerId))
+        {
+            await Clients.Client(Context.ConnectionId).Error("You are already in this match");
+            return;
+        }
+
+        await _playerService.ConnectPlayer(matchId, playerId, Context.User, Context.ConnectionId);
+
+        var matchPlayers = match.Players.Select(x => 
+            new PlayerInMatch
+            {
+                Username = x.User.UserName,
+                Avatar = x.User.AvatarFull,
+                Team = x.Team,
+            });
+
+        await Clients.Caller.OnMatchJoin(matchPlayers);
     }
 }

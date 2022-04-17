@@ -12,4 +12,14 @@ public class MatchDto
     public string LobbyName { get; set; }
     public string LobbyPassword { get; set; }
     public ICollection<Player> Players { get; set; }
+    
+    public int TotalPlayers => GameMode switch
+    {
+        GameMode.OneVsOne => 2,
+        GameMode.TwoVsTwo => 4,
+        GameMode.FiveVsFive => 10,
+        _ => 0
+    };
+
+    public int JoinedPlayers => Players?.Count ?? 0;
 }

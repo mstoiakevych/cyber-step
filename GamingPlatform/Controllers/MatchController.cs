@@ -19,7 +19,7 @@ public class MatchController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<Match[]>> Search([FromQuery] MatchSearchArgs args)
+    public async Task<ActionResult<MatchDto[]>> Search([FromQuery] MatchSearchArgs args)
     {
         var matches = await _matchService.Search(args);
 
