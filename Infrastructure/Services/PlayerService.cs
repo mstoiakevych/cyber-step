@@ -33,17 +33,25 @@ public class PlayerService : IPlayerService
 
     public async Task<Player?> JoinMatch(long matchId, ClaimsPrincipal claimsPrincipal)
     {
-        var match = _matchRepository.Query.Include(x => x.Players).FirstOrDefault(x => x.Id == matchId);
+        var match = await _matchRepository.Query
+            .Include(x => x.Players!)
+            .ThenInclude(x => x.User)
+            .FirstOrDefaultAsync(x => x.Id == matchId);
 
         if (match == null)
-            return null;
+            throw new CSNotAcceptableException("This match has been finished.");
 
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
         if (user == null)
-            return null;
+        {
+            if (!match.Players!.Any())
+                _matchRepository.Delete(match);
+            
+            throw new CSNotAuthenticatedException("You must authenticate first!");
+        }
 
-        var existingPlayer = match.Players?.FirstOrDefault(x => x.UserId == user.Id);
+        var existingPlayer = match.Players!.FirstOrDefault(x => x.UserId == user.Id);
         if (existingPlayer != null)
             return existingPlayer;
 
@@ -104,5 +112,10 @@ public class PlayerService : IPlayerService
         if (hubClient == null) return null;
 
         return await _playerRepository.GetByKeyAsync(hubClient.PlayerId);
+    }
+
+    public async Task<HubClient?> GetHubClientFromPlayerId(long playerId)
+    {
+        return await _hubClientsRepository.Query.FirstOrDefaultAsync(x => x.PlayerId == playerId);
     }
 }

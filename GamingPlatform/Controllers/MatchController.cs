@@ -1,4 +1,5 @@
-﻿using Domain.Tournaments;
+﻿using Domain.Exceptions;
+using Domain.Tournaments;
 using Infrastructure.Abstractions;
 using Infrastructure.DTO.Match;
 using Microsoft.AspNetCore.Mvc;
@@ -22,12 +23,41 @@ public class MatchController : ControllerBase
     public async Task<ActionResult<MatchDto[]>> Search([FromQuery] MatchSearchArgs args)
     {
         var matches = await _matchService.Search(args);
+        
+        var matchDtos = matches
+            .Select(x => new MatchDto 
+            {
+                Id = x.Id, 
+                Name = x.Name, 
+                Server = x.Server, 
+                GameMode = x.GameMode ?? GameMode.OneVsOne, 
+                GameState = x.GameState, 
+                LobbyName = x.LobbyName, 
+                LobbyPassword = x.LobbyPassword, 
+                Players = x.Players
+                    .Select(x => new PlayerInMatch 
+                        {Id = x.Id, Username = x.User.UserName, Avatar = x.User.Avatar, Team = x.Team})
+                    .ToList()
+            });
 
-        return Ok(matches);
+        return Ok(matchDtos);
     }
 
-    [HttpPost("create-join")]
-    public async Task<ActionResult<JoinMatchDto>> CreateAndJoin(CreateMatchDto createMatchDto)
+    [HttpGet("{id:long}")]
+    public async Task<ActionResult<MatchDto>> Get(long id)
+    {
+        var match = await _matchService.Get(id);
+        
+        return new MatchDto
+        {
+            Id = match.Id, Name = match.Name, Server = match.Server, GameMode = (GameMode) match.GameMode,
+            GameState = match.GameState, LobbyName = match.LobbyName, LobbyPassword = match.LobbyPassword,
+            Players = match.Players.Select(x => new PlayerInMatch {Id = x.Id, Username = x.User.UserName, Avatar = x.User.AvatarFull, Team = x.Team}).ToList()
+        };
+    }
+
+    [HttpPost("create")]
+    public async Task<ActionResult<long>> Create(CreateMatchDto createMatchDto)
     {
         var match = new Match
         {
@@ -38,28 +68,17 @@ public class MatchController : ControllerBase
 
         match = await _matchService.CreateMatch(match);
 
-        var player = await _playerService.JoinMatch(match.Id, User);
-        if (player == null) return BadRequest();
-        
-        return new JoinMatchDto
-        {
-            MatchId = match.Id,
-            PlayerId = player.Id
-        };
+        return match.Id;
     }
 
     [HttpPost("join/{id:long}")]
-    public async Task<ActionResult<JoinMatchDto>> Join(long id)
+    public async Task<ActionResult<PlayerInMatch>> Join(long id)
     {
         var player = await _playerService.JoinMatch(id, User);
 
-        if (player == null) return BadRequest();
+        if (player == null) throw new CSNotAuthenticatedException("You must authenticate first");
 
-        return new JoinMatchDto
-        {
-            MatchId = id,
-            PlayerId = player.Id
-        };
+        return new PlayerInMatch {Id = player.Id, Username = player.User.UserName, Avatar = player.User.AvatarFull, Team = player.Team};
     }
 
     [HttpPost("end/{id:long}")]

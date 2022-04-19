@@ -11,7 +11,7 @@ public class MatchDto
     public string Server { get; set; }
     public string LobbyName { get; set; }
     public string LobbyPassword { get; set; }
-    public ICollection<Player> Players { get; set; }
+    public List<PlayerInMatch> Players { get; set; }
     
     public int TotalPlayers => GameMode switch
     {

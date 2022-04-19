@@ -59,8 +59,12 @@ export class MatchManagementHub {
     MatchManagementHub.connection.on('onMatchJoin', cb)
   }
 
-  public createGame(matchId: number, playerId: number) {
-    MatchManagementHub.connection.send('CreateGame', matchId, playerId)
+  public onNewPlayerJoin(cb: (player: Player) => void) {
+    MatchManagementHub.connection.on('OnNewPlayerJoin', cb)
+  }
+
+  public createGame(matchId: number) {
+    MatchManagementHub.connection.send('CreateGame', matchId)
   }
 
   public invitePlayers(matchId: number) { //?

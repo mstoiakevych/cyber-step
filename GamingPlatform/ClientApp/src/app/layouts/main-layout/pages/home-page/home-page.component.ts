@@ -4,7 +4,8 @@ import {MatchManagementHub} from "../../../../shared/hubs/match-management.hub";
 import {MatchService} from "../../../../shared/services/match.service";
 import {Match, serverRepresentations} from "../../../../shared/interfaces/match";
 import {NotificationService} from "../../../../shared/services/notification.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
+import {NgxSmartModalComponent} from "ngx-smart-modal/src/components/ngx-smart-modal.component";
 
 @Component({
   selector: 'app-home-page',
@@ -16,12 +17,15 @@ export class HomePageComponent implements OnInit {
   createGameModalId = 'CreateGameId';
   matches: Match[] = []
   matchServerRepresentations = serverRepresentations
+  get createGameModal(): NgxSmartModalComponent {
+    return this.ngxSmartModalService.getModal(this.createGameModalId)
+  }
 
   constructor(public ngxSmartModalService: NgxSmartModalService,
-              public hub: MatchManagementHub,
               public matchService: MatchService,
               public notificationService: NotificationService,
-              public router: Router) {}
+              public router: Router,
+              public hub: MatchManagementHub) {}
 
   ngOnInit(): void {
     this.hub.onError(message => this.notificationService.warning('Warning', message))
@@ -29,12 +33,8 @@ export class HomePageComponent implements OnInit {
     this.hub.establishConnection()
 
     this.matchService.getMatches().subscribe(matches => {
-      console.log('Fetched matches!', matches)
       this.matches = matches;
     }, error => this.notificationService.error('Oops!', error.message))
-  }
-
-  onCreateGame() {
   }
 
   getNormalizedServerName(match: Match): string {
@@ -42,6 +42,7 @@ export class HomePageComponent implements OnInit {
   }
 
   onJoin(match: Match) {
-    this.router.navigateByUrl(`/match/${match.id}`, {state: match})
+    this.createGameModal.close()
+    this.router.navigateByUrl(`/match/${match.id}`)
   }
 }

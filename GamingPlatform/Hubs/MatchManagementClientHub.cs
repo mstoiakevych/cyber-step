@@ -20,6 +20,7 @@ public interface IMatchClientHub
     Task StartGame(string? arg);
     Task ShowMatchResult(Team winner);
     Task OnMatchJoin(IEnumerable<PlayerInMatch> players);
+    Task OnNewPlayerJoin(PlayerInMatch player);
 }
 
 public partial class MatchManagementHub : Hub<IMatchClientHub>
@@ -43,7 +44,7 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
         return Context.ConnectionId;
     }
 
-    public async Task CreateGame(long matchId, long playerId)
+    public async Task CreateGame(long matchId)
     {
         var client = new HttpClient();
         var response = await client.GetAsync($"{_botOptions.ServerUrl}/create");
@@ -52,10 +53,9 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
             await Clients.Client(Context.ConnectionId).Error("Server error");
             return;
         }
-
+        
         var botConnectionId = response.Content.ReadAsStringAsync().Result;
         await _playerService.ConnectBot(matchId, botConnectionId);
-        await _playerService.ConnectPlayer(matchId, playerId, Context.User, Context.ConnectionId);
         await Clients.Client(botConnectionId).UpGame(matchId);
     }
 
@@ -96,7 +96,7 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
             return;
         }
 
-        var player = await _playerRepository.GetByKeyAsync(playerId);
+        var player = await _playerRepository.Query.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == playerId);
 
         if (player == null)
         {
@@ -104,22 +104,13 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
             return;   
         }
 
-        if (match.Players.Any(x => x.Id == playerId))
+        var hubClient = await _playerService.GetHubClientFromPlayerId(playerId);
+
+        if (hubClient == null)
         {
-            await Clients.Client(Context.ConnectionId).Error("You are already in this match");
-            return;
+            await _playerService.ConnectPlayer(matchId, playerId, Context.User, Context.ConnectionId);
         }
 
-        await _playerService.ConnectPlayer(matchId, playerId, Context.User, Context.ConnectionId);
-
-        var matchPlayers = match.Players.Select(x => 
-            new PlayerInMatch
-            {
-                Username = x.User.UserName,
-                Avatar = x.User.AvatarFull,
-                Team = x.Team,
-            });
-
-        await Clients.Caller.OnMatchJoin(matchPlayers);
+        await Clients.AllExcept(Context.ConnectionId).OnNewPlayerJoin(new PlayerInMatch {Id = playerId, Username = player.User.UserName, Avatar = player.User.Avatar, Team = player.Team});
     }
 }

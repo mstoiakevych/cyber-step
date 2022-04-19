@@ -11,4 +11,5 @@ public interface IPlayerService
     Task<BotClient> ConnectBot(long matchId, string connectionId);
     Task<Player?> GetPlayerFromHubClient(HubClient hubClient);
     Task<Player?> GetPlayerByHubClientConnectionId(string connectionId);
+    Task<HubClient?> GetHubClientFromPlayerId(long playerId);
 }

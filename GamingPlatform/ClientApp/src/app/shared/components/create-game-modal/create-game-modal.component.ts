@@ -4,6 +4,11 @@ import {gameModeRepresentations, serverRepresentations} from "../../interfaces/m
 import {ModalComponent} from "../../interfaces/modal-component";
 import {MatchService} from "../../services/match.service";
 import {MatchManagementHub} from "../../hubs/match-management.hub";
+import {AuthService} from "../../services/auth.service";
+import {NotificationService} from "../../services/notification.service";
+import {Router} from "@angular/router";
+import {NgxSmartModalComponent} from "ngx-smart-modal/src/components/ngx-smart-modal.component";
+import {NgxSmartModalService} from "ngx-smart-modal";
 
 @Component({
   selector: 'app-create-game-modal',
@@ -13,6 +18,9 @@ import {MatchManagementHub} from "../../hubs/match-management.hub";
 export class CreateGameModalComponent implements OnInit, ModalComponent {
 
   @Input() modalId: string = 'CreateGameModalId'
+  get createGameModal(): NgxSmartModalComponent {
+    return this.ngxSmartModalService.getModal(this.modalId)
+  }
 
   gameCreationForm = new FormGroup({
     Name: new FormControl('', [Validators.required]),
@@ -24,15 +32,28 @@ export class CreateGameModalComponent implements OnInit, ModalComponent {
   gameModes = gameModeRepresentations
   servers = serverRepresentations
 
-  constructor(private matchService: MatchService, public hub: MatchManagementHub) {
+  constructor(private matchService: MatchService,
+              public authService: AuthService,
+              public notificationService: NotificationService,
+              public router: Router,
+              public hub: MatchManagementHub,
+              public ngxSmartModalService: NgxSmartModalService) {
   }
 
   ngOnInit(): void {
   }
 
   onSubmit() {
-    this.matchService.createAndJoinMatch(this.gameCreationForm.value).subscribe(createdMatch => {
-      this.hub.createGame(createdMatch.matchId, createdMatch.playerId)
+    this.matchService.create(this.gameCreationForm.value).subscribe(matchId => {
+      this.createGameModal.close()
+      // this.hub.createGame(matchId)
+      this.router.navigateByUrl(`/match/${matchId}`)
+    }, e => {
+      if (e.status === 403) {
+        this.authService.login('/'); // TODO move to interceptor
+      }
+
+      this.notificationService.error('', e.message);
     })
   }
 }

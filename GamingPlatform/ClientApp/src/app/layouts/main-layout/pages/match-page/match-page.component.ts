@@ -1,9 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Match} from "../../../../shared/interfaces/match";
-import {Router} from "@angular/router";
+import {CreatedMatch, Match} from "../../../../shared/interfaces/match";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MatchService} from "../../../../shared/services/match.service";
 import {NotificationService} from "../../../../shared/services/notification.service";
 import {MatchManagementHub} from "../../../../shared/hubs/match-management.hub";
+import {Player} from "../../../../shared/interfaces/player";
+import {AuthService} from "../../../../shared/services/auth.service";
 
 @Component({
   selector: 'app-match-page',
@@ -12,14 +14,17 @@ import {MatchManagementHub} from "../../../../shared/hubs/match-management.hub";
 })
 export class MatchPageComponent implements OnInit {
 
+  matchId: number
   match: Match
-  playerId: number
+  player: Player
 
   constructor(public router: Router,
+              private route: ActivatedRoute,
               public matchService: MatchService,
               public notificationService: NotificationService,
-              public hub: MatchManagementHub) {
-    this.match = this.router.getCurrentNavigation()!.extras.state as Match
+              public hub: MatchManagementHub,
+              public authService: AuthService) {
+    this.matchId = route.snapshot.params['id']
   }
 
   ngOnInit(): void {
@@ -27,14 +32,29 @@ export class MatchPageComponent implements OnInit {
       console.log('OnMatchJoin', players)
     })
 
-    if (!this.match) {
-      this.notificationService.info('', 'You can\'t join this game any more.')
-      this.router.navigateByUrl('/');
-    }
+    this.hub.onNewPlayerJoin(player => {
+      console.log('New player joined', player)
+    })
 
-    this.matchService.joinMatch(this.match.id).subscribe(created => {
-      this.playerId = created.playerId
-      this.hub.joinGame(created.matchId, created.playerId)
+    this.hub.establishConnection()
+
+    this.matchService.getMatch(this.matchId).subscribe(match => {
+      this.match = match;
+
+      this.matchService.join(match.id).subscribe(player => {
+        this.player = player
+
+        this.hub.joinGame(match.id, player.id)
+      }, joinError => {
+        if (joinError.status === 403) {
+          this.authService.login('/'); // TODO move to interceptor
+        }
+        this.notificationService.error('', joinError.message)
+      })
+    }, matchError => {
+      this.notificationService.error('', 'This match doesn\'t exist anymore')
+
+      this.router.navigateByUrl('/')
     })
   }
 

@@ -1,5 +1,4 @@
-﻿using Domain.Common;
-using Domain.Tournaments;
+﻿using Domain.Tournaments;
 using Infrastructure.Abstractions;
 using Infrastructure.DTO.Match;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +15,17 @@ public class MatchService : IMatchService
         _matchRepository = matchRepository;
         _clientService = clientService;
     }
-    
+
+    public async Task<Match> Get(long id)
+    {
+        var match = await _matchRepository.Query
+            .Include(x => x.Players!)
+            .ThenInclude(x => x.User)
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+        return match;
+    }
+
     public async Task<Match> CreateMatch(Match match)
     {
         await _matchRepository.InsertAsync(match);
@@ -24,9 +33,9 @@ public class MatchService : IMatchService
         return match;
     }
 
-    public async Task<List<MatchDto>> Search(MatchSearchArgs args)
+    public async Task<List<Match>> Search(MatchSearchArgs args)
     {
-        var query = _matchRepository.Query.Include(x => x.Players).Where(x => x.GameState == GameState.Lobby);
+        var query = _matchRepository.Query.Include(x => x.Players).ThenInclude(x => x.User).Where(x => x.GameState == GameState.Lobby);
         
         if (args.GameMode != null)
         {
@@ -38,7 +47,7 @@ public class MatchService : IMatchService
             query = query.Where(x => x.Server == args.Server);
         }
 
-        return await query.Select(x => new MatchDto {Id = x.Id, Name = x.Name, Server = x.Server, GameMode = x.GameMode ?? GameMode.OneVsOne, GameState = x.GameState, LobbyName = x.LobbyName, LobbyPassword = x.LobbyPassword, Players = x.Players}).ToListAsync();
+        return await query.ToListAsync();
     }
 
     public async Task<bool> EndMatch(long id)
