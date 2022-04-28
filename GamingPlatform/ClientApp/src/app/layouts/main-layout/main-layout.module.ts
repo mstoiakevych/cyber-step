@@ -11,7 +11,7 @@ import {PackagesPageComponent} from './pages/packages-page/packages-page.compone
 import {ContactPageComponent} from './pages/contact-page/contact-page.component';
 import {ExamplesComponent} from './pages/examples/examples.component';
 import {CarouselModule} from 'ngx-owl-carousel-o';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {GamePageComponent} from './pages/game-page/game-page.component';
 import {DigitGamePageComponent} from './pages/game-page/components/digit-game-page/digit-game-page.component';
 import {
@@ -28,10 +28,18 @@ import {NgxSmartModalModule} from "ngx-smart-modal";
 import {NgSelectModule} from "@ng-select/ng-select";
 import {CreateGameModalComponent} from "../../shared/components/create-game-modal/create-game-modal.component";
 import { MatchPageComponent } from './pages/match-page/match-page.component';
+import {AuthInterceptor} from "../../shared/interceptors/auth.interceptor";
 
 
 @NgModule({
-  providers: [AuthGuard],
+  providers: [
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   declarations: [
     HeaderComponent,
     MainLayoutComponent,
