@@ -17,7 +17,7 @@ public interface IMatchClientHub
     Task ShowModalWithMessage(string message);
     Task EditCustomMatch(string args, long matchId);
     Task ShowModalWithTimer(string message);
-    Task StartGame(string? arg);
+    Task StartGame(string? arg); // TODO delete
     Task ShowMatchResult(Team winner);
     Task OnMatchJoin(IEnumerable<PlayerInMatch> players);
     Task OnNewPlayerJoin(PlayerInMatch player);
@@ -46,17 +46,17 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
 
     public async Task CreateGame(long matchId)
     {
-        var client = new HttpClient();
-        var response = await client.GetAsync($"{_botOptions.ServerUrl}/create");
-        if (!response.IsSuccessStatusCode)
-        {
-            await Clients.Client(Context.ConnectionId).Error("Server error");
-            return;
-        }
-        
-        var botConnectionId = response.Content.ReadAsStringAsync().Result;
-        await _playerService.ConnectBot(matchId, botConnectionId);
-        await Clients.Client(botConnectionId).UpGame(matchId);
+        // var client = new HttpClient();
+        // var response = await client.GetAsync($"{_botOptions.ServerUrl}/create");
+        // if (!response.IsSuccessStatusCode)
+        // {
+        //     await Clients.Client(Context.ConnectionId).Error("Server error");
+        //     return;
+        // }
+        //
+        // var botConnectionId = response.Content.ReadAsStringAsync().Result;
+        // await _playerService.ConnectBot(matchId, botConnectionId);
+        await Clients.Client("DASDSA").UpGame(matchId);
     }
 
     public async Task InvitePlayers(long matchId)
@@ -112,5 +112,27 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
         }
 
         await Clients.AllExcept(Context.ConnectionId).OnNewPlayerJoin(new PlayerInMatch {Id = playerId, Username = player.User.UserName, Avatar = player.User.Avatar, Team = player.Team});
+        
+        // FROM InvitePlayers (if last player invite players)
+        if (match.Players.Count == 2 && match.GameMode == GameMode.OneVsOne)
+        {
+            if (match.Bot?.Status != BotState.Online)
+            {
+                await Clients.Client(Context.ConnectionId).Error("Your bot is not online");
+                return;
+            }
+
+            if (match.Players?.Count > 0)
+            {
+                var players = match.Players.Select(x => x.UserId);
+                await Clients.Client(match.BotId).InviteInLobby(players, matchId);
+                await Clients.Clients(players).ShowModalWithMessage("Waiting when all players accept invite");
+            }
+        }
+    }
+
+    public void Test()
+    {
+        Console.WriteLine("TEST HAS BEEN PASSED");
     }
 }

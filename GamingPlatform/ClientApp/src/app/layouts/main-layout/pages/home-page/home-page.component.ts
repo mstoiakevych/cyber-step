@@ -24,17 +24,18 @@ export class HomePageComponent implements OnInit {
   constructor(public ngxSmartModalService: NgxSmartModalService,
               public matchService: MatchService,
               public notificationService: NotificationService,
-              public router: Router,
-              public hub: MatchManagementHub) {}
+              public router: Router, public hub: MatchManagementHub) {}
 
   ngOnInit(): void {
-    this.hub.onError(message => this.notificationService.warning('Warning', message))
-
-    this.hub.establishConnection()
-
     this.matchService.getMatches().subscribe(matches => {
       this.matches = matches;
     }, error => this.notificationService.error('Oops!', error.message))
+
+    this.hub.establishConnection()
+  }
+
+  testHub() {
+    this.hub.test()
   }
 
   getNormalizedServerName(match: Match): string {

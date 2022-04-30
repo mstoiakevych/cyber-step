@@ -56,15 +56,28 @@ export class MatchManagementHub {
   }
 
   public onMatchJoin(cb: (players: Player[]) => void) {
-    MatchManagementHub.connection.on('onMatchJoin', cb)
+    MatchManagementHub.connection.on('OnMatchJoin', cb)
   }
 
   public onNewPlayerJoin(cb: (player: Player) => void) {
     MatchManagementHub.connection.on('OnNewPlayerJoin', cb)
   }
 
+  public onShowModalWithMessage(cb: (message: string) => void) {
+    MatchManagementHub.connection.on('ShowModalWithMessage', cb)
+  }
+
+  public onShowMatchResult(cb: (winner: Team) => void) {
+    MatchManagementHub.connection.on('ShowMatchResult', cb)
+  }
+
   public createGame(matchId: number) {
     MatchManagementHub.connection.send('CreateGame', matchId)
+  }
+
+  public test() {
+    console.log('testich')
+    MatchManagementHub.connection.send('CreateGame', 1)
   }
 
   public invitePlayers(matchId: number) { //?

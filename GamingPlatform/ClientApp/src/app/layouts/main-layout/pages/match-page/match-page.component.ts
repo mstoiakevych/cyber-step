@@ -28,12 +28,31 @@ export class MatchPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.hub.onError(message => {
+      this.notificationService.error('', message)
+    })
+
     this.hub.onMatchJoin(players => {
       console.log('OnMatchJoin', players)
     })
 
     this.hub.onNewPlayerJoin(player => {
       console.log('New player joined', player)
+    })
+
+    this.hub.onShowModalWithTimer(message => {
+      console.log('[TESTING] Event ShowModalWithTimer')
+      this.notificationService.info('', message)
+    })
+
+    this.hub.onShowModalWithMessage(message => {
+      console.log('[TESTING] Event ShowModalWithMessage')
+      this.notificationService.info('', message)
+    })
+
+    this.hub.onShowMatchResult(winner => {
+      console.log('[TESTING] Event ShowMatchResult')
+      this.notificationService.success('', 'Game has ended. Winner: ' + winner.toFixed())
     })
 
     this.hub.establishConnection()
@@ -58,4 +77,9 @@ export class MatchPageComponent implements OnInit {
     })
   }
 
+
+  invitePlayers() {
+    console.log('[TESTING] Call InvitePlayers')
+    this.hub.invitePlayers(1)
+  }
 }

@@ -46,7 +46,7 @@ export class CreateGameModalComponent implements OnInit, ModalComponent {
   onSubmit() {
     this.matchService.create(this.gameCreationForm.value).subscribe(matchId => {
       this.createGameModal.close()
-      // this.hub.createGame(matchId)
+      this.hub.createGame(matchId)
       this.router.navigateByUrl(`/match/${matchId}`)
     }, e => {
       if (e.status === 403) {
