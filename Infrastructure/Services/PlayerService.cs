@@ -97,7 +97,12 @@ public class PlayerService : IPlayerService
             MatchId = match.Id
         };
 
-        return await _botRepository.InsertAsync(botClient);
+        match.BotId = botClient.ConnectionId;
+        match.Bot = botClient;
+
+        _matchRepository.Update(match);
+
+        return botClient;
     }
 
     public async Task<Player?> GetPlayerFromHubClient(HubClient hubClient)
