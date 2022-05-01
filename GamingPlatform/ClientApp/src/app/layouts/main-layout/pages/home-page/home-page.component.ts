@@ -27,15 +27,16 @@ export class HomePageComponent implements OnInit {
               public router: Router, public hub: MatchManagementHub) {}
 
   ngOnInit(): void {
+
+    this.hub.onError(message => {
+      console.log('[TESTING] Error: ' + message)
+    })
+
     this.matchService.getMatches().subscribe(matches => {
       this.matches = matches;
     }, error => this.notificationService.error('Oops!', error.message))
 
     this.hub.establishConnection()
-  }
-
-  testHub() {
-    this.hub.test()
   }
 
   getNormalizedServerName(match: Match): string {

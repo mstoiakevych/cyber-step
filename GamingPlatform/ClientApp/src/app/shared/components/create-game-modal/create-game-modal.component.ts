@@ -49,10 +49,6 @@ export class CreateGameModalComponent implements OnInit, ModalComponent {
       this.hub.createGame(matchId)
       this.router.navigateByUrl(`/match/${matchId}`)
     }, e => {
-      if (e.status === 403) {
-        this.authService.login('/'); // TODO move to interceptor
-      }
-
       this.notificationService.error('', e.message);
     })
   }

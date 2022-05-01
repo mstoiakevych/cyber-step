@@ -6,6 +6,7 @@ using GamingPlatform.Middleware;
 using Infrastructure;
 using Infrastructure.Abstractions;
 using Infrastructure.Data;
+using Infrastructure.Mappings;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -30,8 +31,8 @@ builder.Services.AddSignalR(options =>
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    options.UseInMemoryDatabase("InMemory");
-    // options.UseNpgsql(builder.Configuration.GetConnectionString("GamingPlatform"));
+    // options.UseInMemoryDatabase("InMemory");
+    options.UseNpgsql(builder.Configuration.GetConnectionString("GamingPlatform"));
 });
 builder.Services.AddOptions<BotOptions>().Bind(builder.Configuration.GetSection("BotOptions"));
 
@@ -64,6 +65,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient<ISteamApiService, SteamApiService>();
 
 builder.Services.AddInfrastructure();
+
+builder.Services.AddAutoMapper(typeof(MatchMappingProfile));
 
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 

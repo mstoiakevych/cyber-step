@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using AutoMapper;
+using Domain.Common;
 using Domain.Tournaments;
 using Infrastructure.Abstractions;
 using Infrastructure.DTO.Match;
@@ -29,13 +30,15 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
     private readonly IRepository<Match> _matchRepository;
     private readonly IRepository<Player> _playerRepository;
     private readonly IPlayerService _playerService;
+    private readonly IMapper _mapper;
 
     public MatchManagementHub(IOptions<BotOptions> botOptions, IRepository<Match> matchRepository,
-        IPlayerService playerService, IRepository<Player> playerRepository)
+        IPlayerService playerService, IRepository<Player> playerRepository, IMapper mapper)
     {
         _matchRepository = matchRepository;
         _playerService = playerService;
         _playerRepository = playerRepository;
+        _mapper = mapper;
         _botOptions = botOptions.Value;
     }
 
@@ -46,17 +49,24 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
 
     public async Task CreateGame(long matchId)
     {
-        var client = new HttpClient();
-        var response = await client.GetAsync($"{_botOptions.ServerUrl}/create");
-        if (!response.IsSuccessStatusCode)
+        try
         {
-            await Clients.Client(Context.ConnectionId).Error("Server error");
-            return;
+            var client = new HttpClient();
+            var response = await client.GetAsync($"{_botOptions.ServerUrl}/create");
+            if (!response.IsSuccessStatusCode)
+            {
+                await Clients.Client(Context.ConnectionId).Error("Server error");
+                return;
+            }
+
+            var botConnectionId = response.Content.ReadAsStringAsync().Result;
+            await _playerService.ConnectBot(matchId, botConnectionId);
+            await Clients.Client(botConnectionId).UpGame(matchId);
         }
-        
-        var botConnectionId = response.Content.ReadAsStringAsync().Result;
-        await _playerService.ConnectBot(matchId, botConnectionId);
-        await Clients.Client(botConnectionId).UpGame(matchId);
+        catch (Exception e)
+        {
+            await Clients.Caller.Error("Unable to connect bot.");
+        }
     }
 
     public async Task InvitePlayers(long matchId)
@@ -88,7 +98,10 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
 
     public async Task Join(long matchId, long playerId)
     {
-        var match = await _matchRepository.Query.Include(x => x.Players).Include(x => x.Bot).FirstOrDefaultAsync(x => x.Id == matchId);
+        var match = await _matchRepository.Query.Include(x => x.Bot)
+            .Include(x => x.Players)
+            .ThenInclude(x => x.User)
+            .FirstOrDefaultAsync(x => x.Id == matchId);
 
         if (match == null)
         {
@@ -109,30 +122,33 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
         if (hubClient == null)
         {
             await _playerService.ConnectPlayer(matchId, playerId, Context.User, Context.ConnectionId);
+            await Clients.AllExcept(Context.ConnectionId).OnNewPlayerJoin(new PlayerInMatch {Id = playerId, Username = player.User.UserName, Avatar = player.User.Avatar, Team = player.Team});
         }
 
-        await Clients.AllExcept(Context.ConnectionId).OnNewPlayerJoin(new PlayerInMatch {Id = playerId, Username = player.User.UserName, Avatar = player.User.Avatar, Team = player.Team});
-        
+        var matchDto = _mapper.Map<MatchDto>(match);
+
         // FROM InvitePlayers (if last player invite players)
-        if (match.Players.Count == 2 && match.GameMode == GameMode.OneVsOne)
+        if (matchDto.Players.Count == matchDto.TotalPlayers)
         {
             if (match.Bot?.Status != BotState.Online)
             {
-                await Clients.Client(Context.ConnectionId).Error("Your bot is not online");
+                await Clients.AllExcept(match.Bot?.ConnectionId).Error("Your bot is not online");
                 return;
             }
 
-            if (match.Players?.Count > 0)
-            {
-                var players = match.Players.Select(x => x.UserId);
-                await Clients.Client(match.BotId).InviteInLobby(players, matchId);
-                await Clients.Clients(players).ShowModalWithMessage("Waiting when all players accept invite");
-            }
+            var players = match.Players.Select(x => x.UserId);
+            await Clients.Client(match.BotId).InviteInLobby(players, matchId);
+            await Clients.Clients(players).ShowModalWithMessage("Waiting when all players accept invite");
         }
     }
 
     public void Test()
     {
         Console.WriteLine("TEST HAS BEEN PASSED");
+    }
+
+    public override async Task OnDisconnectedAsync(Exception? exception)
+    {
+        await _playerService.LeaveMatch(Context.ConnectionId);
     }
 }

@@ -123,4 +123,28 @@ public class PlayerService : IPlayerService
     {
         return await _hubClientsRepository.Query.FirstOrDefaultAsync(x => x.PlayerId == playerId);
     }
+
+    public async Task<bool> LeaveMatch(long playerId)
+    {
+        var player = await _playerRepository.GetByKeyAsync(playerId);
+
+        if (player == null)
+            return false;
+        
+        _playerRepository.Delete(player);
+
+        return true;
+    }
+    
+    public async Task<bool> LeaveMatch(string connectionId)
+    {
+        var player = await GetPlayerByHubClientConnectionId(connectionId);
+
+        if (player == null)
+            return false;
+        
+        _playerRepository.Delete(player);
+
+        return true;
+    }
 }

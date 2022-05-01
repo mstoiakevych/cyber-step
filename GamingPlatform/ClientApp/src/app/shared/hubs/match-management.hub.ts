@@ -14,7 +14,7 @@ export class MatchManagementHub {
 
   private constructor() {
     if (!MatchManagementHub.connection) {
-      console.log('Construct connection')
+      console.log('Construct new connection')
       MatchManagementHub.connection = new HubConnectionBuilder()
         .withUrl(environment.matchHub, {
           transport: signalR.HttpTransportType.WebSockets,

@@ -39,7 +39,6 @@
           {{match.name}}
         </div>
         <div class="card-body">
-          <h1 (click)="testHub()">Test</h1>
           <h5 class="card-title">Server: {{getNormalizedServerName(match)}}</h5>
           <p class="card-text">Players: {{match.joinedPlayers}}/{{match.totalPlayers}}</p>
           <a class="btn btn-primary" (click)="onJoin(match)">Join</a>

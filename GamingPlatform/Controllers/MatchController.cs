@@ -1,4 +1,5 @@
-﻿using Domain.Exceptions;
+﻿using AutoMapper;
+using Domain.Exceptions;
 using Domain.Tournaments;
 using Infrastructure.Abstractions;
 using Infrastructure.DTO.Match;
@@ -12,11 +13,13 @@ public class MatchController : ControllerBase
 {
     private readonly IMatchService _matchService;
     private readonly IPlayerService _playerService;
+    private readonly IMapper _mapper;
 
-    public MatchController(IPlayerService playerService, IMatchService matchService)
+    public MatchController(IPlayerService playerService, IMatchService matchService, IMapper mapper)
     {
         _playerService = playerService;
         _matchService = matchService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -25,20 +28,7 @@ public class MatchController : ControllerBase
         var matches = await _matchService.Search(args);
         
         var matchDtos = matches
-            .Select(x => new MatchDto 
-            {
-                Id = x.Id, 
-                Name = x.Name, 
-                Server = x.Server, 
-                GameMode = x.GameMode ?? GameMode.OneVsOne, 
-                GameState = x.GameState, 
-                LobbyName = x.LobbyName, 
-                LobbyPassword = x.LobbyPassword, 
-                Players = x.Players
-                    .Select(x => new PlayerInMatch 
-                        {Id = x.Id, Username = x.User.UserName, Avatar = x.User.Avatar, Team = x.Team})
-                    .ToList()
-            });
+            .Select(x => _mapper.Map<MatchDto>(x));
 
         return Ok(matchDtos);
     }
@@ -48,12 +38,7 @@ public class MatchController : ControllerBase
     {
         var match = await _matchService.Get(id);
         
-        return new MatchDto
-        {
-            Id = match.Id, Name = match.Name, Server = match.Server, GameMode = (GameMode) match.GameMode,
-            GameState = match.GameState, LobbyName = match.LobbyName, LobbyPassword = match.LobbyPassword,
-            Players = match.Players.Select(x => new PlayerInMatch {Id = x.Id, Username = x.User.UserName, Avatar = x.User.AvatarFull, Team = x.Team}).ToList()
-        };
+        return _mapper.Map<MatchDto>(match);
     }
 
     [HttpPost("create")]
