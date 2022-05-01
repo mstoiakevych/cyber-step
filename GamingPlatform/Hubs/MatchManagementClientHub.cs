@@ -46,16 +46,16 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
 
     public async Task CreateGame(long matchId)
     {
-        // var client = new HttpClient();
-        // var response = await client.GetAsync($"{_botOptions.ServerUrl}/create");
-        // if (!response.IsSuccessStatusCode)
-        // {
-        //     await Clients.Client(Context.ConnectionId).Error("Server error");
-        //     return;
-        // }
-        //
-        // var botConnectionId = response.Content.ReadAsStringAsync().Result;
-        // await _playerService.ConnectBot(matchId, botConnectionId);
+        var client = new HttpClient();
+        var response = await client.GetAsync($"{_botOptions.ServerUrl}/create");
+        if (!response.IsSuccessStatusCode)
+        {
+            await Clients.Client(Context.ConnectionId).Error("Server error");
+            return;
+        }
+        
+        var botConnectionId = response.Content.ReadAsStringAsync().Result;
+        await _playerService.ConnectBot(matchId, botConnectionId);
         await Clients.Client("DASDSA").UpGame(matchId);
     }
 
@@ -88,7 +88,7 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
 
     public async Task Join(long matchId, long playerId)
     {
-        var match = await _matchRepository.Query.Include(x => x.Players).FirstOrDefaultAsync(x => x.Id == matchId);
+        var match = await _matchRepository.Query.Include(x => x.Players).Include(x => x.Bot).FirstOrDefaultAsync(x => x.Id == matchId);
 
         if (match == null)
         {
