@@ -56,7 +56,7 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
         
         var botConnectionId = response.Content.ReadAsStringAsync().Result;
         await _playerService.ConnectBot(matchId, botConnectionId);
-        await Clients.Client("DASDSA").UpGame(matchId);
+        await Clients.Client(botConnectionId).UpGame(matchId);
     }
 
     public async Task InvitePlayers(long matchId)
