@@ -21,6 +21,7 @@ export class MatchManagementHub {
           skipNegotiation: true
         })
         .build();
+      MatchManagementHub.connection.serverTimeoutInMilliseconds = 999999999;
     }
   }
 
