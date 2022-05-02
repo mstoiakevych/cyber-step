@@ -1,13 +1,11 @@
-﻿using Domain.Tournaments;
-
-namespace Domain.Common;
+﻿namespace Domain.Common;
 
 public class BotClient
 {
     public string ConnectionId { get; init; }
     public long MatchId { get; init; }
-    
-    public BotState Status { get; set; }
+
+    public BotState Status { get; set; } = BotState.Offline;
 
     public BotClient()
     {
