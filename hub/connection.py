@@ -35,5 +35,5 @@ class HubConnection:
         self.hub_connection.on("InviteInLobby",
                                lambda args: invite_players(self.hub_connection, players=args[0], match_id=args[1]))
         self.hub_connection.on("EditCustomMatch",
-                               lambda args: edit_custom_match(self.hub_connection, cgf=args[0], match_id=args[1]))
+                               lambda args: edit_custom_match(self.hub_connection, cfg=args[0], match_id=args[1]))
         self.hub_connection.on("StartGame", lambda args: start_game(self.hub_connection))

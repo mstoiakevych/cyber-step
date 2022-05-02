@@ -39,5 +39,5 @@ def create():
 
 
 if __name__ == '__main__':
-    # app.run(port=5050, host="192.168.0.101")
-    app.run(port=5050)
+    app.run(port=5050, host="192.168.0.102")
+    # app.run(port=5050)

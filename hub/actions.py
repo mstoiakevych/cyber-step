@@ -30,7 +30,7 @@ MAX_CUSTOM_LOBBY_TIME2LIVE = int(os.getenv("MAX_CUSTOM_LOBBY_TIME2LIVE")) if os.
 def up_game(hub_connection):
     pyautogui.hotkey('win', 'd')
     run_game(GAME_PATH, GAME_NAME)
-    time.sleep(3)
+    time.sleep(5)
     w = WindowMgr()
     w.find_window_wildcard(WINDOW_NAME)
     w.set_foreground()
@@ -84,8 +84,8 @@ def invite_players(hub_connection, players, match_id):
     hub_connection.send("EditLobbyConfiguration", [match_id])
 
 
-def edit_custom_match(hub_connection, cgf, match_id):
-    config = json.loads(cgf)
+def edit_custom_match(hub_connection, cfg, match_id):
+    config = json.loads(cfg)
     m = MainPage()
     m.play_dota() \
         .create_custom_lobby() \
