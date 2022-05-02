@@ -27,11 +27,10 @@ MAX_CUSTOM_LOBBY_TIME2LIVE = int(os.getenv("MAX_CUSTOM_LOBBY_TIME2LIVE")) if os.
     "MAX_CUSTOM_LOBBY_TIME2LIVE") is not None else 7200
 
 
-def up_game(hub_connection, args):
+def up_game(hub_connection):
     pyautogui.hotkey('win', 'd')
-    start_game(GAME_PATH, GAME_NAME)
+    run_game(GAME_PATH, GAME_NAME)
     time.sleep(3)
-
     w = WindowMgr()
     w.find_window_wildcard(WINDOW_NAME)
     w.set_foreground()
@@ -61,11 +60,13 @@ def up_game(hub_connection, args):
     pill2kill.set()
     spam_clicks_thread.join()
     hub_connection.send("SetBotStatus", [Status.Online])
+    # todo create separeted method for status on frontend
+    hub_connection.send("ShowModalWithMessage", ["Bot is ready"])
 
 
-def invite_players(hub_connection, args):
+def invite_players(hub_connection, players, match_id):
     m = MainPage()
-    m.invite_players(args[0])
+    m.invite_players(players)
 
     st = time.time()
     while True:
@@ -79,14 +80,12 @@ def invite_players(hub_connection, args):
             logger.info("Waiting time for joining to lobby exceeded")
             hub_connection.send("BotError", ["Waiting time for joining to lobby exceeded"])
             exit_game(GAME_NAME)
-
     hub_connection.send("SetBotStatus", [Status.InLobby])
+    hub_connection.send("EditLobbyConfiguration", [match_id])
 
-    hub_connection.send("EditLobbyConfiguration", [args[1]])
 
-
-def edit_custom_match(hub_connection, args):
-    config = json.loads(args[0])
+def edit_custom_match(hub_connection, cgf, match_id):
+    config = json.loads(cgf)
     m = MainPage()
     m.play_dota() \
         .create_custom_lobby() \
@@ -94,12 +93,12 @@ def edit_custom_match(hub_connection, args):
         .confirm_lobby_settings()
 
     hub_connection.send("SetBotStatus", [Status.ReadyToStart])
-    hub_connection.send("Time2Prepare", [args[1], TIME2PREPARE])
+    hub_connection.send("Time2Prepare", [match_id, TIME2PREPARE])
     time.sleep(TIME2PREPARE)
-    hub_connection.send("StartGame", [args[1]])
+    hub_connection.send("StartGame", [match_id])
 
 
-def start_game(hub_connection, args):
+def start_game(hub_connection):
     c = CustomLobbyPage()
     c.start_game()
     hub_connection.send("SetBotStatus", [Status.InGame])

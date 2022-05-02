@@ -31,7 +31,9 @@ class HubConnection:
         self.hub_connection.on_close(lambda: logger.info("Connection closed"))
         self.hub_connection.on_error(lambda data: logger.error(f"An exception was thrown : {data.error}"))
 
-        self.hub_connection.on("UpGame", lambda args: up_game(self.hub_connection, args))
-        self.hub_connection.on("InviteInLobby", lambda args: invite_players(self.hub_connection, args))
-        self.hub_connection.on("EditCustomMatch", lambda args: edit_custom_match(self.hub_connection, args))
-        self.hub_connection.on("StartGame", lambda args: start_game(self.hub_connection, args))
+        self.hub_connection.on("UpGame", lambda args: up_game(self.hub_connection))
+        self.hub_connection.on("InviteInLobby",
+                               lambda args: invite_players(self.hub_connection, players=args[0], match_id=args[1]))
+        self.hub_connection.on("EditCustomMatch",
+                               lambda args: edit_custom_match(self.hub_connection, cgf=args[0], match_id=args[1]))
+        self.hub_connection.on("StartGame", lambda args: start_game(self.hub_connection))

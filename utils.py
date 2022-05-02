@@ -149,7 +149,7 @@ def spam_clicks(stop_event):
         time.sleep(0.1)
 
 
-def start_game(current_dir, name):
+def run_game(current_dir, name):
     subprocess.Popen(os.path.join(current_dir, name))
 
 

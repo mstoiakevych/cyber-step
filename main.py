@@ -35,9 +35,9 @@ def create():
         response.status = 500
 
     hub.connection_id = response.response
-    print(hub.connection_id)
     return response
 
 
 if __name__ == '__main__':
-    app.run(port=5555)
+    # app.run(port=5050, host="192.168.0.101")
+    app.run(port=5050)
