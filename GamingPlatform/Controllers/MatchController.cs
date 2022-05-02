@@ -44,6 +44,11 @@ public class MatchController : ControllerBase
     [HttpPost("create")]
     public async Task<ActionResult<long>> Create(CreateMatchDto createMatchDto)
     {
+        var isUserInAnyMatch = await _playerService.IsUserInAnyMatch(User);
+
+        if (isUserInAnyMatch)
+            throw new CSNotAcceptableException("You are already in some match. You must finish it first in order to create a new one.");
+        
         var match = new Match
         {
             Name = createMatchDto.Name,

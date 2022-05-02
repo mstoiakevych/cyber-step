@@ -65,13 +65,10 @@ export class MatchPageComponent implements OnInit {
 
         this.hub.joinGame(match.id, player.id)
       }, joinError => {
-        if (joinError.status === 403) {
-          this.authService.login('/'); // TODO move to interceptor
-        }
-        this.notificationService.error('', joinError.message)
+        this.notificationService.warning('', joinError.error.message)
       })
     }, matchError => {
-      this.notificationService.error('', 'This match doesn\'t exist anymore')
+      this.notificationService.warning('', 'This match doesn\'t exist anymore')
 
       this.router.navigateByUrl('/')
     })

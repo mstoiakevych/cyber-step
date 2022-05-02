@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Domain.Common;
+using Domain.Identity;
 using Domain.Tournaments;
 
 namespace Infrastructure.Abstractions;
@@ -14,4 +15,6 @@ public interface IPlayerService
     Task<HubClient?> GetHubClientFromPlayerId(long playerId);
     Task<bool> LeaveMatch(long playerId);
     Task<bool> LeaveMatch(string connectionId);
+    Task<bool> IsUserInAnyMatch(ClaimsPrincipal claimsPrincipal);
+    Task<bool> IsUserInAnyMatch(SteamUser user);
 }

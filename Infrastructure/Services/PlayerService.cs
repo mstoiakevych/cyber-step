@@ -54,6 +54,12 @@ public class PlayerService : IPlayerService
         var existingPlayer = match.Players!.FirstOrDefault(x => x.UserId == user.Id);
         if (existingPlayer != null)
             return existingPlayer;
+        
+        // If Player is already in some match
+        var inAnotherMatch = await IsUserInAnyMatch(user);
+
+        if (inAnotherMatch)
+            throw new CSNotAcceptableException("You are already in some match. You must finish it first in order to join a new one.");
 
         var player = new Player
         {
@@ -146,5 +152,20 @@ public class PlayerService : IPlayerService
         _playerRepository.Delete(player);
 
         return true;
+    }
+
+    public async Task<bool> IsUserInAnyMatch(ClaimsPrincipal claimsPrincipal)
+    {
+        var user = await _userManager.GetUserAsync(claimsPrincipal);
+
+        return await IsUserInAnyMatch(user);
+    }
+
+    public async Task<bool> IsUserInAnyMatch(SteamUser user)
+    {
+        return await _hubClientsRepository.Query
+            .Include(x => x.Player)
+            .Where(x => x.Player != null)
+            .AnyAsync(x => x.Player!.UserId == user.Id);
     }
 }

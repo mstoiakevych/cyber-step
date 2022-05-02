@@ -1,6 +1,6 @@
 ﻿import {Injectable} from "@angular/core";
 import {HttpErrorResponse, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {Observable, of} from "rxjs";
+import {Observable, of, throwError} from "rxjs";
 import {catchError} from "rxjs/operators";
 import {AuthService} from "../services/auth.service";
 
@@ -17,7 +17,7 @@ export class AuthInterceptor implements HttpInterceptor {
           this.authService.login('/')
         }
 
-        return of(err);
+        return throwError(err);
       })
     )
   }

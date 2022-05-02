@@ -9,6 +9,8 @@ import {NotificationService} from "../../services/notification.service";
 import {Router} from "@angular/router";
 import {NgxSmartModalComponent} from "ngx-smart-modal/src/components/ngx-smart-modal.component";
 import {NgxSmartModalService} from "ngx-smart-modal";
+import {catchError} from "rxjs/operators";
+import {throwError} from "rxjs";
 
 @Component({
   selector: 'app-create-game-modal',
@@ -44,12 +46,14 @@ export class CreateGameModalComponent implements OnInit, ModalComponent {
   }
 
   onSubmit() {
-    this.matchService.create(this.gameCreationForm.value).subscribe(matchId => {
-      this.createGameModal.close()
-      this.hub.createGame(matchId)
-      this.router.navigateByUrl(`/match/${matchId}`)
-    }, e => {
-      this.notificationService.error('', e.message);
-    })
+    this.matchService.create(this.gameCreationForm.value)
+      .subscribe(matchId => {
+        this.createGameModal.close()
+        this.hub.createGame(matchId)
+        this.router.navigateByUrl(`/match/${matchId}`)
+      }, err => {
+        this.createGameModal.close()
+        this.notificationService.warning('', err.error.message)
+      })
   }
 }
