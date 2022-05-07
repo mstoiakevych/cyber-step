@@ -1,0 +1,93 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+@import "src/scss/settings";
+
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  position: relative;
+  min-height: 100vh;
+}
+
+main {
+  height: 100%;
+  margin: 0 auto;
+}
+
+.body {
+  padding-bottom: $footer-height;
+}
+
+.footer {
+  background-color: #333;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e1e1e1;
+  border: 0 none #ffffff;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e1e1e1;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #e1e1e1;
+}
+
+::-webkit-scrollbar-track {
+  background: #a0a0a0;
+  border: 0 none #ffffff;
+  border-radius: 100px;
+}
+
+::-webkit-scrollbar-track:hover {
+  background: #a0a0a0;
+}
+
+::-webkit-scrollbar-track:active {
+  background: #a0a0a0;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.inputIcon {
+  position: relative;
+  top: -31px;
+  float: right;
+  padding: 0 12px;
+  height: 0;
+}
+
+.inputIcon:hover {
+  cursor: pointer;
+}
+
+.bi-chevron-down:hover {
+  cursor: auto;
+  pointer-events: none;
+}

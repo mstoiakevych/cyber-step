@@ -1,0 +1,18 @@
+.pageSize{
+  max-width: 270px;
+}
+
+.empty-table:hover{
+  cursor: default;
+}
+
+.notFoundTable{
+  min-height: 65vh;
+}
+
+#password, #gameMode, #server{
+  padding-right: 36px;
+}
+.table-hover tbody tr:hover{
+  cursor: pointer;
+}
