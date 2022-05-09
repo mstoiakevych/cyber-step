@@ -1,6 +1,6 @@
 ﻿import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {CreatedMatch, CreateMatch, Match} from "../interfaces/match";
+import {CreateMatch, Match} from "../interfaces/match";
 import {Observable} from "rxjs";
 import {IApiService} from "../interfaces/iapi.service";
 import {Player} from "../interfaces/player";

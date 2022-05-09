@@ -1,6 +1,11 @@
-<body>
+<app-header *ngIf="isHeader"></app-header>
+<app-toast role="alert" aria-live="assertive" aria-atomic="true"></app-toast>
 <app-notification></app-notification>
-<div class="container">
-  <router-outlet></router-outlet>
-</div>
-</body>
+<router-outlet></router-outlet>
+<app-spinner></app-spinner>
+<!--<button class="btn btn-primary" (click)="toastService.show('Lorem Ipsum is simply dummy text of the printing and typesetting industry.')">-->
+<!--  Click me to show a toast-->
+<!--</button>-->
+<!--<button class="btn btn-primary" (click)="spinnerService.show({withBackGround:true})">spin</button>-->
+<!--<button class="btn btn-danger" (click)="spinnerService.hide()">un spin</button>-->
+<app-footer *ngIf="isFooter"></app-footer>

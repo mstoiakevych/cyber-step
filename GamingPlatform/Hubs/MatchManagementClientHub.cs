@@ -22,6 +22,9 @@ public interface IMatchClientHub
     Task ShowMatchResult(Team winner);
     Task OnMatchJoin(IEnumerable<PlayerInMatch> players);
     Task OnNewPlayerJoin(PlayerInMatch player);
+    Task PlayerToggleReady(PlayerInMatch player);
+    Task PlayerChangeTeam(PlayerInMatch player);
+    Task PlayerLeave(PlayerInMatch player);
 }
 
 public partial class MatchManagementHub : Hub<IMatchClientHub>
@@ -82,15 +85,18 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
             return;
         }
 
-        if (match.Bot.Status != BotState.Online)
+        if (match.Bot?.Status != BotState.Online)
         {
             await Clients.Client(Context.ConnectionId).Error("Your bot is not online");
+            await Clients.AllExcept(match.Bot?.ConnectionId).Error("Your bot is not online");
             return;
         }
 
-        if (match.Players?.Count > 0)
+        var matchDto = _mapper.Map<MatchDto>(match);
+
+        if (matchDto.Players.Count == matchDto.TotalPlayers)
         {
-            var players = match.Players.Select(x => x.UserId);
+            var players = match.Players!.Select(x => x.UserId);
             await Clients.Client(match.BotId).InviteInLobby(players, matchId);
             await Clients.Clients(players).ShowModalWithMessage("Waiting when all players accept invite");
         }
@@ -122,24 +128,58 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
         if (hubClient == null)
         {
             await _playerService.ConnectPlayer(matchId, playerId, Context.User, Context.ConnectionId);
-            await Clients.AllExcept(Context.ConnectionId).OnNewPlayerJoin(new PlayerInMatch {Id = playerId, Username = player.User.UserName, Avatar = player.User.Avatar, Team = player.Team});
+            await Clients.AllExcept(Context.ConnectionId).OnNewPlayerJoin(new PlayerInMatch {Id = playerId, Username = player.User.UserName, Avatar = player.User.Avatar, Team = player.Team, IsReady = player.IsReady});
         }
 
-        var matchDto = _mapper.Map<MatchDto>(match);
+        // var matchDto = _mapper.Map<MatchDto>(match);
 
         // FROM InvitePlayers (if last player invite players)
-        if (matchDto.Players.Count == matchDto.TotalPlayers)
-        {
-            if (match.Bot?.Status != BotState.Online)
-            {
-                await Clients.AllExcept(match.Bot?.ConnectionId).Error("Your bot is not online");
-                return;
-            }
+        // if (matchDto.Players.Count == matchDto.TotalPlayers)
+        // {
+        //     if (match.Bot?.Status != BotState.Online)
+        //     {
+        //         await Clients.AllExcept(match.Bot?.ConnectionId).Error("Your bot is not online");
+        //         return;
+        //     }
+        //
+        //     var players = match.Players.Select(x => x.UserId);
+        //     await Clients.Client(match.BotId).InviteInLobby(players, matchId);
+        //     await Clients.Clients(players).ShowModalWithMessage("Waiting when all players accept invite");
+        // }
+    }
 
-            var players = match.Players.Select(x => x.UserId);
-            await Clients.Client(match.BotId).InviteInLobby(players, matchId);
-            await Clients.Clients(players).ShowModalWithMessage("Waiting when all players accept invite");
-        }
+    public async Task<bool> ToggleReady()
+    {
+        var player = await _playerService.GetPlayerByHubClientConnectionId(Context.ConnectionId);
+
+        if (player is null) return false;
+
+        player.IsReady = !player.IsReady;
+        
+        _playerRepository.Update(player);
+
+        var playerDto = new PlayerInMatch {Id = player.Id, Username = player.User.UserName, Avatar = player.User.Avatar, Team = player.Team, IsReady = player.IsReady};
+        
+        await Clients.Others.PlayerToggleReady(playerDto);
+        
+        return player.IsReady;
+    }
+
+    public async Task<bool> ChangeTeam(long playerId, Team team)
+    {
+        var player = await _playerRepository.Query.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == playerId);
+        if (player is null) return false;
+
+        var playerHubClient = await _playerService.GetHubClientFromPlayerId(playerId);
+        if (playerHubClient is null) return false;
+        
+        player.Team = team;
+        
+        _playerRepository.Update(player);
+        
+        await Clients.Others.PlayerChangeTeam(new PlayerInMatch {Id = player.Id, Username = player.User.UserName, Avatar = player.User.Avatar, Team = player.Team, IsReady = player.IsReady});
+
+        return true;
     }
 
     public void Test()
@@ -149,6 +189,10 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
+        var player = await _playerService.GetPlayerByHubClientConnectionId(Context.ConnectionId);
+
         await _playerService.LeaveMatch(Context.ConnectionId);
+        
+        await Clients.Others.PlayerLeave(new PlayerInMatch {Id = player.Id, Username = player.User.UserName, Team = player.Team, Avatar = player.User.Avatar, IsReady = player.IsReady});
     }
 }

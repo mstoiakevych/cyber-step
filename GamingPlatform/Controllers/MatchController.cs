@@ -53,7 +53,10 @@ public class MatchController : ControllerBase
         {
             Name = createMatchDto.Name,
             Server = createMatchDto.Server,
-            GameMode = createMatchDto.GameMode
+            GameMode = createMatchDto.GameMode,
+            LobbyName = $"[CyberStep] {createMatchDto.Name}",
+            LobbyPassword = createMatchDto.Password,
+            MatchMode = createMatchDto.MatchMode
         };
 
         match = await _matchService.CreateMatch(match);
@@ -68,7 +71,7 @@ public class MatchController : ControllerBase
 
         if (player == null) throw new CSNotAuthenticatedException("You must authenticate first");
 
-        return new PlayerInMatch {Id = player.Id, Username = player.User.UserName, Avatar = player.User.AvatarFull, Team = player.Team};
+        return new PlayerInMatch {Id = player.Id, Username = player.User.UserName, Avatar = player.User.AvatarFull, Team = player.Team, IsReady = player.IsReady};
     }
 
     [HttpPost("end/{id:long}")]

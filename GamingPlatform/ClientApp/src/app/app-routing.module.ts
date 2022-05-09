@@ -1,21 +1,11 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
-import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
-import { NotFoundLayoutComponent } from './layouts/notfound-layout/notfound-layout.component';
-import { HomePageComponent } from './layouts/main-layout/pages/home-page/home-page.component';
-import { LoginPageComponent } from './layouts/auth-layout/pages/login-page/login-page.component';
-import { SignupPageComponent } from './layouts/auth-layout/pages/signup-page/signup-page.component';
-import { PackagesPageComponent } from './layouts/main-layout/pages/packages-page/packages-page.component';
-import { ContactPageComponent } from './layouts/main-layout/pages/contact-page/contact-page.component';
-import { ExamplesComponent } from './layouts/main-layout/pages/examples/examples.component';
-import { GamePageComponent } from './layouts/main-layout/pages/game-page/game-page.component';
-import { ProfilePageComponent } from './layouts/main-layout/pages/profile-page/profile-page.component';
-import { BlogPageComponent } from './layouts/main-layout/pages/blog-page/blog-page.component';
-import { SingleBlogPageComponent } from './layouts/main-layout/pages/blog-page/components/single-blog-page/single-blog-page.component';
-import { AuthGuard } from './shared/guards/auth.guard';
-import {MatchPageComponent} from "./layouts/main-layout/pages/match-page/match-page.component";
-
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {PageNotFoundComponent} from "./components/page-not-found/page-not-found.component";
+import {MainLayoutComponent} from "./components/main-layout/main-layout.component";
+import {MatchComponent} from "./components/match/match.component";
+import {HomePageComponent} from "./components/home-page/home-page.component";
+import {GamesComponent} from "./components/games/games.component";
+import {LobbyComponent} from "./lobby/lobby.component";
 
 const routes: Routes = [
   {
@@ -24,72 +14,51 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '/',
-        pathMatch: 'full'
+        component: HomePageComponent,
+        data: {isHeader: true, isFooter: true},
       },
       {
-        path: '',
-        component: HomePageComponent
+        path: 'match',
+        component: GamesComponent,
+        data : {isHeader: true}
       },
       {
-        path: 'packages',
-        component: PackagesPageComponent
+        path: 'match/dota2',
+        component: MatchComponent,
+        data : {isHeader: true}
       },
       {
-        path: 'contact',
-        component: ContactPageComponent
+        path: 'match/dota2/:id',
+        component: LobbyComponent,
+        data : {isHeader: true}
       },
-      {
-        path: 'examples',
-        canActivate: [AuthGuard],
-        component: ExamplesComponent
-      },
-      {
-        path: 'game/:name',
-        component: GamePageComponent
-      },
-      {
-        path: 'profile',
-        component: ProfilePageComponent,
-        canActivate: [AuthGuard]
-      },
-      {
-        path: 'blog',
-        component: BlogPageComponent
-      },
-      {
-        path: 'blog/:id',
-        component: SingleBlogPageComponent
-      },
-      {
-        path: 'match/:id',
-        component: MatchPageComponent
-      }
-    ]
-  },
-  {
-    path: '',
-    component: AuthLayoutComponent,
-    children: [
-      {
-        path: '',
-        redirectTo: '/',
-        pathMatch: 'full'
-      },
-      {
-        path: 'login',
-        component: LoginPageComponent
-      },
-      {
-        path: 'signup',
-        component: SignupPageComponent
-      }
+      // {
+      //   path: 'match',
+      //   component: MatchComponent,
+      //   data: {isHeader: true},
+      // },
+      // {
+      //   path: 'match/:id',
+      //   component: MatchComponent,
+      //   data: {isHeader: true},
+      // },
+      // {
+      //   path: 'tournament',
+      //   component: GamesComponent,
+      //   data: {isHeader: true},
+      // },
+      // {
+      //   path: 'tournament/dota2',
+      //   component: MatchComponent,
+      //   data: {isHeader: true, game: 'dota2'},
+      // }
     ]
   },
   {
     path: '**',
-    component: NotFoundLayoutComponent
-  }
+    data: {isHeader: true},
+    component: PageNotFoundComponent
+  },
 ];
 
 @NgModule({

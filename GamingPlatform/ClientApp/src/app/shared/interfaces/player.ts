@@ -3,6 +3,7 @@
   username: string;
   avatar: string;
   team: Team;
+  isReady: boolean;
 }
 
 export enum Team {

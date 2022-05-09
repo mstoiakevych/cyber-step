@@ -7,6 +7,7 @@ public class MatchDto
     public long Id { get; set; }
     public string Name { get; set; }
     public GameMode GameMode { get; set; }
+    public string MatchMode { get; set; }
     public GameState GameState { get; set; }
     public string Server { get; set; }
     public string LobbyName { get; set; }

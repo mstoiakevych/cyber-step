@@ -11,5 +11,5 @@ public class Player : IEntity
     public Team? Team { get; set; }
     public long MatchId { get; set; }
     public Match? Match { get; set; }
-    // todo add props
+    public bool IsReady { get; set; }
 }

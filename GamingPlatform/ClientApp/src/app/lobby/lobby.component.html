@@ -1,0 +1,161 @@
+<div class="container-fluid" *ngIf="match">
+  <button type="button" class="btn btn-primary btn-sm" backButton>Back</button>
+  <form [formGroup]="form">
+    <div class="form-group row py-1">
+      <div class="col-sm-12 py-1">
+        <label for="name" class="form-label">Match Name</label>
+        <input class="form-control" id="name" placeholder="Name..." value="{{match.name}}" formControlName='name'>
+      </div>
+
+      <div class="col-sm-6 py-1">
+        <label for="matchMode" class="form-label">Game Mode</label>
+        <ng-select
+          id="matchMode"
+          formControlName="matchMode"
+          bindLabel="representation"
+          bindValue="value"
+          [clearable]="false"
+          [searchable]="false"
+          [items]="matchModes"
+        >
+        </ng-select>
+      </div>
+      <div class="col-sm-6 py-1">
+        <label for="name" class="form-label">Rate</label>
+        <input type="number" class="form-control" id="rate" placeholder="Rate..." formControlName='rate' value="322"> <!--[(ngModel)]="game.rate"-->
+      </div>
+      <div class="col-sm-6 py-1">
+        <label for="server" class="form-label">Server</label>
+        <ng-select
+          id="server"
+          formControlName="server"
+          bindLabel="representation"
+          bindValue="value"
+          [clearable]="false"
+          [searchable]="false"
+          [items]="servers"
+        >
+        </ng-select>
+      </div>
+      <div class="col-sm-6 py-1">
+        <label for="password" class="form-label">Password</label>
+        <input type="text" class="form-control" id="password" placeholder="Password" formControlName='password'>
+      </div>
+
+    </div>
+    <div class="d-flex flex-row-reverse py-1">
+      <button type="button" class="btn btn-primary" (click)="submit()">Edit</button>
+    </div>
+  </form>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-6 team-container">
+        <h2 class="text-center">Dire</h2>
+        <div
+          cdkDropList
+          #direList="cdkDropList"
+          [cdkDropListData]="DireList"
+          [cdkDropListConnectedTo]="[radiantList]"
+          class="player-list "
+          (cdkDropListDropped)="onDrop($event)">
+          <div class="player-block p-2" *ngFor="let player of DireList" [id]="player.id" cdkDrag>
+            <img src="{{player.avatar}}" alt="" width="50" height="50">
+            <div class="px-2">
+              <div style="font-size: 20px">{{player.username}}</div>
+<!--              <span>{{player.id}}</span>-->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 team-container">
+        <h2 class="text-center">Radiant</h2>
+        <div
+          cdkDropList
+          #radiantList="cdkDropList"
+          [cdkDropListData]="RadiantList"
+          [cdkDropListConnectedTo]="[direList]"
+          class="player-list"
+          (cdkDropListDropped)="onDrop($event)">
+          <div class="player-block p-2" *ngFor="let player of RadiantList" [id]="player.id" cdkDrag>
+            <img src="{{player.avatar}}" alt="" width="50" height="50">
+            <div class="px-2">
+              <div style="font-size: 20px">{{player.username}}</div>
+<!--              <span>{{player.id}}</span>-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="py-3">
+      <ng-template [ngIf]="!isStarted">
+        <div class="row">
+          <div class="col my-2 d-flex justify-content-end">
+            <button type="button" class="btn btn-primary btn-sm join-btn" (click)="toggleReady()">Accept</button>
+          </div>
+          <div class="col-lg-5 col-md-7 col-12 my-2 d-flex flex-md-nowrap flex-wrap justify-content-end px-0">
+            <div *ngFor="let item of counter(match.totalPlayers); index as i"
+                 class="accept-round m-1 {{i > acceptedCount() - 1 ? '' : 'accepted'}}"></div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end" *ngIf="acceptedCount() === match.totalPlayers">
+
+          <button type="button" class="btn btn-primary btn-sm join-btn" (click)="start()">Start</button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div [hidden]="!isStarted">
+    <mat-stepper  #stepper>
+      <mat-step [editable]="false">
+        <form>
+          <ng-template matStepLabel>Preparing bot</ng-template>
+          <div class="text-center p-3">
+            The bot is trying to start the game.
+          </div>
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </form>
+      </mat-step>
+      <mat-step [editable]="false">
+        <form>
+          <ng-template matStepLabel>Invitation to the lobby</ng-template>
+          <div class="text-center p-3">
+            The bot sent you an invitation to the lobby. Please accept it.
+          </div>
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </form>
+      </mat-step>
+      <mat-step [editable]="false">
+        <ng-template matStepLabel>Preparing lobby config</ng-template>
+        <div class="text-center p-3">
+          The bot configures the match.
+        </div>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </mat-step>
+      <mat-step [editable]="false">
+        <ng-template matStepLabel>Starting the match</ng-template>
+        <div class="text-center p-3">
+          Take the right command according to the location on the site after which the bot will start the game.
+        </div>
+        <div>
+          <app-timer [className]="'text-center h2'" [timeLeft]="60" #timer></app-timer>
+        </div>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </mat-step>
+      <mat-step [editable]="false">
+        <ng-template matStepLabel>Waiting for game result</ng-template>
+        <div class="text-center p-3">
+          Waiting for game result.
+        </div>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </mat-step>
+      <mat-step [editable]="false">
+        <ng-template matStepLabel>Game result</ng-template>
+        <div class="text-center p-3 h1">
+          Radiant win
+        </div>
+        <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
+      </mat-step>
+    </mat-stepper>
+  </div>
+</div>

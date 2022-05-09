@@ -64,7 +64,8 @@ public class PlayerService : IPlayerService
         var player = new Player
         {
             UserId = user.Id,
-            MatchId = matchId
+            MatchId = matchId,
+            Team = match.Players!.GroupBy(x => x.Team).Select(g => new {Team = g.Key, Count = g.Count()}).OrderBy(x => x.Count).FirstOrDefault()?.Team ?? Team.Radiant
         };
 
         player = await _playerRepository.InsertAsync(player);
@@ -118,7 +119,7 @@ public class PlayerService : IPlayerService
     
     public async Task<Player?> GetPlayerByHubClientConnectionId(string connectionId)
     {
-        var hubClient = await _hubClientsRepository.GetByKeyAsync(connectionId);
+        var hubClient = await _hubClientsRepository.Query.Include(x => x.Player).ThenInclude(x => x.User).FirstOrDefaultAsync(x => x.ConnectionId == connectionId);
 
         if (hubClient == null) return null;
 
@@ -157,6 +158,9 @@ public class PlayerService : IPlayerService
     public async Task<bool> IsUserInAnyMatch(ClaimsPrincipal claimsPrincipal)
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
+
+        if (user == null)
+            throw new CSNotAuthenticatedException("You must authenticate first");
 
         return await IsUserInAnyMatch(user);
     }

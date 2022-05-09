@@ -192,6 +192,9 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<bool>("IsReady")
+                        .HasColumnType("boolean");
+
                     b.Property<long>("MatchId")
                         .HasColumnType("bigint");
 

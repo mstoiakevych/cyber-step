@@ -1,0 +1,35 @@
+.sidebar-slider {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translateX(-100%);
+}
+
+.sidebar-slider.sidebar-slide-in {
+  transform: translateX(0%);
+}
+
+.sidebar-close {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 16px;
+}
+
+.sidebar-bg {
+  position: absolute;
+  transform: translateX(0%);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .sidebar-slider {
+    width: 100vw !important;
+  }
+}
+

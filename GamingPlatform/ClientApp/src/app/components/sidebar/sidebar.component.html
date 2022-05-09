@@ -1,0 +1,16 @@
+<div *ngIf="sidebarShow" [@fadeInOut]="{value: ':leave', params : {timing: this.time}}">
+  <div class="sidebar-bg"
+       [style.zIndex]="zIndex-1"
+       [style.background]="toggleBackground"
+       (click)="toggle ? hide(): null"
+  ></div>
+</div>
+<div class="sidebar-slider" [class.sidebar-slide-in]="sidebarShow"
+     [style.width]="width"
+     [style.background]="background"
+     [style.transition]="transition"
+     [style.zIndex]="zIndex"
+>
+  <button type="button" class="btn-close sidebar-close" aria-label="Close" (click)="hide()"></button>
+  <ng-content></ng-content>
+</div>

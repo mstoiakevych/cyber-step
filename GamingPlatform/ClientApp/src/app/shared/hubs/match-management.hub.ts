@@ -72,6 +72,18 @@ export class MatchManagementHub {
     MatchManagementHub.connection.on('ShowMatchResult', cb)
   }
 
+  public onPlayerToggleReady(cb: (player: Player) => void) {
+    MatchManagementHub.connection.on('PlayerToggleReady', cb)
+  }
+
+  public onPlayerChangeTeam(cb: (player: Player) => void) {
+    MatchManagementHub.connection.on('PlayerChangeTeam', cb)
+  }
+
+  public onPlayerLeave(cb: (player: Player) => void) {
+    MatchManagementHub.connection.on('PlayerLeave', cb)
+  }
+
   public createGame(matchId: number) {
     MatchManagementHub.connection.send('CreateGame', matchId)
   }
@@ -99,5 +111,13 @@ export class MatchManagementHub {
 
   public joinGame(matchId: number, playerId: number) {
     MatchManagementHub.connection.send('Join', matchId, playerId)
+  }
+
+  public toggleReady(): Promise<boolean> {
+    return MatchManagementHub.connection.invoke<boolean>('ToggleReady')
+  }
+
+  public changeTeam(playerId: number, team: Team): Promise<boolean> {
+    return MatchManagementHub.connection.invoke<boolean>('ChangeTeam', playerId, team)
   }
 }

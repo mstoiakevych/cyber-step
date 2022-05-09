@@ -1,0 +1,16 @@
+<div class="px-3">
+  <drag-scroll #nav>
+    <div class="row d-flex flex-nowrap">
+      <li drag-scroll-item *ngFor="let game of games" class="game-card col-lg-3 col-md-4 col-sm-4 col-xs-12 mb-1 px-0"
+          [style.background] = "game.bg"
+          [style.background-color] = "game.color"
+          [style.background-size] = "'cover'"
+      >
+        <div class="game-title"
+             [style.pointer-events]="game.isActive ? 'auto' : 'none'"
+             [routerLink]="game.url">{{game.title}}</div>
+        <div *ngIf="!game.isActive" class="coming-soon">Coming Soon</div>
+      </li>
+    </div>
+  </drag-scroll>
+</div>
