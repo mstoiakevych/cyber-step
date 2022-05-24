@@ -54,7 +54,7 @@ public class MatchController : ControllerBase
             Name = createMatchDto.Name,
             Server = createMatchDto.Server,
             GameMode = createMatchDto.GameMode,
-            LobbyName = $"[CyberStep] {createMatchDto.Name}",
+            LobbyName = createMatchDto.Name,
             LobbyPassword = createMatchDto.Password,
             MatchMode = createMatchDto.MatchMode
         };

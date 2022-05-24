@@ -9,6 +9,7 @@ import {Player, Team} from "../shared/interfaces/player";
 import {ToastService} from "../shared/services/toast.service";
 import {MatchManagementHub} from "../shared/hubs/match-management.hub";
 import {GameService} from "../components/match/game.service";
+import {B, F} from "@angular/cdk/keycodes";
 
 @Component({
   selector: 'app-lobby',
@@ -47,6 +48,10 @@ export class LobbyComponent implements OnInit {
   matchModes = matchModeRepresentations
   isEditing: boolean = true;
   isStarted: boolean = false;
+  showReady: boolean = false;
+  showLoadingBot: boolean = false;
+  matchResult: string = "";
+  timerSeconds:number = 60;
 
   public allAccepted = () => this.match?.totalPlayers === this.players.filter(p => p.isReady).length
 
@@ -61,11 +66,22 @@ export class LobbyComponent implements OnInit {
               public hub: MatchManagementHub,
               public notification: ToastService,
               public gameService: GameService
-              ) {
-    this.matchId = route.snapshot.params['id']
+  ) {
+    this.matchId = Number(route.snapshot.params['id'])
   }
 
   ngOnInit(): void {
+    this.hub.onShowLoadingBot(() => {
+      this.showLoadingBot = true
+    })
+
+    this.hub.onShowBotReady(() => {
+      this.showLoadingBot = false
+      this.showReady = true
+      this.stepper.next()
+    })
+
+
     this.hub.onError(message => {
       this.notification.show(message)
     })
@@ -102,19 +118,29 @@ export class LobbyComponent implements OnInit {
       this.updatePlayerTeam(player)
     })
 
-    this.hub.onShowModalWithTimer(message => {
-      console.log('[TESTING] Event ShowModalWithTimer')
-      this.notification.show(message)
+    this.hub.onShowModalWithTimer((message, seconds) => {
+      this.stepper.next()
+      this.timerSeconds = seconds
+      this.timer.startTimer()
     })
 
     this.hub.onShowModalWithMessage(message => {
-      console.log('[TESTING] Event ShowModalWithMessage')
-      this.notification.show(message)
+      console.log(message)
+      this.stepper.next()
+      // this.notification.show(message)
     })
 
     this.hub.onShowMatchResult(winner => {
-      console.log('[TESTING] Event ShowMatchResult')
-      this.notification.show('Game has ended. Winner: ' + winner.toFixed())
+      switch (winner) {
+        case Team.Dire:
+          this.matchResult = "Dire win"
+          break
+        case Team.Radiant:
+          this.matchResult = "Radiant win"
+          break
+      }
+      this.stepper.next()
+      // this.notification.show('Game has ended. Winner: ' + winner.toFixed())
     })
 
     this.hub.onPlayerLeave(player => {
@@ -203,25 +229,30 @@ export class LobbyComponent implements OnInit {
 
 
   start() {
-    if (this.allAccepted()) {
-      this.isStarted = true;
-      setTimeout(() => {
-        this.stepper.next()
-      }, 5000)
-      setTimeout(() => {
-        this.stepper.next()
-      }, 10000)
-      setTimeout(() => {
-        this.stepper.next();
-        this.timer.startTimer();
-        setTimeout(() => {
-          this.stepper.next()
-          setTimeout(() => {
-            this.stepper.next()
-          }, 10000)
-        }, 60000)
-      }, 15000)
-    }
+    this.showReady = false
+    this.showLoadingBot = false
+    this.isStarted = true
+    this.hub.invitePlayers(this.matchId)
+    // if (this.allAccepted()) {
+    //
+    //
+    //   // setTimeout(() => {
+    //   //   this.stepper.next()
+    //   // }, 5000)
+    //   // setTimeout(() => {
+    //   //   this.stepper.next()
+    //   // }, 10000)
+    //   // setTimeout(() => {
+    //   //   this.stepper.next();
+    //   //   this.timer.startTimer();
+    //   //   setTimeout(() => {
+    //   //     this.stepper.next()
+    //   //     setTimeout(() => {
+    //   //       this.stepper.next()
+    //   //     }, 10000)
+    //   //   }, 60000)
+    //   // }, 15000)
+    // }
   }
 
   toggleReady() {

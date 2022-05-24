@@ -5,6 +5,7 @@ import {Injectable} from "@angular/core";
 import {Player, Team} from "../interfaces/player";
 
 type StringAction = (message: string) => void
+type TimerArgs = (message: string, seconds: number) => void
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,14 @@ export class MatchManagementHub {
     }
   }
 
+  public onShowLoadingBot(cb: StringAction): void {
+    MatchManagementHub.connection.on('ShowLoadingBot', cb)
+  }
+
+  public onShowBotReady(cb: StringAction): void {
+    MatchManagementHub.connection.on('ShowBotReady', cb)
+  }
+
   public onError(cb: StringAction): void {
     MatchManagementHub.connection.on('Error', cb)
   }
@@ -48,13 +57,13 @@ export class MatchManagementHub {
     MatchManagementHub.connection.on('EditCustomMatch', cb)
   }
 
-  public onShowModalWithTimer(cb: StringAction): void {
+  public onShowModalWithTimer(cb: TimerArgs): void {
     MatchManagementHub.connection.on('ShowModalWithTimer', cb)
   }
 
-  public onMatchResult(cb: (winner: Team) => void) {
-    MatchManagementHub.connection.on('ShowMatchResult', cb)
-  }
+  // public onMatchResult(cb: (winner: Team) => void) {
+  //   MatchManagementHub.connection.on('ShowMatchResult', cb)
+  // }
 
   public onMatchJoin(cb: (players: Player[]) => void) {
     MatchManagementHub.connection.on('OnMatchJoin', cb)

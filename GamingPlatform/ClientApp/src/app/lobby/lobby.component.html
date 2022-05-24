@@ -87,7 +87,7 @@
       </div>
     </div>
     <div class="py-3">
-      <ng-template [ngIf]="!isStarted">
+      <ng-template [ngIf]="showReady">
         <div class="row">
           <div class="col my-2 d-flex justify-content-end">
             <button type="button" class="btn btn-primary btn-sm join-btn" (click)="toggleReady()">Accept</button>
@@ -101,6 +101,10 @@
 
           <button type="button" class="btn btn-primary btn-sm join-btn" (click)="start()">Start</button>
         </div>
+      </ng-template>
+
+      <ng-template [ngIf]="showLoadingBot">
+        Wait until the server picks up the bot for you
       </ng-template>
     </div>
   </div>
@@ -138,7 +142,7 @@
           Take the right command according to the location on the site after which the bot will start the game.
         </div>
         <div>
-          <app-timer [className]="'text-center h2'" [timeLeft]="60" #timer></app-timer>
+          <app-timer [className]="'text-center h2'" [timeLeft]="timerSeconds" #timer></app-timer>
         </div>
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       </mat-step>
@@ -152,7 +156,7 @@
       <mat-step [editable]="false">
         <ng-template matStepLabel>Game result</ng-template>
         <div class="text-center p-3 h1">
-          Radiant win
+          {{matchResult}}
         </div>
         <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
       </mat-step>

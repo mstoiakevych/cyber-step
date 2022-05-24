@@ -17,7 +17,7 @@ public interface IMatchClientHub
     Task InviteInLobby(IEnumerable<string> players, long matchId);
     Task ShowModalWithMessage(string message);
     Task EditCustomMatch(string args, long matchId);
-    Task ShowModalWithTimer(string message);
+    Task ShowModalWithTimer(string message, int seconds);
     Task StartGame(string? arg); // TODO delete
     Task ShowMatchResult(Team winner);
     Task OnMatchJoin(IEnumerable<PlayerInMatch> players);
@@ -25,6 +25,8 @@ public interface IMatchClientHub
     Task PlayerToggleReady(PlayerInMatch player);
     Task PlayerChangeTeam(PlayerInMatch player);
     Task PlayerLeave(PlayerInMatch player);
+    Task ShowBotReady();
+    Task ShowLoadingBot();
 }
 
 public partial class MatchManagementHub : Hub<IMatchClientHub>
@@ -52,6 +54,19 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
 
     public async Task CreateGame(long matchId)
     {
+        var match = await _matchRepository.Query.Include(x => x.Bot).Include(x => x.Players)
+            .FirstOrDefaultAsync(x => x.Id == matchId);
+
+        if (match == null)
+        {
+            await Clients.Client(Context.ConnectionId).Error($"Can not find match by this id: {matchId}");
+            return;
+        }
+        
+        var players = match.Players.Select(x =>
+            _playerService.GetHubClientFromPlayerId(x.Id).Result?.ConnectionId);
+        await Clients.Clients(players).ShowLoadingBot();
+
         try
         {
             var client = new HttpClient();
@@ -77,6 +92,7 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
         var match = await _matchRepository.Query
             .Include(x => x.Bot)
             .Include(x => x.Players)
+            .ThenInclude(x => x.User)
             .FirstOrDefaultAsync(x => x.Id == matchId);
 
         if (match == null)
@@ -88,18 +104,19 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
         if (match.Bot?.Status != BotState.Online)
         {
             await Clients.Client(Context.ConnectionId).Error("Your bot is not online");
-            await Clients.AllExcept(match.Bot?.ConnectionId).Error("Your bot is not online");
+            var players = match.Players.Select(x =>
+                _playerService.GetHubClientFromPlayerId(x.Id).Result?.ConnectionId);
+            await Clients.Clients(players).Error("Your bot is not online");
             return;
         }
 
         var matchDto = _mapper.Map<MatchDto>(match);
-
-        if (matchDto.Players.Count == matchDto.TotalPlayers)
+        if (match.Players.Count == matchDto.TotalPlayers)
         {
-            var players = match.Players!.Select(x => x.UserId);
+            var players = match.Players.Select(x => x.UserId);
             await Clients.Client(match.BotId).InviteInLobby(players, matchId);
-            await Clients.Clients(players).ShowModalWithMessage("Waiting when all players accept invite");
         }
+
     }
 
     public async Task Join(long matchId, long playerId)
@@ -130,8 +147,13 @@ public partial class MatchManagementHub : Hub<IMatchClientHub>
             await _playerService.ConnectPlayer(matchId, playerId, Context.User, Context.ConnectionId);
             await Clients.AllExcept(Context.ConnectionId).OnNewPlayerJoin(new PlayerInMatch {Id = playerId, Username = player.User.UserName, Avatar = player.User.Avatar, Team = player.Team, IsReady = player.IsReady});
         }
+        var matchDto = _mapper.Map<MatchDto>(match);
 
-        // var matchDto = _mapper.Map<MatchDto>(match);
+        if (match.Players.Count == matchDto.TotalPlayers)
+        {
+            await CreateGame(matchId);
+        }
+
 
         // FROM InvitePlayers (if last player invite players)
         // if (matchDto.Players.Count == matchDto.TotalPlayers)
