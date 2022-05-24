@@ -18,7 +18,7 @@ class MainPage:
 
     invite_to_party_btn = Item(
         path=os.path.join(os.path.dirname(__file__), '../assets', 'profile_invite_to_party_btn.png'),
-        area=((570, 180), (870, 268)), title='profile_invite_to_party_btn')
+        area=((570, 180), (1450, 268)), title='profile_invite_to_party_btn')
 
     count_of_invites = Item(
         path=os.path.join(os.path.dirname(__file__), '../assets', 'lobby_count_of_invites.png'),
@@ -61,8 +61,9 @@ class MainPage:
                                                              area=self.invite_to_party_btn.Area,
                                                              element_name=self.invite_to_party_btn.Title)
 
-                    click_to_the_center(invite2party_coords)
-                    click_to_the_center(logo_coords)
+                    if invite2party_coords is not None:
+                        click_to_the_center(invite2party_coords)
+                        click_to_the_center(logo_coords)
 
         return self
 

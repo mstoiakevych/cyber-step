@@ -27,7 +27,7 @@ MAX_CUSTOM_LOBBY_TIME2LIVE = int(os.getenv("MAX_CUSTOM_LOBBY_TIME2LIVE")) if os.
     "MAX_CUSTOM_LOBBY_TIME2LIVE") is not None else 7200
 
 
-def up_game(hub_connection):
+def up_game(hub_connection, match_id):
     pyautogui.hotkey('win', 'd')
     run_game(GAME_PATH, GAME_NAME)
     time.sleep(5)
@@ -61,11 +61,12 @@ def up_game(hub_connection):
     spam_clicks_thread.join()
     hub_connection.send("SetBotStatus", [Status.Online])
     # todo create separeted method for status on frontend
-    hub_connection.send("ShowModalWithMessage", ["Bot is ready"])
+    hub_connection.send("BotReady", [match_id])
 
 
 def invite_players(hub_connection, players, match_id):
     m = MainPage()
+    time.sleep(1)
     m.invite_players(players)
 
     st = time.time()
@@ -81,6 +82,7 @@ def invite_players(hub_connection, players, match_id):
             hub_connection.send("BotError", ["Waiting time for joining to lobby exceeded"])
             exit_game(GAME_NAME)
     hub_connection.send("SetBotStatus", [Status.InLobby])
+    hub_connection.send("ShowModalWithMessage", ["All players accepted invite"])
     hub_connection.send("EditLobbyConfiguration", [match_id])
 
 
@@ -102,7 +104,7 @@ def start_game(hub_connection):
     c = CustomLobbyPage()
     c.start_game()
     hub_connection.send("SetBotStatus", [Status.InGame])
-    hub_connection.send("ShowModalWithMessage", ["Waiting for the game result"])
+    # hub_connection.send("ShowModalWithMessage", ["Waiting for the game result"])
 
     st = time.time()
 

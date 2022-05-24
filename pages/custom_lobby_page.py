@@ -11,7 +11,7 @@ class CustomLobbyPage:
 
     kick_bot2spectators_btn = Item(
         path=os.path.join(os.path.dirname(__file__), '../assets', 'kick_bot2spectators_btn.png'),
-        area=((1494, 177), (1530, 207)),
+        area=((1480, 165), (1536, 217)),
         title='kick_bot2spectators_btn')
 
     edit_btn = Item(
@@ -103,7 +103,8 @@ class CustomLobbyPage:
     def kick_bot(self):
         kick_bot2spectators_coords = try_find_on_screen(template=self.kick_bot2spectators_btn.Image,
                                                         area=self.kick_bot2spectators_btn.Area,
-                                                        element_name=self.kick_bot2spectators_btn.Title)
+                                                        element_name=self.kick_bot2spectators_btn.Title,
+                                                        attempts=5)
 
         if kick_bot2spectators_coords is not None:
             click_to_the_center(kick_bot2spectators_coords)
@@ -117,6 +118,7 @@ class CustomLobbyPage:
 
         if create_custom_lobby_coords is not None:
             click_to_the_center(create_custom_lobby_coords, timeout=1.5)
+            time.sleep(0.5)
             self.kick_bot()
 
         return self
