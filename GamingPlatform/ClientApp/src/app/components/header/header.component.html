@@ -19,12 +19,25 @@
             <a class="nav-link" [routerLink]="'/about'" (click)="isMenuCollapsed = true">About</a>
           </li>
         </ul>
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item active">
-            <button  type="button" class="btn btn-primary" (click)="isAuthorized=!isAuthorized">
-                <i class="bi bi-box-arrow-in-{{isAuthorized ? 'left': 'right'}}"></i>
-                {{isAuthorized ? 'Log out' : 'Login'}}
-            </button>
+        <ul class="navbar-nav ms-auto pr-3">
+          <li class="nav-item active right-menu-item" *ngIf="authService.isAuthenticated()">
+            <div class="money" >
+              <fa-icon [icon]="faGem"></fa-icon>
+              <span class="amount">3128</span>
+            </div>
+          </li>
+          <li class="nav-item active right-menu-item">
+            <div class="login-btn" (click)="handleLogin()">
+              <img *ngIf="!authService.isAuthenticated()"
+                   src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/2048px-Steam_icon_logo.svg.png"
+                   alt="steam">
+              <img *ngIf="authService.isAuthenticated()"
+                   [src]="authService.currentUser.avatar || 'https://static.thenounproject.com/png/55168-200.png'"
+                   alt="profile-image">
+              <div *ngIf="authService.isAuthenticated()" class="leave-btn" (click)="authService.logout()">
+                <fa-icon [icon]="faSignOut"></fa-icon>
+              </div>
+            </div>
           </li>
         </ul>
       </div>

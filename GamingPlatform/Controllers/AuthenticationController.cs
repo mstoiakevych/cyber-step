@@ -72,7 +72,7 @@ public class AuthenticationController : Controller
         
         HttpContext.Response.Cookies.Append("UserId", user.Id);
         HttpContext.Response.Cookies.Append("Username", user.UserName);
-        HttpContext.Response.Cookies.Append("Avatar", user.Avatar);
+        HttpContext.Response.Cookies.Append("Avatar", user.AvatarFull);
         
         return Redirect("/");
     }

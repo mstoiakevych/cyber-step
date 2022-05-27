@@ -34,6 +34,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./shared/interceptors/auth.interceptor";
 import {RepresentationPipe} from './shared/pipes/representation.pipe.ts.pipe';
 import {DecimalPipe} from "@angular/common";
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   providers: [
@@ -80,7 +81,8 @@ import {DecimalPipe} from "@angular/common";
     MatStepperModule,
     MatIconModule,
     MatProgressBarModule,
-    HttpClientModule
+    HttpClientModule,
+    FontAwesomeModule
   ],
   bootstrap: [AppComponent]
 })

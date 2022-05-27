@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {AuthService} from "../../shared/services/auth.service";
+import {Router} from "@angular/router";
+import {faSignOut, faGem} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-header',
@@ -6,8 +9,20 @@ import { Component } from '@angular/core';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  public isMenuCollapsed = true;
-  public isAuthorized = false;
-  constructor() { }
+  // Icons
+  faSignOut = faSignOut
+  faGem = faGem
 
+  public isMenuCollapsed = true;
+
+  constructor(public authService: AuthService, public router: Router) {
+  }
+
+  handleLogin() {
+    if (this.authService.isAuthenticated()) {
+
+    } else {
+      this.authService.login('')
+    }
+  }
 }
