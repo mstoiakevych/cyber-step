@@ -1,0 +1,122 @@
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4 card-bg">
+          <div class="card-body text-center">
+            <img [src]="authService.currentUser.avatar" alt="avatar"
+                 class="rounded-circle img-fluid" style="width: 150px;">
+            <h5 class="my-3">{{authService.currentUser.username}}</h5>
+            <p class="text-muted mb-1">IT Step Student</p>
+            <p class="text-muted mb-4">Lviv, Ukraine</p>
+            <div class="rank">
+              <img src="assets/img/ranks/dota2/divine1.webp" alt="rank" class="rank-img">
+              <span>Divine I</span>
+            </div>
+            <div class="d-flex justify-content-center mb-2">
+              <button type="button" class="btn btn-primary">Follow</button>
+              <button type="button" class="btn btn-outline-primary ms-1">Message</button>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4 mb-lg-0 card-bg">
+          <div class="card mb-4 mb-md-0 card-bg">
+            <div style="display: block">
+              <canvas baseChart [data]="barChartData" [options]="barChartOptions"
+                      [type]="barChartType"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-4 card-bg">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Full Name</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">Maxym Stoiakevych</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Email</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">maxym.stoiakevych@gmail.com</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Phone</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">+38 (068) 073 8073</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Rating (MMR)</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">5214</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Wins/Loses</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">1476 / 1204</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Balance</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">3128</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card mb-4 mb-md-0 card-bg">
+              <div style="display: block">
+                <canvas baseChart
+                        [data]="polarAreaChartData"
+                        [legend]="polarAreaLegend"
+                        [type]="polarAreaChartType"
+                        [options]="polarChartOptions"
+                >
+                </canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card mb-4 mb-md-0 card-bg">
+              <div class="card-body">
+                <div style="display: block">
+                  <canvas baseChart width="400" height="400"
+                          [datasets]="radarChartData"
+                          [labels]="radarChartLabels"
+                          [options]="radarChartOptions"
+                          [legend]="false"
+                  >
+                  </canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

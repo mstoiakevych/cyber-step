@@ -1,6 +1,6 @@
 import {DecimalPipe} from '@angular/common';
 import {Component, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {Observable} from 'rxjs';
+import {map, Observable} from 'rxjs';
 
 import {GameService} from './game.service';
 import {NgbdSortableHeader, SortEvent} from './sortable.directive';
@@ -8,8 +8,8 @@ import {Router} from "@angular/router";
 import {CreateMatch, Match, matchModeRepresentations, serverRepresentations} from "../../shared/interfaces/match";
 import {FormControl, FormGroup} from "@angular/forms";
 import {SidebarComponent} from "../sidebar/sidebar.component";
-import {NotificationService} from "../../shared/services/notification.service";
 import {ToastService} from "../../shared/services/toast.service";
+import {faGem} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-match',
@@ -18,10 +18,13 @@ import {ToastService} from "../../shared/services/toast.service";
   providers: [GameService, DecimalPipe]
 })
 export class MatchComponent implements OnInit {
+  faGem = faGem
+
   public servers = serverRepresentations
   public gameModes = matchModeRepresentations
 
   showPassword: boolean = false;
+  feeValue = 25;
 
   games$: Observable<Match[]>;
   total$: Observable<number | null>;
@@ -39,7 +42,7 @@ export class MatchComponent implements OnInit {
   @ViewChild('sidebar') sidebar: SidebarComponent;
 
   constructor(public service: GameService, private router: Router, public notification: ToastService) {
-    this.games$ = service.games$;
+    this.games$ = service.games$.pipe(map(x => x.map(g => {(g as any).fee = Math.floor(Math.random() * 300); return g})));
     this.total$ = service.total$;
     this.headers = new QueryList<NgbdSortableHeader>();
   }
@@ -61,7 +64,6 @@ export class MatchComponent implements OnInit {
     })
 
     this.games$.subscribe(x => {
-      console.log(x)
     })
   }
 
@@ -84,5 +86,21 @@ export class MatchComponent implements OnInit {
       this.notification.show(error.error.message)
       this.sidebar.hide()
     })
+  }
+
+  getRandomFee(game: any) {
+    return game.fee
+  }
+
+  onValueChange(event: any) {
+    console.log(event)
+  }
+
+  formatLabel(value: number) {
+    if (value >= 1000) {
+      return Math.round(value / 1000) + 'k';
+    }
+
+    return value;
   }
 }

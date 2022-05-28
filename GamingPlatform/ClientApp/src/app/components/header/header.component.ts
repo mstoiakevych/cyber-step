@@ -20,7 +20,7 @@ export class HeaderComponent {
 
   handleLogin() {
     if (this.authService.isAuthenticated()) {
-
+      this.router.navigateByUrl('profile')
     } else {
       this.authService.login('')
     }

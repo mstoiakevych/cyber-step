@@ -6,6 +6,7 @@ import {MatchComponent} from "./components/match/match.component";
 import {HomePageComponent} from "./components/home-page/home-page.component";
 import {GamesComponent} from "./components/games/games.component";
 import {LobbyComponent} from "./lobby/lobby.component";
+import {ProfilePageComponent} from "./components/profile-page/profile-page.component";
 
 const routes: Routes = [
   {
@@ -32,6 +33,11 @@ const routes: Routes = [
         component: LobbyComponent,
         data : {isHeader: true}
       },
+      {
+        path: 'profile',
+        component: ProfilePageComponent,
+        data: {isHeader: true}
+      }
       // {
       //   path: 'match',
       //   component: MatchComponent,

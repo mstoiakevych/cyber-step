@@ -18,12 +18,16 @@
 .game-title {
   height: 100%;
   padding-top: 30px;
-  background: rgba(51, 51, 51, 0.4);
+
   transition: all .5s ease;
 }
 
+.nonactive-game {
+  background: rgba(51, 51, 51, 0.4);
+}
+
 .game-title:hover {
-  background: rgba(51, 51, 51, 0.6);
+  background: linear-gradient(180deg, rgba(36,20,94,0) 0%, rgba(78,44,179,1) 100%);
   cursor: pointer;
 }
 

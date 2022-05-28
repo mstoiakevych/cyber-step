@@ -24,6 +24,12 @@ export class AuthService {
   }
 
   get currentUser(): User {
-    return {id: this.cookies.get('UserId'), username: this.cookies.get('Username'), avatar: this.cookies.get('Avatar')}
+    const id = this.cookies.get('UserId')
+
+    return {id: id, id32: AuthService.steamID64toSteamID32(id), username: this.cookies.get('Username'), avatar: this.cookies.get('Avatar')}
+  }
+
+  static steamID64toSteamID32 (steamID64: string) {
+    return Number(steamID64.substr(-16,16)) - 6561197960265728
   }
 }

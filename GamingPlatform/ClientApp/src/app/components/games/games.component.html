@@ -6,7 +6,7 @@
           [style.background-color] = "game.color"
           [style.background-size] = "'cover'"
       >
-        <div class="game-title"
+        <div class="game-title" [class.nonactive-game]="!game.isActive"
              [style.pointer-events]="game.isActive ? 'auto' : 'none'"
              [routerLink]="game.url">{{game.title}}</div>
         <div *ngIf="!game.isActive" class="coming-soon">Coming Soon</div>

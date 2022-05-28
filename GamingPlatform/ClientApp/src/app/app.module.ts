@@ -35,6 +35,9 @@ import {AuthInterceptor} from "./shared/interceptors/auth.interceptor";
 import {RepresentationPipe} from './shared/pipes/representation.pipe.ts.pipe';
 import {DecimalPipe} from "@angular/common";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ProfilePageComponent } from './components/profile-page/profile-page.component';
+import { NgChartsModule } from 'ng2-charts';
+import {MatSliderModule} from "@angular/material/slider";
 
 @NgModule({
   providers: [
@@ -66,7 +69,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     BackButtonDirective,
     TimerComponent,
     NotificationComponent,
-    RepresentationPipe
+    RepresentationPipe,
+    ProfilePageComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -82,7 +86,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     MatIconModule,
     MatProgressBarModule,
     HttpClientModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    NgChartsModule,
+    MatSliderModule
   ],
   bootstrap: [AppComponent]
 })

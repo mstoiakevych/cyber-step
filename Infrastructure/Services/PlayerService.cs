@@ -61,8 +61,7 @@ public class PlayerService : IPlayerService
         {
             UserId = user.Id,
             MatchId = matchId,
-            Team = match.Players!.GroupBy(x => x.Team).Select(g => new {Team = g.Key, Count = g.Count()})
-                .OrderBy(x => x.Count).FirstOrDefault()?.Team ?? Team.Radiant
+            Team = match.Players!.Count == 0 ? Team.Dire : Team.Radiant
         };
 
         player = await _playerRepository.InsertAsync(player);

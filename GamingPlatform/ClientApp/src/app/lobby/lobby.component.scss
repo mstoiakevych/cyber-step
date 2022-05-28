@@ -61,7 +61,7 @@
 }
 
 .accepted {
-  background-color: #ffc107;
+  background-color: #7530f3;
 }
 
 .mat-stepper-horizontal {
@@ -74,4 +74,22 @@
 
 ::ng-deep .mat-horizontal-stepper-header{
   pointer-events: none !important;
+}
+
+.form-label {
+  color: white;
+}
+
+.team-name {
+  color: white;
+}
+
+.container-fluid.ng-star-inserted {
+  background-color: #4e4e4e5e;
+  padding: 15px;
+  border-radius: 9px;
+}
+
+.lobby-control {
+  margin-right: 10px;
 }

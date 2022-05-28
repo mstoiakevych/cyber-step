@@ -7,8 +7,9 @@
         <input class="form-control" id="name" placeholder="Name..." formControlName="name">
       </div>
       <div class="mb-3">
-        <label for="rate" class="form-label">Rate</label>
-        <input type="number" class="form-control" id="rate" placeholder="Rate..." formControlName="rate">
+        <label for="rate" class="form-label">Fee <fa-icon [icon]="faGem" class="fee"></fa-icon></label>
+        <mat-slider class="form-range" id="rate" min="0" max="1000" formControlName="rate" thumbLabel>
+        </mat-slider>
       </div>
       <div class="mb-3">
         <label for="gameMode" class="form-label">Game Mode</label>
@@ -57,7 +58,7 @@
       <button type="button" class="btn btn-primary" (click)="sidebar.show()">Create</button>
     </div>
     <div class="col-md-3 col-xs-12 my-1">
-      <input placeholder="Search game..." type="text" class="form-control" name="searchTerm"
+      <input placeholder="Search game..." type="text" class="form-control search" name="searchTerm"
              [(ngModel)]="service.searchTerm">
     </div>
   </div>
@@ -70,7 +71,7 @@
         <th class="col-md-3" scope="col" sortable="gameMode" (sort)="onSort($event)">Game Mode</th>
         <th class="col-md-1" scope="col" sortable="server" (sort)="onSort($event)">Server</th>
         <th class="col-md-1 text-center" scope="col" sortable="joinedPlayers" (sort)="onSort($event)">Players</th>
-        <th class="col-md-1 text-center" scope="col">Rate <span>&#36;</span></th>
+        <th class="col-md-1 text-center" scope="col"><fa-icon [icon]="faGem" class="fee"></fa-icon></th>
         <!-- sortable="rate" (sort)="onSort($event)"-->
         <th class="col-md-1 text-center" scope="col">  <!-- sortable="locked" (sort)="onSort($event)"-->
           <i class="bi bi-lock-fill"></i>
@@ -119,7 +120,7 @@
         <td>{{ game.matchMode | RepresentationPipe: gameModes }}</td>
         <td>{{ game.server | RepresentationPipe: servers }}</td>
         <td class="text-center">{{ game.joinedPlayers }} / {{game.totalPlayers}}</td>
-        <td class="text-center">322</td>
+        <td class="text-center">{{ getRandomFee(game) }}</td>
         <td class="text-center">
           <i *ngIf="game.joinedPlayers !== game.totalPlayers" class="bi bi-unlock"></i>
           <i *ngIf="game.joinedPlayers === game.totalPlayers" class="bi bi-lock"></i>
@@ -128,27 +129,27 @@
       </tbody>
     </table>
 
-    <div class="row d-flex justify-content-md-between mx-auto p-2 bottom-0">
-      <div class="col-md-5 col-xs-12 d-flex justify-content-md-between justify-content-center">
-        <ngb-pagination
-          [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize" [rotate]="true"
-          [maxSize]="5">
-        </ngb-pagination>
-      </div>
-      <div class="col-md-3 col-xs-12 d-flex justify-content-center">
-        <select class="form-select pageSize" name="pageSize" [(ngModel)]="service.pageSize">
-          <option [value]="25">25 items</option>
-          <option [value]="50">50 items</option>
-          <option [value]="75">75 items</option>
-          <option [value]="100">100 items</option>
-        </select>
-      </div>
-    </div>
+<!--    <div class="row d-flex justify-content-md-between mx-auto p-2 bottom-0">-->
+<!--      <div class="col-md-5 col-xs-12 d-flex justify-content-md-between justify-content-center">-->
+<!--        <ngb-pagination-->
+<!--          [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize" [rotate]="true"-->
+<!--          [maxSize]="5">-->
+<!--        </ngb-pagination>-->
+<!--      </div>-->
+<!--      <div class="col-md-3 col-xs-12 d-flex justify-content-center">-->
+<!--        <select class="form-select pageSize paginator" name="pageSize" [(ngModel)]="service.pageSize">-->
+<!--          <option [value]="25">25 items</option>-->
+<!--          <option [value]="50">50 items</option>-->
+<!--          <option [value]="75">75 items</option>-->
+<!--          <option [value]="100">100 items</option>-->
+<!--        </select>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
   <ng-template #notFoundBlock>
     <div class="d-flex flex-column align-items-center justify-content-center notFoundTable">
       <ant-empty></ant-empty>
-      <div>No Data</div>
+      <div style="color: white">No Data</div>
     </div>
   </ng-template>
 </div>

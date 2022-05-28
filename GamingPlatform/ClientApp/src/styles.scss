@@ -1,5 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 
+$theme-colors: (
+  "primary": #5c0fe1
+);
+
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
 
@@ -7,6 +11,8 @@
 @import "src/scss/settings";
 
 @import "~@ng-select/ng-select/themes/default.theme.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
 
 html {
   scroll-behavior: smooth;
@@ -90,4 +96,11 @@ main {
 .bi-chevron-down:hover {
   cursor: auto;
   pointer-events: none;
+}
+
+body {
+  background-color: rgba(78,44,179,1);
+  background-image: url("assets/img/bg/esports2.jpg");
+  background-size: 100%;
+  //background-repeat: no-repeat;
 }

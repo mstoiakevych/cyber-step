@@ -9,7 +9,6 @@ import {Player, Team} from "../shared/interfaces/player";
 import {ToastService} from "../shared/services/toast.service";
 import {MatchManagementHub} from "../shared/hubs/match-management.hub";
 import {GameService} from "../components/match/game.service";
-import {B, F} from "@angular/cdk/keycodes";
 
 @Component({
   selector: 'app-lobby',
@@ -52,6 +51,7 @@ export class LobbyComponent implements OnInit {
   showLoadingBot: boolean = false;
   matchResult: string = "";
   timerSeconds:number = 60;
+  feeValue = 322;
 
   public allAccepted = () => this.match?.totalPlayers === this.players.filter(p => p.isReady).length
 
@@ -82,17 +82,16 @@ export class LobbyComponent implements OnInit {
     })
 
 
-    this.hub.onError(message => {
-      this.notification.show(message)
-    })
+    // this.hub.onError(message => {
+    //   this.notification.show(message)
+    // })
 
     this.hub.onMatchJoin(players => {
       console.log('OnMatchJoin', players)
     })
 
     this.hub.onNewPlayerJoin(player => {
-      console.log('New player joined', player)
-
+      this.feeValue += this.feeValue
       this.addPlayerToTeam(player)
     })
 
@@ -170,6 +169,8 @@ export class LobbyComponent implements OnInit {
 
       this.router.navigateByUrl('/')
     })
+
+    this.passPreparation()
   }
 
   onDrop(event: CdkDragDrop<any>) {
@@ -227,32 +228,27 @@ export class LobbyComponent implements OnInit {
     password: new FormControl({value: this.match.lobbyPassword, disabled: this.isEditing}),
   })
 
+  passPreparation() {
+    setTimeout(() => {
+      this.stepper.next()
+
+      setTimeout(() => {
+        this.stepper.next()
+
+        setTimeout(() => {
+          this.stepper.next()
+          this.timer.startTimer();
+          this.showReady = true
+        }, 3000)
+      }, 10000)
+    }, 10000)
+  }
 
   start() {
     this.showReady = false
     this.showLoadingBot = false
     this.isStarted = true
     this.hub.invitePlayers(this.matchId)
-    // if (this.allAccepted()) {
-    //
-    //
-    //   // setTimeout(() => {
-    //   //   this.stepper.next()
-    //   // }, 5000)
-    //   // setTimeout(() => {
-    //   //   this.stepper.next()
-    //   // }, 10000)
-    //   // setTimeout(() => {
-    //   //   this.stepper.next();
-    //   //   this.timer.startTimer();
-    //   //   setTimeout(() => {
-    //   //     this.stepper.next()
-    //   //     setTimeout(() => {
-    //   //       this.stepper.next()
-    //   //     }, 10000)
-    //   //   }, 60000)
-    //   // }, 15000)
-    // }
   }
 
   toggleReady() {

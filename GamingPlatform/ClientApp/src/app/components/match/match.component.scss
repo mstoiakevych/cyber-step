@@ -16,3 +16,35 @@
 .table-hover tbody tr:hover{
   cursor: pointer;
 }
+
+.fee {
+  color: #5c0fe1;
+}
+
+ngb-pagination ::ng-deep ul > li.active > a {
+  background-color: #5c0fe1 !important;
+  border-color: #5c0fe1 !important;
+}
+
+.table {
+  color: white;
+}
+
+td {
+  color: white !important;
+}
+
+tr.ng-star-inserted:hover {
+  background: linear-gradient(180deg, rgba(36,20,94,0) 0%, rgba(78,44,179,1) 100%) !important;
+}
+
+.search {
+  background-color: transparent;
+  border-color: #5c0fe1;
+}
+
+.paginator {
+  background-color: transparent;
+  border-color: #5c0fe1;
+  color: #6c757d;
+}
