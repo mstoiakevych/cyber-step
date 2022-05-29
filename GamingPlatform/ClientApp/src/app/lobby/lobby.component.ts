@@ -9,6 +9,7 @@ import {Player, Team} from "../shared/interfaces/player";
 import {ToastService} from "../shared/services/toast.service";
 import {MatchManagementHub} from "../shared/hubs/match-management.hub";
 import {GameService} from "../components/match/game.service";
+import {faGem} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-lobby',
@@ -52,6 +53,9 @@ export class LobbyComponent implements OnInit {
   matchResult: string = "";
   timerSeconds:number = 60;
   feeValue = 322;
+  faGem = faGem
+  gameGoesOn = false
+  gameFinished = false
 
   public allAccepted = () => this.match?.totalPlayers === this.players.filter(p => p.isReady).length
 
@@ -239,9 +243,19 @@ export class LobbyComponent implements OnInit {
           this.stepper.next()
           this.timer.startTimer();
           this.showReady = true
-        }, 3000)
-      }, 10000)
-    }, 10000)
+        }, 300)
+      }, 1000)
+    }, 1000)
+  }
+
+  startGameProcess() {
+    this.stepper.next()
+    this.gameGoesOn = true
+
+    setTimeout(() => {
+      this.stepper.next()
+      this.gameFinished = true
+    }, 1000)
   }
 
   start() {

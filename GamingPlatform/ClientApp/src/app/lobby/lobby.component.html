@@ -1,6 +1,25 @@
-<div class="container-fluid" *ngIf="match">
-  <button type="button" class="btn btn-primary btn-sm" backButton>Back</button>
-  <form [formGroup]="form">
+<div class="container-fluid match-info" *ngIf="match">
+
+  <div class="match-result-modal" *ngIf="gameGoesOn" [class.hidden]="!gameFinished">
+    <div class="congrats-area">
+      <div class="congrats-text">
+        <div class="congrats-text-aligner">
+          <h1 class="congrats-title">CONGRATS!</h1>
+          <p class="congrats-content">That was an amazing game. You crushed your oponent and won</p>
+          <p class="congrats-prize"><fa-icon [icon]="faGem" class="gem"></fa-icon> 644</p>
+          <div class="btn-leave" routerLink="/">
+            LEAVE
+          </div>
+        </div>
+      </div>
+
+      <img src="./assets/img/logo/winner.png" class="winner" alt="winner">
+    </div>
+  </div>
+
+
+  <button type="button" class="btn btn-primary btn-sm" backButton [class.hidden]="gameFinished">Back</button>
+  <form [formGroup]="form" [class.hidden]="gameFinished">
     <div class="form-group row py-1">
       <div class="col-sm-12 py-1">
         <label for="name" class="form-label">Match Name</label>
@@ -22,7 +41,8 @@
       </div>
       <div class="col-sm-6 py-1">
         <label for="name" class="form-label">Fee</label>
-        <input type="number" class="form-control" id="rate" placeholder="Rate..." formControlName='rate' [value]="feeValue"> <!--[(ngModel)]="game.rate"-->
+        <input type="number" class="form-control" id="rate" placeholder="Rate..." formControlName='rate'
+               [value]="feeValue"> <!--[(ngModel)]="game.rate"-->
       </div>
       <div class="col-sm-6 py-1">
         <label for="server" class="form-label">Server</label>
@@ -47,7 +67,7 @@
       <button type="button" class="btn btn-primary" (click)="submit()">Edit</button>
     </div>
   </form>
-  <div class="container">
+  <div class="container" [class.hidden]="gameFinished">
     <div class="row">
       <div class="col-12 col-md-6 team-container">
         <h2 class="text-center team-name">Dire</h2>
@@ -62,7 +82,7 @@
             <img src="{{player.avatar}}" alt="" width="50" height="50">
             <div class="px-2">
               <div style="font-size: 20px">{{player.username}}</div>
-<!--              <span>{{player.id}}</span>-->
+              <!--              <span>{{player.id}}</span>-->
             </div>
           </div>
         </div>
@@ -80,7 +100,7 @@
             <img src="{{player.avatar}}" alt="" width="50" height="50">
             <div class="px-2">
               <div style="font-size: 20px">{{player.username}}</div>
-<!--              <span>{{player.id}}</span>-->
+              <!--              <span>{{player.id}}</span>-->
             </div>
           </div>
         </div>
@@ -94,9 +114,11 @@
           <div class="col">
             <div class="row">
               <div class="col my-2">
-                <button type="button" class="btn btn-primary btn-sm join-btn lobby-control" (click)="toggleReady()">Ready</button>
-<!--                <button *ngIf="acceptedCount() === match.totalPlayers"-->
-<!--                  type="button" class="btn btn-primary btn-sm join-btn lobby-control" (click)="start()">Start</button>-->
+                <button type="button" class="btn btn-primary btn-sm join-btn lobby-control" (click)="toggleReady()">
+                  Ready
+                </button>
+                <!--                <button *ngIf="acceptedCount() === match.totalPlayers"-->
+                <!--                  type="button" class="btn btn-primary btn-sm join-btn lobby-control" (click)="start()">Start</button>-->
               </div>
               <div class="col-lg-5 col-md-7 col-12 my-2 d-flex flex-md-nowrap flex-wrap justify-content-end px-0">
                 <div *ngFor="let item of counter(match.totalPlayers); index as i"
@@ -107,15 +129,15 @@
         </div>
       </ng-template>
 
-<!--      <ng-template [ngIf]="showLoadingBot">-->
-<!--        Wait until the server picks up the bot for you-->
-<!--      </ng-template>-->
+      <!--      <ng-template [ngIf]="showLoadingBot">-->
+      <!--        Wait until the server picks up the bot for you-->
+      <!--      </ng-template>-->
     </div>
   </div>
 
-<!--  [hidden]="!isStarted"-->
-  <div>
-    <mat-stepper  #stepper color="accent">
+  <!--  [hidden]="!isStarted"-->
+  <div [class.hidden]="gameFinished">
+    <mat-stepper #stepper color="accent">
       <mat-step [editable]="false">
         <form>
           <ng-template matStepLabel>Preparing bot</ng-template>
@@ -147,7 +169,8 @@
           If everything is ok, click 'Ready' to start the match.
         </div>
         <div>
-          <app-timer [className]="'text-center h2'" [timeLeft]="timerSeconds" #timer (onTimerEnds)="stepper.next()"></app-timer>
+          <app-timer [className]="'text-center h2'" [timeLeft]="timerSeconds" #timer
+                     (onTimerEnds)="startGameProcess()"></app-timer>
         </div>
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       </mat-step>
