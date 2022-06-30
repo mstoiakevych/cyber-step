@@ -1,4 +1,4 @@
-# Gaming Platform
+# Cyber Step
 
 *IT STEP University graduate work*
 
