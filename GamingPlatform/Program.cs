@@ -17,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
+
 builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
     build =>
     {
@@ -24,6 +25,7 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
             .AllowAnyHeader()
             .AllowAnyOrigin();
     }));
+
 builder.Services.AddSignalR(options =>
 {
     options.MaximumReceiveMessageSize = 102400000;
